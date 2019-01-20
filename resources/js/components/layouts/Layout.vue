@@ -37,7 +37,7 @@
 <script>
 
 import nav from '../../_nav'
-import { Header, SidebarToggler, Sidebar, SidebarNav, SidebarMinimizer, Footer, Breadcrumb } from '@coreui/vue'
+import { Header, SidebarToggler, Sidebar, SidebarNav, SidebarMinimizer, Footer } from '@coreui/vue'
 import Account from './Account'
 
 export default {
@@ -49,8 +49,7 @@ export default {
     Sidebar,
     SidebarNav,
     SidebarMinimizer,
-    Footer,
-    Breadcrumb
+    Footer
   },
   data () {
     return {

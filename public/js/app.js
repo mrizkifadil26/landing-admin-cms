@@ -4912,8 +4912,7 @@ __webpack_require__.r(__webpack_exports__);
     Sidebar: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["Sidebar"],
     SidebarNav: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["SidebarNav"],
     SidebarMinimizer: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["SidebarMinimizer"],
-    Footer: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["Footer"],
-    Breadcrumb: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["Breadcrumb"]
+    Footer: _coreui_vue__WEBPACK_IMPORTED_MODULE_1__["Footer"]
   },
   data: function data() {
     return {
@@ -4933,6 +4932,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -58398,32 +58399,38 @@ var render = function() {
           _c(
             "b-col",
             [
-              _c("div", { attrs: { slot: "header" }, slot: "header" }, [
-                _c("strong", [_vm._v("Create User")]),
-                _vm._v(" "),
-                _c("small", [_vm._v("Muhammad Rizki Fadillah")])
-              ]),
-              _vm._v(" "),
               _c(
-                "b-row",
+                "b-card",
                 [
+                  _c("div", { attrs: { slot: "header" }, slot: "header" }, [
+                    _c("strong", [_vm._v("Create User")]),
+                    _vm._v(" "),
+                    _c("small", [_vm._v("Muhammad Rizki Fadillah")])
+                  ]),
+                  _vm._v(" "),
                   _c(
-                    "b-col",
+                    "b-row",
                     [
                       _c(
-                        "b-form-group",
-                        {
-                          attrs: {
-                            label: "Title",
-                            "label-for": "title",
-                            "label-cols": 3,
-                            horizontal: true
-                          }
-                        },
+                        "b-col",
                         [
-                          _c("b-form-input", {
-                            attrs: { id: "title", type: "text" }
-                          })
+                          _c(
+                            "b-form-group",
+                            {
+                              attrs: {
+                                label: "Title",
+                                "label-for": "title",
+                                "label-cols": 3,
+                                horizontal: true
+                              }
+                            },
+                            [
+                              _c("b-form-input", {
+                                attrs: { id: "title", type: "text" }
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -72397,15 +72404,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/es/index.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var _components_News__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/News */ "./resources/js/components/News.vue");
-/* harmony import */ var _components_Posts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Posts */ "./resources/js/components/Posts.vue");
-/* harmony import */ var _components_Dashboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Dashboard */ "./resources/js/components/Dashboard.vue");
-/* harmony import */ var _components_layouts_Layout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/layouts/Layout */ "./resources/js/components/layouts/Layout.vue");
-/* harmony import */ var _components_layouts_Account__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/layouts/Account */ "./resources/js/components/layouts/Account.vue");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
+/* harmony import */ var _components_News__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/News */ "./resources/js/components/News.vue");
+/* harmony import */ var _components_Posts__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Posts */ "./resources/js/components/Posts.vue");
+/* harmony import */ var _components_Dashboard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Dashboard */ "./resources/js/components/Dashboard.vue");
+/* harmony import */ var _components_layouts_Layout__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/layouts/Layout */ "./resources/js/components/layouts/Layout.vue");
+/* harmony import */ var _components_layouts_Account__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/layouts/Account */ "./resources/js/components/layouts/Account.vue");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
 
-
+ // import VueRouter from 'vue-router'
 
 
 
@@ -72419,9 +72425,9 @@ __webpack_require__.r(__webpack_exports__);
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // Vue.use(VueRouter)
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
+
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /**
  * The following block of code may be used to automatically register your
@@ -72440,14 +72446,15 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+/* eslint-disable no-new */
+
+new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
+  router: _router__WEBPACK_IMPORTED_MODULE_7__["default"],
   components: {
-    Layout: _components_layouts_Layout__WEBPACK_IMPORTED_MODULE_6__["default"],
-    Dashboard: _components_Dashboard__WEBPACK_IMPORTED_MODULE_5__["default"],
-    Account: _components_layouts_Account__WEBPACK_IMPORTED_MODULE_7__["default"]
-  },
-  Router: _router__WEBPACK_IMPORTED_MODULE_8__["default"]
+    Layout: _components_layouts_Layout__WEBPACK_IMPORTED_MODULE_5__["default"],
+    Account: _components_layouts_Account__WEBPACK_IMPORTED_MODULE_6__["default"]
+  }
 });
 
 /***/ }),
@@ -72914,17 +72921,22 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  mode: 'hash',
+  mode: 'history',
   linkActiveClass: 'open active',
   routes: [{
-    path: '/',
-    redirect: '/admin',
-    name: 'Dashboard',
-    component: _components_Dashboard__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }, {
-    path: '/admin/users',
-    name: 'Users',
-    component: _components_users_CreateUser__WEBPACK_IMPORTED_MODULE_4__["default"]
+    path: '/admin',
+    redirect: '/admin/dashboard',
+    name: 'Home',
+    component: _components_layouts_Layout__WEBPACK_IMPORTED_MODULE_2__["default"],
+    children: [{
+      path: 'dashboard',
+      name: 'Dashboard',
+      component: _components_Dashboard__WEBPACK_IMPORTED_MODULE_3__["default"]
+    }, {
+      path: 'users',
+      name: 'Users',
+      component: _components_users_CreateUser__WEBPACK_IMPORTED_MODULE_4__["default"]
+    }]
   }]
 }));
 

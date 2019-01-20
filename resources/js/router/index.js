@@ -8,19 +8,26 @@ import CreateUser from '../components/users/CreateUser'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   linkActiveClass: 'open active',
   routes: [
     {
-      path: '/',
-      redirect: '/admin',
-      name: 'Dashboard',
-      component: Dashboard,
-    },
-    {
-      path: '/admin/users',
-      name: 'Users',
-      component: CreateUser
+      path: '/admin',
+      redirect: '/admin/dashboard',
+      name: 'Home',
+      component: Layout,
+      children: [
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: Dashboard
+        },
+        {
+          path: 'users',
+          name: 'Users',
+          component: CreateUser
+        }
+      ]
     }
   ]
 })

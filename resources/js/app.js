@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
-import VueRouter from 'vue-router'
+// import VueRouter from 'vue-router'
 import News from './components/News'
 import Posts from './components/Posts' 
 import Dashboard from './components/Dashboard'
 import Layout from './components/layouts/Layout'
 import Account from './components/layouts/Account'
-import Router from './router'
+import router from './router'
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -16,7 +16,7 @@ import Router from './router'
 
 require('./bootstrap');
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 
 /**
@@ -38,8 +38,9 @@ Vue.use(BootstrapVue)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
+/* eslint-disable no-new */
+new Vue({
     el: '#app',
-    components: { Layout, Dashboard, Account },
-    Router,
+    router,
+    components: { Layout, Account },
 });
