@@ -1,29 +1,39 @@
 <template>
-  <HeaderDropdown right no-caret>
+  <AppHeaderDropdown right no-caret>
     <template slot="header">
-      <img src="" alt="">
+      <img 
+        src="http://placehold.it/200x200" 
+        alt="avatar"
+        class="img-avatar">
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center">
+      <b-dropdown-header 
+        tag="div" 
+        class="text-center">
         <strong>Account</strong>
       </b-dropdown-header>
 
+      <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
+      <b-dropdown-divider />
       <b-dropdown-item>
-        <i class="fas fa-sign-out"> Logout</i>
+        <logout @click="logout" />
       </b-dropdown-item>
 
     </template>
-  </HeaderDropdown>
+  </AppHeaderDropdown>
 </template>
 
 <script>
 
-import HeaderDropdown from '@coreui/vue'
+import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
+import Logout from '../auth/Logout'
 
 export default {
   name: 'Account',
-  components : {
-    HeaderDropdown
+  components: {
+    AppHeaderDropdown,
+    'logout': Logout
   },
 }
+
 </script>

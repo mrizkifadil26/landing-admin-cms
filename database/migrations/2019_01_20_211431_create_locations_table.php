@@ -15,7 +15,15 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('location');
+            $table->string('description');
+            $table->string('category');
+            $table->string('image');
+            $table->integer('rating')->unsigned()->default(0);
+            $table->integer('posted_by')->unsigned();
             $table->timestamps();
+
+            $table->foreign('posted_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

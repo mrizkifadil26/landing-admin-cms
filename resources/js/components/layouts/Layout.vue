@@ -7,7 +7,7 @@
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav class="ml-auto">
-        <Account />
+        <Account></Account>
       </b-navbar-nav>
     </Header>
     <div class="app-body">
@@ -16,6 +16,8 @@
         <SidebarMinimizer />  
       </Sidebar>
       <main class="main">
+        <Breadcrumb 
+            :list="list" />
         <div class="container-fluid">
           <router-view></router-view>
         </div>
@@ -37,7 +39,7 @@
 <script>
 
 import nav from '../../_nav'
-import { Header, SidebarToggler, Sidebar, SidebarNav, SidebarMinimizer, Footer } from '@coreui/vue'
+import { Header, SidebarToggler, Sidebar, SidebarNav, SidebarMinimizer, Footer, Breadcrumb } from '@coreui/vue'
 import Account from './Account'
 
 export default {
@@ -49,11 +51,20 @@ export default {
     Sidebar,
     SidebarNav,
     SidebarMinimizer,
-    Footer
+    Footer,
+    Breadcrumb
   },
   data () {
     return {
       nav: nav.items
+    }
+  },
+  computed: {
+    name () {
+      return this.$route.name
+    },
+    list () {
+      return this.$route.matched.filter((route) => route.name || route.meta.label )
     }
   }
 }

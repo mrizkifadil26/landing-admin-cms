@@ -12,8 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('main');
+    return view('landing.landing');
 });
+
+Route::get('/login', function() {
+    return view('auth.login');
+});
+
+Route::get('/logout', 'AuthController@logout');
 
 Route::get('/posts/{post}', 'PostController@single');
 Route::get('/posts', 'PostController@all');

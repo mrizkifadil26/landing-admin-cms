@@ -15,12 +15,12 @@ export default {
     },
     {
       name: 'Best Location',
-      url: '/admin/location',
+      url: '/admin/locations',
       icon: 'fas fa-map-marker-alt',
     },
     {
       name: 'Complaint',
-      url: '/admin/complaint',
+      url: '/admin/complaints',
       icon: 'fas fa-list',
     },
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -35,7 +36,33 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'description' => 'required',
+            'category' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,gif,svg',
+            'content' => 'required'
+        ]);
+
+        $post = new Post;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = str_slug($request->title) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/posts');
+            $imagePath = $destinationPath . '/' . $name;
+            $image->move($destinationPath, $name);
+            $post->image = $name;
+        }
+
+        $post->created_by = \Auth::id() || 1;
+        $post->title = $request->title;
+        $post->slug = str_slug($post->title);
+        $post->description = $request->description;
+        $post->content = $request->content;
+        $post->save();
+
+        return new PostResource($post);
     }
 
     /**
@@ -69,7 +96,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        
     }
 
     /**
