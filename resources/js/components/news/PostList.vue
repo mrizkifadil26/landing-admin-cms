@@ -31,7 +31,7 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="status" slot-scope="data">
-                  <b-badge :variant="getBadge(data.items.status)">{{ data.items.status }}</b-badge>
+                  <b-badge :variant="getBadge(data.item.status)">{{ data.item.status }}</b-badge>
                 </template>
                 <template slot="actions" slot-scope="data">
                   <b-button variant="info" :to="{ name: 'Show Post' }">{{ data.item.actions[0] }}</b-button>

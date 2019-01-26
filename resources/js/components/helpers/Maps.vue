@@ -3,9 +3,12 @@
     <l-map
       style="width: 100%"
       :zoom="zoom"
-      :center="center">
+      :center="latLng">
       <l-tile-layer :url="url"></l-tile-layer>
-      <l-marker :lat-lng="markerLatLng"></l-marker>
+      <l-marker 
+        :lat-lng.sync="latLng"
+        :draggable="draggable">
+      </l-marker>
     </l-map>
   </div>  
 </template>
@@ -13,9 +16,28 @@
 <script>
 
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import L from 'leaflet'
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.imagePath = '/';
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 export default {
   name: 'Maps',
+  props: {
+    draggable: {
+      type: Boolean,
+      default: false
+    },
+    markerLatLng: {
+      type: [Array, Object],
+      default: () => []
+    }
+  },
   components: {
     LMap,
     LTileLayer,
@@ -25,8 +47,11 @@ export default {
     return {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       zoom: 13,
-      center: [47.413220, -1.219482],
-      markerLatLng: [47.413220, -1.219482],
+    }
+  },
+  computed: {
+    latLng: function() {
+      return this.markerLatLng
     }
   }
 }

@@ -16,7 +16,8 @@ const cleanWebpackPlugin = require('clean-webpack-plugin');
 
 var pathsToClean = [
    'public/js',
-   'public/css'
+   'public/css',
+   'public/fonts'
 ];
 
 var cleanOptions = {};
@@ -28,5 +29,4 @@ mix.webpackConfig({
 })
 
 mix.js('resources/js/main.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-   .copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/fonts');
+   .sass('resources/sass/app.scss', 'public/css');
