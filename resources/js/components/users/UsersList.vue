@@ -7,10 +7,10 @@
             <strong>Users List</strong> <small>Muhammad Rizki Fadillah</small>
           </div>
           <b-row class="mb-3">
-            <b-col md="3">
+            <b-col md="3" sm="3">
               <b-button :to="{ name: 'Add User' }" variant="primary"><i class="fas fa-plus"></i> Add User</b-button>
             </b-col>
-            <b-col md="4 ml-auto">
+            <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
                   <b-form-input type="text"></b-form-input>
@@ -30,10 +30,13 @@
                 :fields="captions" 
                 :current-page="currentPage" 
                 :per-page="perPage">
+                <template slot="avatar" slot-scope="data">
+                  <b-img rounded="circle" width="64" center thumbnail fluid :src="data.item.avatar" alt="Thumbnail" />
+                </template>
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="info" :to="{ name: 'Show User' }">{{ data.item.actions[0] }}</b-button>
-                  <b-button variant="warning" :to="{ name: 'Edit User' }">{{ data.item.actions[1] }}</b-button>
-                  <b-button variant="danger">{{ data.item.actions[2] }}</b-button>
+                  <b-button class="mb-1" variant="info" :to="{ name: 'Show User' }">{{ data.item.actions[0] }}</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User' }">{{ data.item.actions[1] }}</b-button>
+                  <b-button class="mb-1" variant="danger">{{ data.item.actions[2] }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -58,16 +61,18 @@
 <script>
 
 const data = () => [
-  { image: 'avatar.jpg', name: 'Muhammad Rizki Fadillah', username: 'mrizkifadil26', role: 'Admin', actions: ['Show', 'Edit', 'Delete'] }
+  { 
+    avatar: 'http://placehold.it/200x200',
+    name: 'Muhammad Rizki Fadillah', 
+    username: 'mrizkifadil26', 
+    role: 'Admin', 
+    actions: ['Show', 'Edit', 'Delete'] 
+  }
 ]
 
 export default {
   name: 'UsersList',
   props: {
-    userId: {
-      type: Number,
-      required: true
-    },
     caption: {
       type: String,
       default: 'Table'
@@ -95,10 +100,11 @@ export default {
       items: data,
       itemsArray: data(),
       fields: [
-        { key: 'name', label: 'Name', sortable: true},
-        { key: 'username' },
-        { key: 'role' },
-        { key: 'actions' }
+        { key: 'avatar', tdClass: "align-middle" },
+        { key: 'name', label: 'Name', sortable: true, tdClass: "align-middle" },        
+        { key: 'username', tdClass: "align-middle" },
+        { key: 'role', tdClass: "align-middle" },
+        { key: 'actions', tdClass: "align-middle" },
       ]
     }
   },

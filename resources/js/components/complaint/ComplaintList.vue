@@ -7,10 +7,10 @@
             <strong>Complaint List</strong> <small>Muhammad Rizki Fadillah</small>
           </div>
           <b-row class="mb-3">
-            <b-col md="3">
+            <b-col md="3" sm="3">
               <b-button variant="primary"><i class="fas fa-download"></i> Export</b-button>
             </b-col>
-            <b-col md="4 ml-auto">
+            <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
                   <b-form-input type="text"></b-form-input>

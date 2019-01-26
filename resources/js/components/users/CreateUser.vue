@@ -8,6 +8,19 @@
           </div>
           <b-row>
             
+            <b-col md="4" class="mb-3">
+              <b-row class="text-center mb-3">
+                <b-col>
+                  <b-img rounded="circle" thumbnail fluid src="https://picsum.photos/200/200/?image=54" alt="Thumbnail" />
+                </b-col>
+              </b-row>
+              <b-row class="text-center">
+                <b-col>
+                  <b-button variant="success">Upload Avatar</b-button>
+                </b-col>
+              </b-row>
+            </b-col>
+
             <b-col md="8" class="mb-3">
               <b-form-group
                 label="Name"
@@ -45,21 +58,9 @@
                 </b-form-select>
               </b-form-group>
 
+              <b-button class="ml-auto" variant="danger">Reset</b-button>
               <b-button class="ml-auto" variant="primary">Create</b-button>
 
-            </b-col>
-
-            <b-col md="4" class="mb-3">
-              <b-row class="text-center mb-3">
-                <b-col>
-                  <b-img rounded="circle" thumbnail fluid src="https://picsum.photos/200/200/?image=54" alt="Thumbnail" />
-                </b-col>
-              </b-row>
-              <b-row class="text-center">
-                <b-col>
-                  <b-input type="file" variant="primary">Upload Avatar</b-input>
-                </b-col>
-              </b-row>
             </b-col>
 
           </b-row>
@@ -73,12 +74,6 @@
 
 export default {
   name: 'CreateUser',
-  props: {
-    userId: {
-      type: Number,
-      required: true
-    }
-  },
 }
 </script>
 
