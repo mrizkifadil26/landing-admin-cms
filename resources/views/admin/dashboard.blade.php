@@ -1,7 +1,5 @@
-@extends('admin.layouts.admin')
+@extends('layouts.master')
 
-@section('content')
-  <Layout>
-    <Dashboard />
-  </Layout>
+@section('page')
+  <div id="app"></div>
 @endsection

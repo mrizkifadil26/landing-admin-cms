@@ -34,7 +34,7 @@
                   <b-img rounded="circle" width="64" center thumbnail fluid :src="data.item.avatar" alt="Thumbnail" />
                 </template>
                 <template slot="actions" slot-scope="data">
-                  <b-button class="mb-1" variant="info" :to="{ name: 'Show User' }">{{ data.item.actions[0] }}</b-button>
+                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User' }">{{ data.item.actions[0] }}</b-button>
                   <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User' }">{{ data.item.actions[1] }}</b-button>
                   <b-button class="mb-1" variant="danger">{{ data.item.actions[2] }}</b-button>
                 </template>

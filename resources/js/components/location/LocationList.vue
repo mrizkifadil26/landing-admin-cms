@@ -31,7 +31,7 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="info" :to="{ name: 'Show Location' }">{{ data.item.actions[0] }}</b-button>
+                  <b-button variant="success" :to="{ name: 'Show Location' }">{{ data.item.actions[0] }}</b-button>
                   <b-button variant="warning" :to="{ name: 'Edit Location' }">{{ data.item.actions[1] }}</b-button>
                   <b-button variant="danger">{{ data.item.actions[2] }}</b-button>
                 </template>

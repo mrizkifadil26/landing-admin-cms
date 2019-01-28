@@ -31,7 +31,7 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="warning" :to="{ name: 'Complaint Details' }">{{ data.item.actions }}</b-button>
+                  <b-button variant="success" :to="{ name: 'Complaint Details' }">{{ data.item.actions }}</b-button>
                 </template>
               </b-table>
               <nav>

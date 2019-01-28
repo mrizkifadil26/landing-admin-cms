@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Layout from '../components/layouts/Layout'
 
 import Landing from '../components/landing/Landing'
+import News from '../components/landing/News'
 
 import Login from '../components/auth/Login'
 import Logout from '../components/auth/Logout'
@@ -48,6 +49,10 @@ let router =  new Router({
         {
           path: '',
           component: Landing
+        },
+        {
+          path: '/news',
+          component: News
         }
       ]
     },

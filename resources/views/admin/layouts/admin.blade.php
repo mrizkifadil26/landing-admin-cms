@@ -1,7 +1,5 @@
 @extends('layouts.master')
 
 @section('page')
-  <div id="app">
-    @yield('content')
-  </div>
+  <div id="app"></div>
 @endsection

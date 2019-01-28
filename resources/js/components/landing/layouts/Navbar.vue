@@ -1,29 +1,166 @@
 <template>
-  <b-navbar toggleable="md" type="dark" text-variant="white" variant="primary">
-    <b-navbar-brand tag="h1" href="#">
-      <img src="img/favicon.png" class="d-inline-block align-top" alt="Logo" width="60"> 
-    </b-navbar-brand>
-    <span class="h3" align-self="center"><strong class="text-warning">CILEGON</strong>SMARTCITY</span>
-
-    <b-collapse is-nav id="nav_text_collapse">
-      <b-navbar-nav class="ml-auto" align-self="center">
-        <b-nav-item href="#" variant="" class="mr-4 py-auto text-uppercase" v-for="(nav, index) in navs" :key="index">{{ nav }}</b-nav-item>
-        <b-nav-item href="/login">
-          <b-button variant="warning" class="text-uppercase">Login</b-button>
-        </b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
-
-  </b-navbar>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" v-scroll-to="'#page-top'" href="#page-top"><img src="img/favicon.png" alt="Logo">Cilegon <span>SmartCity</span></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" v-scroll-to="'#news'" href="#news">Berita</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" v-scroll-to="'#complaint'" href="#complaint">Kolom Aduan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" v-scroll-to="'#location'" href="#location">Lokasi Istimewa</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" v-scroll-to="'#links'" href="#links">Link Penting</a>
+          </li>
+          <li class="nav-item ml-3">
+           <button type="button" class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }">Login</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <script>
+
+import ScrollTo from 'vue-scrollto'
+
 export default {
   name: 'Navbar',
+  directives: {
+    ScrollTo
+  },
   data() {
     return {
       navs: ['News', 'Best Location', 'Complaint', 'About']
     }
+  },
+  mounted() {
+
+    this.$nextTick(function() {
+      window.addEventListener("scroll", function() {
+        var navbar = document.getElementById("mainNav")
+        var nav_classes = navbar.classList
+        if(document.documentElement.scrollTop >= 150) {
+          if (nav_classes.contains("navbar-shrink") === false) {
+            nav_classes.toggle("navbar-shrink");
+          }
+        }
+        else {
+          if (nav_classes.contains("navbar-shrink") === true) {
+            nav_classes.toggle("navbar-shrink");
+          }
+        }
+      })
+    })
   }
 }
+
 </script>
+
+<style lang="scss" scoped>
+
+@import '../../../../sass/landing.scss';
+
+#mainNav {
+  border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+  background: #fff;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#mainNav .navbar-brand {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2C9DD9;
+  font-size: 1rem;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+#mainNav .navbar-brand span {
+  color: #ffc107;
+}
+
+#mainNav .navbar-brand img {
+  max-width: 56px;
+  height: 100%;
+  width: 100%;
+}
+
+#mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
+  font-size: 1rem;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #212529;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link.active,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
+  color: #2C9DD9 !important;
+  background: transparent;
+}
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link.active:hover,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active:hover {
+  background: transparent;
+}
+
+@media (min-width: 992px) {
+  #mainNav {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  #mainNav .navbar-brand {
+    color: #fff;
+  }
+  #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
+    color: #fff;
+  }
+  #mainNav .navbar-nav > li.nav-item > a.nav-link {
+    padding: 0.5rem 1rem;
+  }
+  #mainNav .navbar-nav > li.nav-item > a.nav-link,
+  #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    color:#fff;;
+  }
+  #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
+  #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+    color: #ffc107;;
+  }
+  #mainNav.navbar-shrink {
+    border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+    background-color: #fff;
+  }
+  #mainNav.navbar-shrink .navbar-brand {
+    color: #2C9DD9;
+  }
+  #mainNav.navbar-shrink .navbar-brand span {
+    color: #f05f40;
+  }
+  #mainNav.navbar-shrink .navbar-brand:focus, #mainNav.navbar-shrink .navbar-brand:hover {
+    color: #f05f40;
+  }
+  #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
+  #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
+    color: #212529;
+  }
+  #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
+  #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
+    color: #2C9DD9;
+  }
+}
+
+</style>

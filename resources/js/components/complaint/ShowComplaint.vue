@@ -4,7 +4,7 @@
       <b-col>        
         <b-card>
           <div slot="header">
-            <i class="fas fa-user"></i> <strong> User Details</strong>
+            <i class="fas fa-list"></i> <strong> Complaint Details</strong>
           </div>
           <b-row>
             

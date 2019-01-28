@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('landing.landing');
 });
 
-Route::get('/login', function() {
+Route::get('/login', function () {
     return view('auth.login');
 });
 
@@ -24,3 +24,7 @@ Route::get('/logout', 'AuthController@logout');
 Route::get('/posts/{post}', 'PostController@single');
 Route::get('/posts', 'PostController@all');
 Route::get('/admin', 'DashboardController@index');
+
+Route::get('/{vue_capture?}', function () {
+    return view('admin.dashboard');
+})->where('vue_capture', '[\/\w\.-]*');

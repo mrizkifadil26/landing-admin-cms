@@ -38,7 +38,7 @@
                   label-for="mapLocation"
                   :label-cols="3"
                   :horizontal="true">
-                  <b-form-input id="mapLocation" type="text" v-model="location.mapLocation" :value="latLng"></b-form-input>
+                  <b-form-input id="mapLocation" type="text" v-model="location.mapLocation" :value="location.mapLocation"></b-form-input>
                 </b-form-group>
                 
                 <b-form-group>

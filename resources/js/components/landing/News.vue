@@ -1,5 +1,7 @@
 <template>
-  <header class="masthead text-center text-white d-flex">
+  <div class="page-top">
+    <navbar></navbar>
+    <header class="masthead text-center text-white d-flex">
     <div class="container my-auto">
       <div class="row">
         <div class="col-lg-10 mx-auto">
@@ -16,18 +18,26 @@
       </div>
     </div>
   </header>
+  </div>
 </template>
 
 <script>
 
+import Navbar from './layouts/Navbar'
+import Hero from './layouts/Hero'
+
 export default {
-  name: 'Hero',
+  name: 'NewsLayout',
+  components: {
+    'navbar': Navbar,
+    'main-image': Hero
+  }
 }
+
 </script>
 
-<style lang="scss" scoped>
 
-@import '../../../../sass/landing.scss';
+<style lang="scss" scoped>
 
 a {
   color: #fff;
@@ -40,7 +50,6 @@ header.masthead {
   background-position: center center;
   background-image: linear-gradient(to top right, rgba(0, 47, 75, .5), rgba(220, 66, 37, .5)), url('~/img/cover.jpg');
   background-size: cover;
-
 }
 
 header.masthead hr {
@@ -81,3 +90,4 @@ header.masthead p {
 }
 
 </style>
+

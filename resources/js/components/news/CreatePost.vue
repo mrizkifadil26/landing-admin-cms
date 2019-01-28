@@ -30,8 +30,20 @@
                   label-for="category"
                   :label-cols="3"
                   :horizontal="true">
-                  <b-form-input id="category" type="text" v-model="post.category"></b-form-input>
+                  <vue-tags-input
+                    v-model="post.category"
+                    :tags="tags"
+                    @tags-changed="newTags => tags = newTags"
+                  ></vue-tags-input>
                 </b-form-group>
+
+                <b-form-group
+                  label="Main Image"
+                  label-for="image"
+                  :label-cols="3"
+                  :horizontal="true">
+                </b-form-group>
+                <vue-dropzone id="dropzone" :options="dropzoneOptions" class="mb-3"></vue-dropzone>
 
                 <b-form-group
                   label="Content"
@@ -56,11 +68,15 @@
 <script>
 
 import { VueEditor } from 'vue2-editor'
+import VueTagsInput from '@johmun/vue-tags-input'
+import VueDropzone from 'vue2-dropzone'
 
 export default {
   name: 'CreatePost',
   components: {
-    VueEditor
+    VueEditor,
+    'vue-tags-input': VueTagsInput,
+    'vue-dropzone': VueDropzone,
   },
   data () {
     return {
@@ -69,7 +85,14 @@ export default {
         description: '',
         category: '',
         content: '',
-      }
+      },
+      tags: [],
+      dropzoneOptions: {
+        url: 'https://httpbin.org/post',
+        thumbnailWidth: 200,
+        addRemoveLinks: true,
+        dictDefaultMessage: "<i class='fas fa-upload'></i> CLICK TO UPLOAD"
+      },
     }
   },
   method: {

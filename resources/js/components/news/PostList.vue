@@ -34,7 +34,7 @@
                   <b-badge :variant="getBadge(data.item.status)">{{ data.item.status }}</b-badge>
                 </template>
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="info" :to="{ name: 'Show Post' }">{{ data.item.actions[0] }}</b-button>
+                  <b-button variant="success" :to="{ name: 'Show Post' }">{{ data.item.actions[0] }}</b-button>
                   <b-button variant="warning" :to="{ name: 'Edit Post' }">{{ data.item.actions[1] }}</b-button>
                   <b-button variant="danger">{{ data.item.actions[2] }}</b-button>
                 </template>

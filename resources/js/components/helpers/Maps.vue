@@ -3,10 +3,10 @@
     <l-map
       style="width: 100%"
       :zoom="zoom"
-      :center="latLng">
+      :center="markerLatLng">
       <l-tile-layer :url="url"></l-tile-layer>
       <l-marker 
-        :lat-lng.sync="latLng"
+        :lat-lng.sync="markerLatLng"
         :draggable="draggable">
       </l-marker>
     </l-map>
@@ -50,9 +50,7 @@ export default {
     }
   },
   computed: {
-    latLng: function() {
-      return this.markerLatLng
-    }
+    
   }
 }
 
