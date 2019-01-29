@@ -13,10 +13,11 @@
         <strong>Account</strong>
       </b-dropdown-header>
 
+      <b-dropdown-item>{{ user.name }}</b-dropdown-item>
       <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item>
-        <logout @click="logout" />
+        <logout @click="this.$emit('logout')" />
       </b-dropdown-item>
 
     </template>
@@ -34,6 +35,16 @@ export default {
     AppHeaderDropdown,
     'logout': Logout
   },
+  methods: {
+    logout() {
+      
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.getters.currentUser
+    }
+  }
 }
 
 </script>

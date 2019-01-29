@@ -7,20 +7,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" v-scroll-to="'#news'" href="#news">Berita</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" v-scroll-to="'#complaint'" href="#complaint">Kolom Aduan</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" v-scroll-to="'#location'" href="#location">Lokasi Istimewa</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" v-scroll-to="'#links'" href="#links">Link Penting</a>
+          <li class="nav-item" v-for="(nav, index) in navs" :key="index">
+            <a class="nav-link js-scroll-trigger" v-scroll-to="nav.href" :href="nav.href">{{ nav.name }}</a>
           </li>
           <li class="nav-item ml-3">
-           <button type="button" class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }">Login</button>
+           <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }">Login</b-button>
           </li>
         </ul>
       </div>
@@ -39,7 +30,24 @@ export default {
   },
   data() {
     return {
-      navs: ['News', 'Best Location', 'Complaint', 'About']
+      navs: [
+        {
+          name: 'Berita',
+          href: '#news'
+        },
+        {
+          name: 'Kolom Aduan',
+          href: '#complaint'
+        },
+        {
+          name: 'Lokasi Istimewa',
+          href: '#location'
+        },  
+        {
+          name: 'Link Penting',
+          href: '#links'
+        }
+      ]
     }
   },
   mounted() {
@@ -67,7 +75,27 @@ export default {
 
 <style lang="scss" scoped>
 
-@import '../../../../sass/landing.scss';
+// @import '../../../../sass/landing.scss';
+.btn {
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 200px;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.navbar-shrink .btn {
+  background-color: #f05f40;
+  color: #fff;
+}
+
+.navbar-shrink .btn:hover {
+  background-color: #2C9DD9;
+}
+
+.navbar-shrink .btn:active {
+  background-color: #2C9DD9;
+}
 
 #mainNav {
   border-bottom: 1px solid rgba(33, 37, 41, 0.1);

@@ -53,6 +53,14 @@ let router =  new Router({
         {
           path: '/news',
           component: News
+        },
+        {
+          path: '/location',
+          component: {}
+        },
+        {
+          path: '/complaint',
+          component: {}
         }
       ]
     },
@@ -60,7 +68,7 @@ let router =  new Router({
       path: '/admin',
       redirect: '/admin/dashboard',
       name: 'Home',
-      meta: { sdsada: true },
+      meta: { requiresAuth: true },
       component : Layout,
       children: [
         {

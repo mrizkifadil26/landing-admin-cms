@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div @click="logout">
     <i class="fas fa-sign-out-alt" /> Logout
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Logout',
   computed: {
@@ -19,7 +20,11 @@ export default {
           this.$router.push('/login')
         })
     }
+  },
+  mounted() {
+    this.$on('logout', this.logout)
   }
 }
+
 </script>
 

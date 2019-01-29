@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only(['username', 'password']);
+        $credentials = $request->only(['username', 'password', 'name']);
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
@@ -30,7 +30,9 @@ class AuthController extends Controller
                 ], 400);
             }
         } catch(JWTException $e) {
-			return response()->json(['error' => 'Could not create token'], 500);
+			return response()->json([
+                'error' => 'Could not create token'
+            ], 500);
 		}
         
 
@@ -39,39 +41,40 @@ class AuthController extends Controller
             'status' => 'success',
             'user' => $credentials,
             'token' => $token,
-        ])->header('Authorization', $token);
+        ])->header('Authorization', 'Bearer ' . $token);
     }
 
-    public function authenticated(Request $request)
+    public function me()
     {
-        $user = User::find(Auth::user()->id);
-        // return response()->json(auth()->user());
-        return response([
-            'status'=> 'success',
-            'data' => $user
-        ]);
+        return response()->json(auth()->user());
     }
 
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
     public function refresh()
     {
-        // return $this->respondWithToken(auth()->refresh());
-        return response([
-            'status' => 'success'
-        ]);
+        return $this->respondWithToken(auth('api')->refresh());
     }
 
     public function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
+            'user' => $this->guard()->user(),
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
+    }
+
+    public function guard()
+    {
+        return \Auth::Guard('api');
     }
 
 }

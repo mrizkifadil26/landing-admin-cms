@@ -26,5 +26,5 @@ Route::get('/posts', 'PostController@all');
 Route::get('/admin', 'DashboardController@index');
 
 Route::get('/{vue_capture?}', function () {
-    return view('admin.dashboard');
+    return view('layouts.main');
 })->where('vue_capture', '[\/\w\.-]*');

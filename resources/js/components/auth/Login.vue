@@ -8,7 +8,7 @@
               <b-form v-on:submit.prevent="signIn">
                 <h1>Login</h1>
                 <p class="text-muted">Sign In to your account</p>
-                <b-alert show dismissible variant="danger" v-if="error">Danger Alert</b-alert>
+                <b-alert show dismissible variant="danger" v-if="error.state === true">{{ error.message }}</b-alert>
                 <b-input-group class="mb-3" validated>
                   <b-input-group-prepend><b-input-group-text><i class="fas fa-user"></i></b-input-group-text></b-input-group-prepend>
                   <b-form-input type="text" class="form-control is-valid" placeholder="Username" autocomplete="username" v-model="login.username" />
@@ -55,13 +55,16 @@ export default {
         username: '',
         password: '',
       },
-      error: false
+      error: {
+        state: false,
+        message: ''
+      }
     }
   },
   methods: {
     signIn () {
       
-      this.error = false;
+      this.error.state = false;
       let username = this.login.username
       let password = this.login.password
 
@@ -70,7 +73,8 @@ export default {
           this.$router.push('/admin')
         })
         .catch(err => {
-          this.error = true
+          this.error.state = true
+          this.error.message = err
           console.log(err)
         })
     }

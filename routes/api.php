@@ -30,7 +30,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::post('auth/login', 'AuthController@login');
 Route::post('auth/logout', 'AuthController@logout');
 Route::group(['middleware' => 'jwt.auth'], function() {
-    Route::get('auth/user', 'AuthController@authenticated');
+    Route::get('auth/user', 'AuthController@me');
 });
 
 Route::group(['middleware' => 'jwt.refresh'], function() {

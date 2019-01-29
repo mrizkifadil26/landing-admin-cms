@@ -83,7 +83,8 @@ export default {
         location: 30,
         post: 20,
         complaint: 50
-      }
+      },
+      selected: true
     }
   }
 }

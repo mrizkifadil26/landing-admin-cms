@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    user: {},
+    currentUser: '',
   },
   mutations: {
     auth_request(state) {
@@ -16,7 +16,7 @@ export default new Vuex.Store({
     },
     auth_success(state, token, user, status) {
       state.token = token
-      state.user = user
+      state.currentUser = user
       state.status = status
     },
     auth_error(state) {
@@ -35,16 +35,18 @@ export default new Vuex.Store({
         .then(response => {
           console.log(response)
           const token = response.data.token
-          let status = response.data.status
-          let user = response.data.user
+          const status = response.data.status
+          const user = response.data.user.name
           localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
+          localStorage.setItem('user', user)
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
           commit('auth_success', token, user, status)        
           resolve(response)
         })
         .catch(err => {
           commit('auth_error', err)
           localStorage.removeItem('token')
+          localStorage.removeItem('user')
           reject(err)
         })
       })
@@ -53,6 +55,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('logout')
         localStorage.removeItem('token')
+        localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
@@ -61,5 +64,6 @@ export default new Vuex.Store({
   getters: {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
+    currentUser: state => state.currentUser,
   }
 })
