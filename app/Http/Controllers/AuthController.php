@@ -39,7 +39,7 @@ class AuthController extends Controller
         // return $this->respondWithToken($token);
         return response([
             'status' => 'success',
-            'user' => $credentials,
+            'user' => Auth::user(),
             'token' => $token,
         ])->header('Authorization', 'Bearer ' . $token);
     }
