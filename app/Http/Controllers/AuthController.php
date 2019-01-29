@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only(['username', 'password', 'name']);
+        $credentials = $request->only(['username', 'password']);
 
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
@@ -40,6 +40,7 @@ class AuthController extends Controller
         return response([
             'status' => 'success',
             'user' => Auth::user(),
+            'name' => Auth::user()->name,
             'token' => $token,
         ])->header('Authorization', 'Bearer ' . $token);
     }
