@@ -17,8 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('posts', 'PostController');
+Route::apiResource('posts', 'Api\v1\PostController');
+Route::apiResource('locations', 'Api\v1\LocationController');
+Route::apiResource('complaints', 'Api\v1\ComplaintController');
 Route::apiResource('users', 'Api\v1\UserController');
+Route::apiResource('images', 'Api\v1\ImageController');
+Route::apiResource('post-categories', 'Api\v1\PostCategoryController');
+Route::apiResource('location-categories', 'Api\v1\LocationCategoryController');
 /*
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('login', 'AuthController@login');

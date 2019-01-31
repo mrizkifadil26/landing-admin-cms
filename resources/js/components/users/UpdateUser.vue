@@ -28,7 +28,7 @@
                 label-for="name"
                 :label-cols="3"
                 :horizontal="true">
-              <b-form-input id="name" type="text"></b-form-input>
+              <b-form-input id="name" type="text" v-model="user.name"></b-form-input>
               </b-form-group>
 
               <b-form-group
@@ -36,7 +36,7 @@
                 label-for="username"
                 :label-cols="3"
                 :horizontal="true">
-              <b-form-input id="username" type="text"></b-form-input>
+                <b-form-input id="username" type="text" v-model="user.username"></b-form-input>
               </b-form-group>
 
               <b-form-group
@@ -44,7 +44,7 @@
                 label-for="password"
                 :label-cols="3"
                 :horizontal="true">
-                <b-form-input id="password" type="password"></b-form-input>
+                <b-form-input id="password" type="password" v-model="user.password"></b-form-input>
               </b-form-group>
 
               <b-form-group
@@ -52,7 +52,7 @@
                 label-for="password_confirmation"
                 :label-cols="3"
                 :horizontal="true">
-                <b-form-input id="password_confirmation" type="password"></b-form-input>
+                <b-form-input id="password_confirmation" type="password" v-model="user.passwordConf"></b-form-input>
               </b-form-group>
 
               <b-form-group
@@ -63,7 +63,8 @@
                 <b-form-select id="roles"
                   :plain="true"
                   :options="['Select Role','Admin', 'User']"
-                  value="Select Role">
+                  value="Select Role"
+                  v-model="user.role">
                 </b-form-select>
               </b-form-group>
 
@@ -81,6 +82,17 @@
 <script>
 export default {
   name: 'UpdateUser',
+  data() {
+    return {
+      user: {
+        name: '',
+        username: '',
+        password: '',
+        passwordConf: '',
+        role: ''
+      }
+    }
+  }
 }
 </script>
 

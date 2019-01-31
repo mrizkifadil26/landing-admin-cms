@@ -7,10 +7,10 @@
             <strong>Posts</strong> <small>Muhammad Rizki Fadillah</small>
           </div>
           <b-row class="mb-3">
-            <b-col md="3">
+            <b-col md="3" sm="3">
               <b-button :to="{ name: 'Add Post' }" variant="primary"><i class="fas fa-plus"></i> Add Post</b-button>
             </b-col>
-            <b-col md="4 ml-auto">
+            <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
                   <b-form-input type="text"></b-form-input>
@@ -24,19 +24,24 @@
           <b-row>
             <b-col>
               <b-table
-                :dark="dark"
-                responsive="sm" 
-                :items="items" 
-                :fields="captions" 
+                responsive="sm"
+                :items="items.data" 
+                :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
-                <template slot="status" slot-scope="data">
-                  <b-badge :variant="getBadge(data.item.status)">{{ data.item.status }}</b-badge>
+                <template slot="posted_by" slot-scope="data">
+                  {{ data.item.posted_by.name }}
                 </template>
-                <template slot="actions" slot-scope="data">
-                  <b-button variant="success" :to="{ name: 'Show Post' }">{{ data.item.actions[0] }}</b-button>
-                  <b-button variant="warning" :to="{ name: 'Edit Post' }">{{ data.item.actions[1] }}</b-button>
-                  <b-button variant="danger">{{ data.item.actions[2] }}</b-button>
+                <template slot="category_id" slot-scope="data">
+                  {{ data.item.category.post_category }}
+                </template>
+                <template slot="status" slot-scope="row">
+                  <b-badge :variant="row.value == 'Published' ? 'danger': 'success' ">Published</b-badge>
+                </template>
+                <template slot="actions" slot-scope="row">
+                  <b-button variant="success" :to="{ path: '/show/:id', label: 'Show Post' }">{{ row.value = 'Show' }}</b-button>
+                  <b-button variant="warning" :to="{ path: '/edit/:id', label: 'Edit Post' }">{{ row.value = 'Edit' }}</b-button>
+                  <b-button variant="danger" :to="{ path: '/delete/:id', label: 'Delete Post' }">{{ row.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -60,69 +65,58 @@
 
 <script>
 
-const data = () => [
-  { 
-    title: 'Hai', 
-    writer: 'Rizki', 
-    category: 'Business', 
-    status: 'Published', 
-    actions: ['Show', 'Edit', 'Delete']
-  }
-]
+import axios from 'axios'
+
+// let items = []
 
 export default {
   name: 'PostList',
   props: {
-    caption: {
-      type: String,
-      default: 'Table'
-    },
     hover: {
       type: Boolean,
       default: true
     },
-    tableData: {
-      type: [Array, Function],
-      default: () => []
-    },
-    perPage: {
-      type: Number,
-      default: 5
-    },
     dark: {
       type: Boolean,
       default: false
-    }
+    },
   },
   data: () => {
     return {
       currentPage: 1,
-      items: data,
-      itemsArray: data(),
+      items: [],
+      perPage: 10,
       fields: [
         { key: 'title', label: 'Title', sortable: true},
-        { key: 'writer' },
-        { key: 'category' },
-        { key: 'status' },
-        { key: 'actions' }
-      ]
+        { key: 'posted_by', sortable: true },
+        { key: 'category_id', label: 'Category' },
+        { key: 'status', sortable: true },
+        { key: 'actions', label: 'Actions' }
+      ],
+      status: ['Published', 'Draft'],
+      actions: ['Show', 'Edit', 'Delete']
     }
   },
+  mounted() {
+    axios.get('http://localhost:8000/api/posts')
+      .then(response => {
+        this.items = response.data
+        console.log(response.data)
+      }).catch(error => {
+        console.log(error)
+      })
+  },
   computed: {
-    totalRows: function () {
-      return this.getRowCount()
-    },
-    captions: function () {
-      return this.fields
+    totalRows: function() {
+      return this.items.length
+      // console.log(this.items.length)
     }
   },
   methods: {
-    getBadge (roles) {
-      return roles === 'Published' ? 'primary' : 'danger';
+    getBadge (status) {
+      return status === 'Published' ? 'primary' : 
+        status === 'Draft' ? 'danger' : 'default';
     },
-    getRowCount: function () {
-      return this.items.length
-    }
   }
 }
 </script>

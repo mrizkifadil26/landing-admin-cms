@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserResource(User::all());
+        return UserResource::collection(User::all());
     }
 
     /**
@@ -29,7 +29,9 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'required|min:6',
+            'name' => 'required',
+            
         ]);
 
         $user = User::create($request->all());

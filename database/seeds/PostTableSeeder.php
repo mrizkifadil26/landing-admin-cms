@@ -12,12 +12,24 @@ class PostTableSeeder extends Seeder
      */
     public function run()
     {
-        $post = new Post;
-        $post->title = "Hai Teman Teman";
-        $post->slug = "hai-teman-teman";
-        $post->description = "Teman";
-        $post->content = "Teman adalah teman";
-        $post->created_by = 1;
-        $post->save();
+        $userCount = (int) $this->command->ask('How many users?', 2);
+        
+        $range = 0 . '-' . 10;
+        $postRange = $this->command->ask('How many posts?', $range);
+
+        $this->command->info('Creating {userCount} users each having a post range of {$postRange}.');
+        
+        $users = factory(App\User::class, $userCount)->create();
+
+        $users->each(function($user) use ($postRange) {
+            factory(Post::class, $this->count($postRange))
+                ->create(['posted_by' => $user->id]);
+        });
+
+    }
+
+    function count($range)
+    {
+        return rand(0, ...explode('-', $range));
     }
 }

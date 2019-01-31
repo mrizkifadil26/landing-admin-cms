@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ComplaintResource;
+use App\Complaint;
 
 class ComplaintController extends Controller
 {
@@ -14,7 +16,7 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        return ComplaintResource::collection(Complaint::all());
     }
 
     /**
@@ -36,7 +38,7 @@ class ComplaintController extends Controller
      */
     public function show($id)
     {
-        //
+        return ComplaintResource::findOrFail($id);
     }
 
     /**

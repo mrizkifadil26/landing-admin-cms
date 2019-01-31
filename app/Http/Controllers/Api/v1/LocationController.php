@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LocationResource;
+use App\Location;
 
 class LocationController extends Controller
 {
@@ -14,7 +16,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        return LocationResource::collection(Location::all());
     }
 
     /**

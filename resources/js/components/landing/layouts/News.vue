@@ -14,39 +14,16 @@
     <div class="container">
       
       <div class="row">
-        <div class="col-lg-4 col-sm-12 mb-4">
+        <div class="col-lg-4 col-sm-12 mb-4" v-for="post in this.posts.data" :key="post.id">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" :src="post.image" alt="" height="200"></a>
             <div class="card-body">
               <h4 class="card-title">
-                <a href="#">Project One</a>
+                <a href="#">{{ post.title }}</a>
               </h4>
-              <p class="card-text text-dark">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur eum quasi sapiente nesciunt? Voluptatibus sit, repellat sequi itaque deserunt, dolores in, nesciunt, illum tempora ex quae? Nihil, dolorem!</p>
-              <p class="text-muted">Posted by Start Bootstrap on July 8, 2018</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-sm-12 mb-4">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Two</a>
-              </h4>
-              <p class="card-text text-dark">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-              <p class="text-muted">Posted by Start Bootstrap on July 8, 2018</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-sm-12 mb-4">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Three</a>
-              </h4>
-              <p class="card-text text-dark">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos quisquam, error quod sed cumque, odio distinctio velit nostrum temporibus necessitatibus et facere atque iure perspiciatis mollitia recusandae vero vel quam!</p>
-              <p class="text-muted">Posted by Start Bootstrap on July 8, 2018</p>
+              <p class="card-text text-dark">{{ post.content | truncate(200, '...')}}</p>
+              <p class="text-muted">Posted by {{ post.posted_by }} on {{ post.created_at }}</p>
+              <b-button class="btn btn-primary" :to="{ path: '/news/show/' + post.id }">Read more <i class="fas fa-arrow-right"></i></b-button>
             </div>
           </div>
         </div>
@@ -82,8 +59,37 @@
 
 <script>
 
+import axios from 'axios'
+
 export default {
-  name: 'News'
+  name: 'News',
+  data () {
+    return {
+      posts: [],
+      // post: {
+      //   title: '',
+      //   content: '',
+      //   image: '',
+      //   category: '',
+      //   postedBy: '',
+      //   createdAt: '',
+      // }
+    }
+  },
+  created() {
+    axios.get('http://localhost:8000/api/posts')
+      .then(response => {
+        this.posts = response.data
+      }).catch(error => {
+        console.log(error)
+      })
+  },
+  filters: {
+     truncate: function (text, length, suffix) { 
+                  return text.substring(0, length) + suffix;
+                },
+  }
+  
 }
 
 </script>
@@ -92,4 +98,11 @@ export default {
 
 @import '../../../../sass/landing.scss';
 
-</style>
+.btn {
+  text-transform: capitalize;
+  font-weight: 500;
+  border-radius: 10px;
+  color: #fff;
+}
+
+</style> 

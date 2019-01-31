@@ -4,6 +4,9 @@ namespace App\Http\Controllers\api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
+use App\Post;
+use App\PostCategory;
 
 class PostController extends Controller
 {
@@ -14,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return PostResource::collection(Post::all());
     }
 
     /**
@@ -25,7 +28,25 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
+        // $category = PostCategory::where(['category_id' => $request->category()->id])->firstOrFail();
+
+        $post = Post::create([
+            'title' => $request->title,
+            'slug' => strtolower(str_slug($request->title, '-')),
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'image_id' => $request->image_id,
+            'content' => $request->content,
+            'posted_by' => $request->posted_by,
+        ]);
+
+        return new PostResource($post);
     }
 
     /**
@@ -36,7 +57,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        return new PostResource(Post::findOrFail($id));
     }
 
     /**
@@ -59,6 +80,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return response()->json(null, 204);
     }
 }

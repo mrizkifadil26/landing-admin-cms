@@ -4,7 +4,8 @@ import Router from 'vue-router'
 import Layout from '../components/layouts/Layout'
 
 import Landing from '../components/landing/Landing'
-import News from '../components/landing/News'
+import NewsLayout from '../components/landing/news/NewsLayout'
+import NewsSection from '../components/landing/news/NewsSection'
 
 import Login from '../components/auth/Login'
 import Logout from '../components/auth/Logout'
@@ -39,7 +40,6 @@ let router =  new Router({
   routes: [
     {
       path: '/',
-      name: 'Landing',
       component: {
         render(c) {
           return c('router-view')
@@ -48,18 +48,37 @@ let router =  new Router({
       children: [
         {
           path: '',
+          name: 'Landing',
           component: Landing
         },
         {
-          path: '/news',
-          component: News
+          path: 'news',
+          meta: { label: 'News Section'},
+          component: {
+            render(c) {
+              return c('router-view')
+            }
+          },
+          children: [
+            {
+              path: '',
+              component: NewsLayout
+            },
+            {
+              path: 'show/:id',
+              component: NewsSection,
+              props: true
+            },
+          ]
         },
         {
           path: '/location',
+          name: 'Location Section',
           component: {}
         },
         {
           path: '/complaint',
+          name: 'Complaint Section',
           component: {}
         }
       ]
@@ -79,7 +98,7 @@ let router =  new Router({
         },
         {
           path: 'news',
-          name: 'News',
+          meta: { label: 'News'},
           component: {
             render(c) { return c('router-view') }
           },
@@ -94,12 +113,12 @@ let router =  new Router({
               component: CreatePost
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Show Post',
               component: ShowPost
             },
             {
-              path: 'edit',
+              path: 'edit/:id',
               name: 'Edit Post',
               component: UpdatePost
             }
@@ -107,13 +126,13 @@ let router =  new Router({
         },
         {
           path: 'locations',
-          name: 'Locations',
+          meta: { label: 'Locations'},
           component: {
             render(c) { return c('router-view') }
           },      
           children: [
             {
-              path: '/',
+              path: '',
               component: LocationList
             },
             {
@@ -135,7 +154,7 @@ let router =  new Router({
         },
         {
           path: 'complaints',
-          name: 'Complaints',
+          meta: { label: 'Complaints'},
           component: {
             render (c) { return c('router-view') }
           },
@@ -153,7 +172,7 @@ let router =  new Router({
         },
         {
           path: 'users',
-          name: 'Users',
+          meta: { label: 'Users'},
           component: {
             render (c) { return c('router-view') }
           },
@@ -183,7 +202,6 @@ let router =  new Router({
     },
     {
       path: '/login',
-      name: 'Login',
       component: {
         render(c) {
           return c('router-view')
@@ -192,6 +210,7 @@ let router =  new Router({
       children: [
         {
           path: '',
+          name: 'Login',
           meta: { auth: false },
           component: Login
         }

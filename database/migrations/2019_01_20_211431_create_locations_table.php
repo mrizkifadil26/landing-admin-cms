@@ -19,7 +19,7 @@ class CreateLocationsTable extends Migration
             $table->string('description');
             $table->string('category');
             $table->string('image');
-            $table->integer('rating')->unsigned()->default(0);
+            $table->integer('avg_rating')->unsigned()->default(0);
             $table->integer('posted_by')->unsigned();
             $table->timestamps();
 

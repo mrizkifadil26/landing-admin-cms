@@ -24,19 +24,18 @@
           <b-row>
             <b-col>
               <b-table
-                :dark="dark"
                 responsive="sm" 
-                :items="items" 
+                :items="items.data" 
                 :fields="captions" 
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="avatar" slot-scope="data">
-                  <b-img rounded="circle" width="64" center thumbnail fluid :src="data.item.avatar" alt="Thumbnail" />
+                  <b-img rounded="circle" width="64" center thumbnail fluid :src="'/img/' + data.item.avatar" alt="Thumbnail" />
                 </template>
-                <template slot="actions" slot-scope="data">
-                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User' }">{{ data.item.actions[0] }}</b-button>
-                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User' }">{{ data.item.actions[1] }}</b-button>
-                  <b-button class="mb-1" variant="danger">{{ data.item.actions[2] }}</b-button>
+                <template slot="actions" slot-scope="row">
+                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User' }">{{ row.value = "Show"  }}</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User' }">{{ row.value = "Edit" }}</b-button>
+                  <b-button class="mb-1" variant="danger">{{ row.value = "Delete" }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -60,30 +59,16 @@
 
 <script>
 
-const data = () => [
-  { 
-    avatar: 'http://placehold.it/200x200',
-    name: 'Muhammad Rizki Fadillah', 
-    username: 'mrizkifadil26', 
-    role: 'Admin', 
-    actions: ['Show', 'Edit', 'Delete'] 
-  }
-]
+import axios from 'axios'
+
+// let items = []
 
 export default {
   name: 'UsersList',
   props: {
-    caption: {
-      type: String,
-      default: 'Table'
-    },
     hover: {
       type: Boolean,
       default: true
-    },
-    tableData: {
-      type: [Array, Function],
-      default: () => []
     },
     perPage: {
       type: Number,
@@ -97,8 +82,7 @@ export default {
   data: () => {
     return {
       currentPage: 1,
-      items: data,
-      itemsArray: data(),
+      items: [],
       fields: [
         { key: 'avatar', tdClass: "align-middle" },
         { key: 'name', label: 'Name', sortable: true, tdClass: "align-middle" },        
@@ -107,6 +91,15 @@ export default {
         { key: 'actions', tdClass: "align-middle" },
       ]
     }
+  },
+  mounted () {
+    axios.get('http://localhost:8000/api/users')
+      .then(response => {
+        this.items = response.data
+        console.log(response.data)
+      }).catch(error => {
+        console.log(error)
+      })
   },
   computed: {
     totalRows: function () {

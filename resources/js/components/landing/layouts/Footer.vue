@@ -37,7 +37,7 @@
           </ul>
         </div>
         <div class="col-md-2">
-          <img src="img/ooredoo.png" alt="Indosat Ooredoo">
+          <img src="/img/ooredoo.png" alt="Indosat Ooredoo">
         </div>
         <div class="col-md-2">
           <a href='https://play.google.com/store/apps/details?id=org.smart.nation.indonesia.android.cilegon&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>

@@ -13,7 +13,7 @@
         <strong>Account</strong>
       </b-dropdown-header>
 
-      <b-dropdown-item>{{ user.name }}</b-dropdown-item>
+      <b-dropdown-item>Muhammad Rizki Fadillah</b-dropdown-item>
       <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item>

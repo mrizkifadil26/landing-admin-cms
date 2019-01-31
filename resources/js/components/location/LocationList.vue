@@ -7,10 +7,10 @@
             <strong>Location List</strong> <small>Muhammad Rizki Fadillah</small>
           </div>
           <b-row class="mb-3">
-            <b-col md="3">
+            <b-col md="3" sm="4 mb-3">
               <b-button :to="{ name: 'Add Location' }" variant="primary"><i class="fas fa-plus"></i> Add Location</b-button>
             </b-col>
-            <b-col md="4 ml-auto">
+            <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
                   <b-form-input type="text"></b-form-input>

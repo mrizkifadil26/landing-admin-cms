@@ -31,7 +31,8 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="success" :to="{ name: 'Complaint Details' }">{{ data.item.actions }}</b-button>
+                  <b-button variant="warning" :to="{ name: 'Change Status' }">{{ data.item.actions[0] }}</b-button>
+                  <b-button variant="success" :to="{ name: 'Complaint Details' }">{{ data.item.actions[1] }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -56,7 +57,7 @@
 <script>
 
 const data = () => [
-  { complaint: 'Fix Street Lamp', pengadu: 'Rizki', category: 'Infrastruktur', actions: 'Details' }
+  { complaint: 'Fix Street Lamp', pengadu: 'Rizki', category: 'Infrastruktur', actions: ['Change Status' ,'Details'] }
 ]
 
 export default {

@@ -8,7 +8,7 @@ const mutations = {
 
 const actions = {
   getLoggedInUser() {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem('user')
     if (!userStr) {
       return null
     }
