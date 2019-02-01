@@ -18,6 +18,9 @@ class CreateLocationCategoryTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('location_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('location_categories')->onDelete('cascade');
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');            
         });
     }
 

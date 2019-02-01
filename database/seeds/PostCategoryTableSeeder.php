@@ -12,12 +12,12 @@ class PostCategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        $count = (int) $this->command->ask('How many categories?', 10);
+        $count = (int) $this->command->ask("How many categories?", 10);
 
-        $this->command->info('Creating {$count} categories');
+        $this->command->info("Creating {$count} categories");
 
         $categories = factory(PostCategory::class, $count)->create();
 
-        $this->command->info('Categories created!');
+        $this->command->info("Categories created!");
     }
 }

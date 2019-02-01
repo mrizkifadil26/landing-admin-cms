@@ -12,12 +12,12 @@ class EventTableSeeder extends Seeder
      */
     public function run()
     {
-        $userCount = (int) $this->command->ask('How many users that posted this?', 5);
+        $userCount = (int) $this->command->ask("How many users that posted this?", 5);
         
         $range = 0 . '-' . 10;
-        $eventRange = $this->command->ask('How many events?', $range);
+        $eventRange = $this->command->ask("How many events?", $range);
 
-        $this->command->info('Creating {userCount} users each creating an event range of {$eventRange}.');
+        $this->command->info("Creating {$userCount} users each creating an event range of {$eventRange}.");
         
         $users = factory(App\User::class, $userCount)->create();
 

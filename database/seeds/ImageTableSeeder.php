@@ -12,12 +12,12 @@ class ImageTableSeeder extends Seeder
      */
     public function run()
     {
-        $imgCount = (int) $this->command->ask('How many images?', 10);
+        $imgCount = (int) $this->command->ask("How many images?", 10);
 
-        $this->command->info('Creating {$imgCount} images');
+        $this->command->info("Creating {$imgCount} images");
 
         $image = factory(Image::class, $imgCount)->create();
 
-        $this->command->info('Images created!');
+        $this->command->info("Images created!");
     }
 }

@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         Eloquent::unguard();
 
-        if ($this->command->confirm('Do you wish to refresh migration before seeding, it will clear all old data?')) {
+        if ($this->command->confirm("Do you wish to refresh migration before seeding, it will clear all old data?")) {
             $this->command->call('migrate:fresh');
-            $this->command->line('Database cleared');
+            $this->command->line("Database cleared");
         }
 
         $this->call([
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             RatingTableSeeder::class
         ]);
 
-        $this->command->info('Database seeded.');
+        $this->command->info("Database seeded.");
 
         Eloquent::reguard();
     }

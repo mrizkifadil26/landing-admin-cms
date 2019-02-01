@@ -12,12 +12,12 @@ class ComplaintCategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        $count = (int) $this->command->ask('How many categories?', 10);
+        $count = (int) $this->command->ask("How many categories?", 10);
 
-        $this->command->info('Creating {$count} of complaint categories');
+        $this->command->info("Creating {$count} of complaint categories");
 
         $categories = factory(ComplaintCategory::class, $count)->create();
 
-        $this->command->info('Complaint categories created!');
+        $this->command->info("Complaint categories created!");
     }
 }

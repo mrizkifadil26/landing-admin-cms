@@ -19,6 +19,9 @@ class CreateRatingsTable extends Migration
             $table->integer('location_id')->unsigned();
             $table->integer('rating')->unsigned();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
         });
     }
 

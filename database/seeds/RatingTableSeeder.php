@@ -15,11 +15,11 @@ class RatingTableSeeder extends Seeder
     public function run()
     {
         $range = 0 . '-' . 10;
-        $ratingRange = $this->command->ask('How many ratings?', $range);
+        $ratingRange = $this->command->ask("How many ratings?", $range);
 
         $locations = Location::all();
 
-        $this->command->info('Creating range of {$ratingRange} ratings for {$locations->count()} posts.');
+        $this->command->info("Creating range of {$ratingRange} ratings for {$locations->count()} locations.");
 
         $locations->each(function($location) use ($ratingRange) {
             factory(Rating::class, $this->count($ratingRange))
@@ -29,7 +29,7 @@ class RatingTableSeeder extends Seeder
                 ]);
         });
 
-        $this->command->info('Ratings created!');
+        $this->command->info("Ratings created!");
 
     }
 

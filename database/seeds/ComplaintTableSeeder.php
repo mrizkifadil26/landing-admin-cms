@@ -12,12 +12,12 @@ class ComplaintTableSeeder extends Seeder
      */
     public function run()
     {
-        $userCount = (int) $this->command->ask('How many users that complained?', 10);
+        $userCount = (int) $this->command->ask("How many users that complained?", 10);
         
         $range = 0 . '-' . 10;
-        $complaintRange = $this->command->ask('How many complaints?', $range);
+        $complaintRange = $this->command->ask("How many complaints?", $range);
 
-        $this->command->info('Creating {userCount} users each having a complaint range of {$complaintRange}.');
+        $this->command->info("Creating {$userCount} users each having a complaint range of {$complaintRange}.");
         
         $users = factory(App\User::class, $userCount)->create();
 

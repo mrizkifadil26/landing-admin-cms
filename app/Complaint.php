@@ -22,6 +22,6 @@ class Complaint extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(ComplaintCategory::class);
+        return $this->belongsTo(ComplaintCategory::class);
     }
 }

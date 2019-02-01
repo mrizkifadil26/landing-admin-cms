@@ -15,11 +15,11 @@ class CommentTableSeeder extends Seeder
     public function run()
     {
         $range = 0 . '-' . 10;
-        $commentRange = $this->command->ask('How many comments?', $range);
+        $commentRange = $this->command->ask("How many comments?", $range);
 
         $posts = Post::all();
 
-        $this->command->info('Creating range of {$commentRange} comments for {$posts->count()} posts.');
+        $this->command->info("Creating range of {$commentRange} comments for {$posts->count()} posts.");
 
         $posts->each(function($post) use ($commentRange) {
             factory(Comment::class, $this->count($commentRange))
