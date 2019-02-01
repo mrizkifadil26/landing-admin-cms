@@ -30,10 +30,18 @@ class ComplaintController extends Controller
         $this->validate([
             'complaint' => 'required',
             'description' => 'required',
+            'category_id' => 'required',
             'image_id' => 'required',
         ]);
 
-        $complaint = Complaint::create($request->all());
+        $complaint = Complaint::create([
+            'complaint' => $request->complaint,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'image_id' => $request->image_id,
+            'status' => $request->status,
+            'complaint_by' => $request->complaint_by
+        ]);
 
         return new ComplaintResource($complaint);
 
@@ -78,6 +86,6 @@ class ComplaintController extends Controller
 
         return response()->json([
             'message' => 'Complaint successfully removed.'
-        ]);
+        ], 204);
     }
 }

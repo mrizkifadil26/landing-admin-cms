@@ -4,7 +4,7 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong>Location List</strong> <small>Muhammad Rizki Fadillah</small>
+            <strong>Location List</strong>
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="4 mb-3">
@@ -24,16 +24,15 @@
           <b-row>
             <b-col>
               <b-table
-                dark="dark"
                 responsive="sm" 
-                :items="locations" 
+                :items="this.locations.data" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
-                <template slot="actions" slot-scope="data">
-                  <b-button variant="success" :to="{ name: 'Show Location' }">{{ data.item.actions[0] }}</b-button>
-                  <b-button variant="warning" :to="{ name: 'Edit Location' }">{{ data.item.actions[1] }}</b-button>
-                  <b-button variant="danger">{{ data.item.actions[2] }}</b-button>
+                <template slot="actions" slot-scope="row">
+                  <b-button variant="success" :to="{ name: 'Show Location' }">{{ row.value = "Show" }}</b-button>
+                  <b-button variant="warning" :to="{ name: 'Edit Location' }">{{ row.value = "Edit" }}</b-button>
+                  <b-button variant="danger" :to="{ name: 'Delete Location' }">{{ row.value = "Delete" }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -74,9 +73,10 @@ export default {
       currentPage: 1,
       locations: [],
       fields: [
-        { key: 'place', label: 'Place', sortable: true},
-        { key: 'category' },
-        { key: 'stars' },
+        { key: 'location', label: 'Place', sortable: true},
+        { key: 'description' },
+        { key: 'address' },
+        { key: 'avg_rating', label: 'Rating' },
         { key: 'actions' }
       ]
     }
@@ -90,15 +90,10 @@ export default {
       .catch(error => {
         console.log(error)
       })
-  },  
-  computed: {
-    totalRows: function () {
-      return this.getRowCount()
-    }
   },
-  methods: {
-    getRowCount: function () {
-      return this.items.length
+  computed: {
+    totalRows: function() {
+      return this.locations.length
     }
   }
 }

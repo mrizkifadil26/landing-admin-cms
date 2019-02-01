@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function avatar()
     {
-        return $this->belongsTo(Image::class);
+        return $this->belongsTo(Image::class, 'avatar', 'id');
     }
 
     public function posts()

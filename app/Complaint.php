@@ -12,16 +12,16 @@ class Complaint extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'complaint_by', 'id');
     }
 
     public function image()
     {
-        return $this->belongsTo(Image::class);
+        return $this->belongsTo(Image::class, 'image_id', 'id');
     }
 
     public function categories()
     {
-        return $this->belongsTo(ComplaintCategory::class);
+        return $this->belongsTo(ComplaintCategory::class, 'category_id', 'id');
     }
 }

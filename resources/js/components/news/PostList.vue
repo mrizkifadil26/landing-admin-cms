@@ -25,7 +25,7 @@
             <b-col>
               <b-table
                 responsive="sm"
-                :items="items.data" 
+                :items="this.posts.data" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -80,8 +80,8 @@ export default {
   data: () => {
     return {
       currentPage: 1,
-      items: [],
-      perPage: 10,
+      posts: [],
+      perPage: 5,
       fields: [
         { key: 'title', label: 'Title', sortable: true},
         { key: 'posted_by', sortable: true },
@@ -96,7 +96,7 @@ export default {
   mounted() {
     axios.get('/api/posts')
       .then(response => {
-        this.items = response.data
+        this.posts = response.data
         console.log(response.data)
       }).catch(error => {
         console.log(error)
@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     totalRows: function totalRows() {
-      return this.items.length
+      return this.posts.length
       // console.log(this.items.length)
     }
   },

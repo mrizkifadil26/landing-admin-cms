@@ -24,13 +24,15 @@
           <b-row>
             <b-col>
               <b-table
-                dark="dark"
                 responsive="sm" 
                 :hover="hover"
-                :items="items" 
+                :items="this.complaints.data" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
+                <template slot="status" slot-scope="data">
+                  <b-badge :variant="data.item.status === 'Handled' ? 'success' : 'danger' ">{{ data.item.status }}</b-badge>
+                </template>
                 <template slot="actions" slot-scope="row">
                   <b-button variant="warning" :to="{ name: 'Change Status' }">{{ row.value = "Change Status" }}</b-button>
                   <b-button variant="success" :to="{ path: 'show/' + row.value, name: 'Complaint Details' }">{{ row.value = "Complaint Details" }}</b-button>
@@ -72,12 +74,12 @@ export default {
   data () {
     return {
       currentPage: 1,
-      items: [],
+      complaints: [],
       fields: [
         { key: 'complaint', label: 'Complaint', sortable: true},
         { key: 'complaint_by', label: 'Complaint By' },
-        { key: 'category' },
-        { key: 'status' },
+        { key: 'category_id', label: 'Category', sortable: true },
+        { key: 'status', sortable: true },
         { key: 'actions' }
       ]
     }
@@ -85,7 +87,7 @@ export default {
   created () {
     axios.get('/api/complaints')
       .then(response => {
-        this.items = response.data
+        this.complaints = response.data
         console.log(response)
       })
       .catch(error => {
@@ -98,11 +100,8 @@ export default {
     }
   },
   methods: {
-    getBadge (status) {
-      return status === 'Handled' ? 'primary' : 'warning';
-    },
     getRowCount: function () {
-      return this.items.length
+      return this.complaints.length
     }
   }
 }
