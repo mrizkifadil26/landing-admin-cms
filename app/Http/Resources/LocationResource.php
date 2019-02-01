@@ -18,6 +18,7 @@ class LocationResource extends JsonResource
             'id' => $this->id,
             'location' => $this->location,
             'description' => $this->description,
+            'address' => $this->address,
             'category' => $this->category,
             'image' => $this->image,
             'avg_rating' => $this->ratings->avg('rating'),

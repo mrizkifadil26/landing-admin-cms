@@ -93,7 +93,6 @@
 import { VueEditor, Quill } from 'vue2-editor'
 // import VueTagsInput from '@johmun/vue-tags-input'
 import VueDropzone from 'vue2-dropzone'
-import axios from 'axios'
 
 export default {
   name: 'CreatePost',
@@ -133,7 +132,8 @@ export default {
       selected: null,
       categories: [],
       dropzoneOptions: {
-        url: 'http://localhost:8000/api/images',
+        // url: 'http://localhost:8000/api/images',
+        url: 'http://eprov.id/api/images',
         thumbnailWidth: 200,
         autoProcessQueue: false,
         addRemoveLinks: true,
@@ -145,7 +145,7 @@ export default {
     }
   },
   mounted () {
-    axios.get(`http://localhost:8000/api/post-categories`)
+    axios.get(`/api/post-categories`)
       .then(response => {
         this.categories = response.data
         console.log(this.categories)
@@ -163,13 +163,13 @@ export default {
       console.log()
       // alert('Processing!')
 
-      axios.post(`http://localhost:8000/api/posts`, {
+      axios.post(`/api/posts`, {
         title: this.post.title,
         description: this.post.description,
         category_id: this.selected,
         image_id: this.post.image_id,
         content: this.post.content,
-        posted_by: 1
+        posted_by: localStorage.getItem('user_id')
       }).then(result => {
         console.log(result)
         this.$router.go(-1)
@@ -191,7 +191,7 @@ export default {
     removeImage: function(e) {
       if (this.image.display === true) {
         let id = this.image.image_id
-        axios.delete(`http://localhost:8000/api/images/${id}`)
+        axios.delete(`/api/images/${id}`)
           .then(response => console.log(response))
           .catch(error => console.log(error))
         this.image.display = false

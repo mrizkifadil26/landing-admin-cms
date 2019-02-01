@@ -4,11 +4,11 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong>Complaint List</strong> <small>Muhammad Rizki Fadillah</small>
+            <i class="fas fa-list"></i> <strong>Complaint List</strong>
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="3">
-              <b-button variant="primary"><i class="fas fa-download"></i> Export</b-button>
+              <!-- <b-button variant="primary"><i class="fas fa-download"></i> Export</b-button> -->
             </b-col>
             <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
@@ -24,15 +24,16 @@
           <b-row>
             <b-col>
               <b-table
-                :dark="dark"
+                dark="dark"
                 responsive="sm" 
+                :hover="hover"
                 :items="items" 
-                :fields="captions" 
+                :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
-                <template slot="actions" slot-scope="data">
-                  <b-button variant="warning" :to="{ name: 'Change Status' }">{{ data.item.actions[0] }}</b-button>
-                  <b-button variant="success" :to="{ name: 'Complaint Details' }">{{ data.item.actions[1] }}</b-button>
+                <template slot="actions" slot-scope="row">
+                  <b-button variant="warning" :to="{ name: 'Change Status' }">{{ row.value = "Change Status" }}</b-button>
+                  <b-button variant="success" :to="{ path: 'show/' + row.value, name: 'Complaint Details' }">{{ row.value = "Complaint Details" }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -56,58 +57,49 @@
 
 <script>
 
-const data = () => [
-  { complaint: 'Fix Street Lamp', pengadu: 'Rizki', category: 'Infrastruktur', actions: ['Change Status' ,'Details'] }
-]
-
 export default {
   name: 'ComplaintList',
   props: {
-    caption: {
-      type: String,
-      default: 'Table'
-    },
     hover: {
       type: Boolean,
       default: true
-    },
-    tableData: {
-      type: [Array, Function],
-      default: () => []
     },
     perPage: {
       type: Number,
       default: 5
     },
-    dark: {
-      type: Boolean,
-      default: false
-    }
   },
-  data: () => {
+  data () {
     return {
       currentPage: 1,
-      items: data,
-      itemsArray: data(),
+      items: [],
       fields: [
-        { key: 'complaint', label: 'Aduan', sortable: true},
-        { key: 'pengadu', label: 'Pengadu' },
+        { key: 'complaint', label: 'Complaint', sortable: true},
+        { key: 'complaint_by', label: 'Complaint By' },
         { key: 'category' },
+        { key: 'status' },
         { key: 'actions' }
       ]
     }
   },
+  created () {
+    axios.get('/api/complaints')
+      .then(response => {
+        this.items = response.data
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
   computed: {
     totalRows: function () {
       return this.getRowCount()
-    },
-    captions: function () {
-      return this.fields
     }
   },
   methods: {
-    getBadge (role) {
-      return role === 'Admin' ? 'primary' : 'warning';
+    getBadge (status) {
+      return status === 'Handled' ? 'primary' : 'warning';
     },
     getRowCount: function () {
       return this.items.length

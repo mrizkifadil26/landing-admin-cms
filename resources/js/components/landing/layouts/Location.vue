@@ -26,12 +26,12 @@
                           :img-src="location.image">
                           
               <div class="row">
-                <div class="col-md-9 text-left">
+                <div class="col-md-9 col-sm-3 text-left">
                   <h1>{{ location.title }}</h1>
                   <p>{{ location.description }}</p>
                   <p><i class="fas fa-tag"></i> <a href="#" v-for="(category, index) in location.category" :key="index">{{ category }}, </a></p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-3 ml-auto">
                   <!-- <a href="#"><strong>{{ location.category }}</strong></a>  -->
                   <h5>Rated:</h5>
                   <h1>{{ location.stars }}</h1>

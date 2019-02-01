@@ -11,7 +11,7 @@
             <b-col md="4" class="mb-3">
               <b-row class="text-center mb-3">
                 <b-col>
-                  <b-img rounded="circle" thumbnail fluid src="https://picsum.photos/200/200/?image=54" alt="Thumbnail" />
+                  <b-img rounded="circle" thumbnail fluid :src="user.data.avatar" alt="Thumbnail" />
                 </b-col>
               </b-row>
             </b-col>
@@ -43,7 +43,7 @@
 
               <b-table 
                 stacked
-                :items="detail">
+                :items="user">
               </b-table>
 
             </b-col>
@@ -61,14 +61,19 @@ export default {
   data () {
     return {
       fields: ['name', 'username', 'roles'],
-      detail: [
-        {
-          name: 'Muhammad Rizki',
-          username: 'mrizkifadil26',
-          roles: 'Admin'
-        }
-      ]
+      user: null
     }
+  },
+  created() {
+    axios.get('/api/users')
+      .then(response => {
+        console.log(response.data)
+        this.user = response.data
+        console.log(this.user)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>

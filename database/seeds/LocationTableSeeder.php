@@ -15,9 +15,9 @@ class LocationTableSeeder extends Seeder
         $userCount = (int) $this->command->ask('How many users?', 5);
         
         $range = 0 . '-' . 10;
-        $locationRange = $this->command->ask('How many posts?', $range);
+        $locationRange = $this->command->ask('How many locations?', $range);
 
-        $this->command->info('Creating {userCount} users each having a post range of {$locationRange}.');
+        $this->command->info('Creating {userCount} users each posting about locations range of {$locationRange}.');
         
         $users = factory(App\User::class, $userCount)->create();
 

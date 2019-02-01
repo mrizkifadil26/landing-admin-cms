@@ -24,10 +24,10 @@
           <b-row>
             <b-col>
               <b-table
-                :dark="dark"
+                dark="dark"
                 responsive="sm" 
-                :items="items" 
-                :fields="captions" 
+                :items="locations" 
+                :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="actions" slot-scope="data">
@@ -57,39 +57,22 @@
 
 <script>
 
-const data = () => [
-  { place: 'Merak Beach Hotel', category: 'Hotel', stars: '5', actions: ['Show', 'Update', 'Delete'] }
-]
-
 export default {
   name: 'LocationList',
   props: {
-    caption: {
-      type: String,
-      default: 'Table'
-    },
     hover: {
       type: Boolean,
       default: true
-    },
-    tableData: {
-      type: [Array, Function],
-      default: () => []
     },
     perPage: {
       type: Number,
       default: 5
     },
-    dark: {
-      type: Boolean,
-      default: false
-    }
   },
-  data: () => {
+  data() {
     return {
       currentPage: 1,
-      items: data,
-      itemsArray: data(),
+      locations: [],
       fields: [
         { key: 'place', label: 'Place', sortable: true},
         { key: 'category' },
@@ -98,18 +81,22 @@ export default {
       ]
     }
   },
+  created() {
+    axios.get('/api/locations')
+      .then(response => {
+        this.locations = response.data
+        console.log(this.locations)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },  
   computed: {
     totalRows: function () {
       return this.getRowCount()
-    },
-    captions: function () {
-      return this.fields
     }
   },
   methods: {
-    getBadge (role) {
-      return role === 'Admin' ? 'primary' : 'warning';
-    },
     getRowCount: function () {
       return this.items.length
     }

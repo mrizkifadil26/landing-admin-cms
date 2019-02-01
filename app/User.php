@@ -29,6 +29,11 @@ class User extends Authenticatable implements JWTSubject
         'password', 'remember_token',
     ];
 
+    public function avatar()
+    {
+        return $this->belongsTo(Image::class);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class, 'posted_by', 'id');

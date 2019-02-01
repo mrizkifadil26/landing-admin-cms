@@ -16,13 +16,13 @@
       <div class="row">
         <div class="col-lg-4 col-sm-12 mb-4" v-for="post in this.posts.data" :key="post.id">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" :src="post.image" alt="" height="200"></a>
+            <a :href="`/news/show/${post.id}`"><img class="card-img-top" :src="post.image.image_link" alt="" height="200"></a>
             <div class="card-body">
               <h4 class="card-title">
-                <a href="#">{{ post.title }}</a>
+                <a href="`/news/show/${post.id}`">{{ post.title }}</a>
               </h4>
               <p class="card-text text-dark">{{ post.content | truncate(200, '...')}}</p>
-              <p class="text-muted">Posted by {{ post.posted_by }} on {{ post.created_at }}</p>
+              <p class="text-muted">Posted by {{ post.posted_by.name }} on {{ post.created_at }}</p>
               <b-button class="btn btn-primary" :to="{ path: '/news/show/' + post.id }">Read more <i class="fas fa-arrow-right"></i></b-button>
             </div>
           </div>
@@ -38,13 +38,13 @@
       <!-- Pagination -->
       <ul class="pagination justify-content-center">
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+          <a class="page-link" href="#" aria-label="Previous" :disabled="page < pages.length"  @click="page++">
             <span aria-hidden="true">Newest Posts</span>
             <span class="sr-only">Newest Posts</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
+          <a class="page-link" href="#" aria-label="Next" :disabled="page != 1" @click="page--">
             <span aria-hidden="true">Older Posts</span>
             <span class="sr-only">Older Posts</span>
           </a>
@@ -59,37 +59,58 @@
 
 <script>
 
-import axios from 'axios'
-
 export default {
   name: 'News',
   data () {
     return {
       posts: [],
-      // post: {
-      //   title: '',
-      //   content: '',
-      //   image: '',
-      //   category: '',
-      //   postedBy: '',
-      //   createdAt: '',
-      // }
+      page: 1,
+      perPage: 3,
+      pages: []
     }
-  },
-  created() {
-    axios.get('http://localhost:8000/api/posts')
-      .then(response => {
-        this.posts = response.data
-      }).catch(error => {
-        console.log(error)
-      })
   },
   filters: {
      truncate: function (text, length, suffix) { 
                   return text.substring(0, length) + suffix;
                 },
-  }
-  
+  },
+  methods: {
+    getPosts: function getPosts() {
+      axios.get('/api/posts')
+      .then(response => {
+        this.posts = response.data
+        console.log(this.posts)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    setPages: function setPages() {
+      let totalPages = Math.ceil(this.posts.length / this.perPage);
+      for (let i = 0; i <= totalPages; i++) {
+        this.pages.push(i)
+      }
+    },
+    paginate: function paginate(posts) {
+      let page = this.page
+      let perPage = this.perPage
+      let from = (page * perPage) - perPage
+      let to = (page * perPage)
+      return posts.slice(from, to)
+    },
+  },
+  computed: {
+    displayedPosts() {
+      return this.paginate(this.posts)
+    }
+  },
+  watch: {
+    posts() {
+      this.setPages()
+    }
+  },
+  created() {
+    this.getPosts()
+  },
 }
 
 </script>

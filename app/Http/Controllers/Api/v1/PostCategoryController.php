@@ -27,7 +27,13 @@ class PostCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate([
+            'post_category' => 'required'
+        ]);
+
+        $postCategory = PostCategory::create($request->all());
+
+        return new PostCategoryResource($postCategory);
     }
 
     /**
@@ -38,7 +44,7 @@ class PostCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        return new PostCategoryResource(PostCategory::findOrFail($id));
     }
 
     /**
@@ -50,7 +56,10 @@ class PostCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $postCategory = PostCategoryResource::findOrFail($id);
+        $postCategory->update($request->all());
+
+        return new PostCategoryResource($postCategory);
     }
 
     /**
@@ -61,6 +70,11 @@ class PostCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $postCategory = PostCategoryResource::findOrFail($id);
+        $postCategory->delete();
+
+        return response()->json([
+            'message' => 'Category successfully removed.'
+        ], 204);
     }
 }

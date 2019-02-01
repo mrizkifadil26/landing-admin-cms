@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Complaint extends Model
 {
     protected $fillable = [
-        'title', 'description', 'category', 'image', 'status', 'complaint_by'
+        'complaint', 'description', 'category_id', 'image_id', 'status', 'complaint_by'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(ComplaintCategory::class);
     }
 }

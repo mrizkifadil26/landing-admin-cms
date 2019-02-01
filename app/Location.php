@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-    protected $fillable = ['location', 'description', 'category', 'image'];
+    protected $fillable = ['location', 'description', 'address', 'category', 'image_id'];
 
     public function user()
     {
@@ -21,6 +21,11 @@ class Location extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class);
     }
 
 }

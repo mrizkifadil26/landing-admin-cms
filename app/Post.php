@@ -25,6 +25,11 @@ class Post extends Model
         return $this->belongsTo(Image::class, 'image_id', 'id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

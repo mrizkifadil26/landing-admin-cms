@@ -9,18 +9,18 @@
               <b-button variant="warning"><i class="fas fa-arrow-left" /> Back</b-button>
             </b-col>
             <b-col md="3 ml-auto" sm="3 ml-auto" class="text-right">
-              <b-button variant="warning"><i class="fas fa-eye" /> Preview</b-button>
+              <b-button variant="warning" :to="{ path: `/news/show/${post.data.id}` }"><i class="fas fa-eye" /> Preview</b-button>
             </b-col>
           </b-row>
           <b-row>
             <b-col>
-              <div class="display-4">{{ post.title }}</div>
+              <div class="display-4">{{ post.data.title }}</div>
               <hr>
-              <p>Posted {{ post.created_at }} by {{ post.created_by }}</p>
-              <p>Tags: <a href="#">{{ post.category }}</a></p>
+              <p>Posted {{ post.data.created_at }} by {{ post.data.posted_by.name }}</p>
+              <p>Tags: <a href="#">{{ post.data.category.post_category }}</a></p>
               <br>
-              <b-img src="http://placehold.it/900x350" center fluid alt="" class="mb-3" />
-              <p>{{ post.content }}</p>
+              <b-img :src="post.data.image.image_link" center fluid :alt="post.data.title" class="mb-3" />
+              <p>{{ post.data.content }}</p>
               <hr>
             </b-col>
           </b-row>
@@ -31,18 +31,23 @@
 </template>
 
 <script>
+
 export default {
   name: 'ShowPost',
   data () {
     return {
-      post: {
-        title: 'Ahiii',
-        category: 'Ashiaapp',
-        created_by: 'Atta Halilintar Ia cetak Gol',
-        created_at: '2017',
-        content: 'wkwkwkwkwkwkwkwkwkwkwkwkwk',
-      }
+      post: {}
     }
+  },
+  created () {
+    const urlParam = this.$route.params.id
+    axios.get(`/api/posts/${urlParam}`)
+      .then(response => {
+        this.post = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>

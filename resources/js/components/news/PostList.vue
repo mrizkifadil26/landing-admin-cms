@@ -38,10 +38,10 @@
                 <template slot="status" slot-scope="row">
                   <b-badge :variant="row.value == 'Published' ? 'danger': 'success' ">Published</b-badge>
                 </template>
-                <template slot="actions" slot-scope="row">
-                  <b-button variant="success" :to="{ path: '/show/:id', label: 'Show Post' }">{{ row.value = 'Show' }}</b-button>
-                  <b-button variant="warning" :to="{ path: '/edit/:id', label: 'Edit Post' }">{{ row.value = 'Edit' }}</b-button>
-                  <b-button variant="danger" :to="{ path: '/delete/:id', label: 'Delete Post' }">{{ row.value = 'Delete' }}</b-button>
+                <template slot="actions" slot-scope="data">
+                  <b-button variant="success" :to="{ path: `news/show/${data.item.id}`, label: 'Show Post' }">{{ data.value = 'Show' }}</b-button>
+                  <b-button variant="warning" :to="{ path: `news/edit/${data.item.id}`, label: 'Edit Post' }">{{ data.value = 'Edit' }}</b-button>
+                  <b-button variant="danger" :to="{ path: `news/delete/${data.item.id}`, label: 'Delete Post' }">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -64,10 +64,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
-// let items = []
 
 export default {
   name: 'PostList',
@@ -98,7 +94,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost:8000/api/posts')
+    axios.get('/api/posts')
       .then(response => {
         this.items = response.data
         console.log(response.data)
@@ -107,7 +103,7 @@ export default {
       })
   },
   computed: {
-    totalRows: function() {
+    totalRows: function totalRows() {
       return this.items.length
       // console.log(this.items.length)
     }

@@ -21,5 +21,13 @@ class RoleTableSeeder extends Seeder
         $role_user->name = 'user';
         $role_user->description = 'A User';
         $role_user->save();
+        // factory(Role::class, 20)->create();
+        // factory(User::class, 50)->create();
+        // $roles = Role::all();
+        // User::all()->each(function($user) use ($roles) {
+        //     $user->roles()->attach(
+        //         $roles->random(rand(1, 2))->pluck('id')->toArray()
+        //     );
+        // });
     }
 }

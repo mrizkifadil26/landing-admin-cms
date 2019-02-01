@@ -93,7 +93,6 @@ let router =  new Router({
         {
           path: 'dashboard',
           name: 'Dashboard',
-          meta: { auth: true },
           component: Dashboard
         },
         {

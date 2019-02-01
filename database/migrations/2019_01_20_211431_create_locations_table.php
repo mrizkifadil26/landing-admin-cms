@@ -17,6 +17,7 @@ class CreateLocationsTable extends Migration
             $table->increments('id');
             $table->string('location');
             $table->string('description');
+            $table->string('address');
             $table->string('category');
             $table->string('image');
             $table->integer('avg_rating')->unsigned()->default(0);

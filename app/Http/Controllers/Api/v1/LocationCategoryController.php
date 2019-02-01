@@ -27,7 +27,13 @@ class LocationCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate([
+            'location_category' => 'required'
+        ]);
+
+        $locationCategory = LocationCategory::create($request->all());
+
+        return new LocationCategoryResource($locationCategory);
     }
 
     /**
@@ -38,7 +44,7 @@ class LocationCategoryController extends Controller
      */
     public function show($id)
     {
-        return LocationCategoryResource::findOrFail($id);
+        return new LocationCategoryResource(LocationCategory::findOrFail($id));
     }
 
     /**
@@ -50,7 +56,10 @@ class LocationCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $locationCategory = LocationCategory::findOrFail($id);
+        $locationCategory->update($request->all());
+
+        return new LocationCategoryResource($locationCategory);
     }
 
     /**
@@ -61,6 +70,11 @@ class LocationCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $locationCategory = LocationCategory::findOrFail($id);
+        $locationCategory->delete();
+
+        return response()->json([
+            'message' => 'Category successfully removed.'
+        ], 204);
     }
 }

@@ -31,7 +31,6 @@ class UserController extends Controller
             'username' => 'required',
             'password' => 'required|min:6',
             'name' => 'required',
-            
         ]);
 
         $user = User::create($request->all());

@@ -27,7 +27,16 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate([
+            'complaint' => 'required',
+            'description' => 'required',
+            'image_id' => 'required',
+        ]);
+
+        $complaint = Complaint::create($request->all());
+
+        return new ComplaintResource($complaint);
+
     }
 
     /**
@@ -38,7 +47,7 @@ class ComplaintController extends Controller
      */
     public function show($id)
     {
-        return ComplaintResource::findOrFail($id);
+        return new ComplaintResource(Complaint::findOrFail($id));
     }
 
     /**
@@ -50,7 +59,10 @@ class ComplaintController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $complaint = Complaint::findOrFail($id);
+        $complaint->update($request->all());
+
+        return new ComplaintResource($complaint);
     }
 
     /**
@@ -61,6 +73,11 @@ class ComplaintController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $complaint = Complaint::findOrFail($id);
+        $complaint->delete();
+
+        return response()->json([
+            'message' => 'Complaint successfully removed.'
+        ]);
     }
 }

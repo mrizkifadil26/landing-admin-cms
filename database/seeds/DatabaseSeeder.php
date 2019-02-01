@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
             LocationCategoryTableSeeder::class,
             LocationTableSeeder::class,
             RoleTableSeeder::class,
+            CommentTableSeeder::class,
+            ComplaintCategoryTableSeeder::class,
+            ComplaintTableSeeder::class,
+            EventTableSeeder::class,
+            RatingTableSeeder::class
         ]);
 
         $this->command->info('Database seeded.');

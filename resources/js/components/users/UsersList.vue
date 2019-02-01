@@ -59,8 +59,6 @@
 
 <script>
 
-import axios from 'axios'
-
 // let items = []
 
 export default {
@@ -93,7 +91,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://localhost:8000/api/users')
+    axios.get('/api/users')
       .then(response => {
         this.items = response.data
         console.log(response.data)
