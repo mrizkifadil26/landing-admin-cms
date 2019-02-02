@@ -14,7 +14,7 @@
     <div class="container">
       
       <div class="row">
-        <div class="col-lg-4 col-sm-12 mb-4" v-for="post in this.posts.data" :key="post.id">
+        <div class="col-lg-4 col-sm-12 mb-4" v-for="post in this.paginate(this.posts.data)" :key="post.id">
           <div class="card h-100">
             <a :href="`/news/show/${post.id}`"><img class="card-img-top" :src="post.image.image_link" alt="" height="200"></a>
             <div class="card-body">
@@ -32,23 +32,27 @@
       <!-- /.row -->
       
       <!-- Action Button -->
-      
+      <!-- <preloader
+        :preloader="this.preloader"
+        class="mb-3"></preloader> -->
       <!-- ./ Action Button -->
 
       <!-- Pagination -->
       <ul class="pagination justify-content-center">
+
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous" :disabled="page < pages.length"  @click="page++">
-            <span aria-hidden="true">Newest Posts</span>
-            <span class="sr-only">Newest Posts</span>
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next" :disabled="page != 1" @click="page--">
+          <b-link class="page-link" aria-label="Next" :disabled="this.page != 1" @click.prevent="this.page--">
             <span aria-hidden="true">Older Posts</span>
             <span class="sr-only">Older Posts</span>
-          </a>
+          </b-link>
         </li>
+        <li class="page-item">
+          <b-link class="page-link" aria-label="Previous" :disabled="this.page < this.posts.length" @click.prevent="this.page++">
+            <span aria-hidden="true">Newest Posts</span>
+            <span class="sr-only">Newest Posts</span>
+          </b-link>
+        </li>
+
       </ul>
     
     </div>
@@ -59,13 +63,20 @@
 
 <script>
 
+import Preloader from '../../helpers/Preloader'
+
 export default {
   name: 'News',
+  components: {
+    'preloader': Preloader
+  },
   data () {
     return {
+      preloader: false,
       posts: [],
-      page: 1,
+      currentPage: 1,
       perPage: 3,
+      page: 1,
       pages: []
     }
   },
@@ -75,22 +86,13 @@ export default {
                 },
   },
   methods: {
-    getPosts: function getPosts() {
-      axios.get('/api/posts')
-      .then(response => {
-        this.posts = response.data
-        console.log(this.posts)
-      }).catch(error => {
-        console.log(error)
-      })
-    },
-    setPages: function setPages() {
-      let totalPages = Math.ceil(this.posts.length / this.perPage);
-      for (let i = 0; i <= totalPages; i++) {
+    setPages () {
+      let numberOfPages = Math.ceil(this.posts.length / this.perPage)
+      for( let i = 1; i <= numberOfPages; i++) {
         this.pages.push(i)
       }
     },
-    paginate: function paginate(posts) {
+    paginate(posts) {
       let page = this.page
       let perPage = this.perPage
       let from = (page * perPage) - perPage
@@ -107,10 +109,18 @@ export default {
     posts() {
       this.setPages()
     }
-  },
-  created() {
-    this.getPosts()
-  },
+  }, 
+  mounted() {
+    this.preloader = true
+    axios.get(`/api/posts?page=${this.page}`)
+      .then(response => {
+        this.posts = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => this.preloader = false)
+  }
 }
 
 </script>

@@ -1,5 +1,6 @@
 function initialState() {
-
+  posts = []
+  loading = false
 }
 
 const mutations = {

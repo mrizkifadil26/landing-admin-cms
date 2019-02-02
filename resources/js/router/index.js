@@ -22,6 +22,11 @@ import PostList from '../components/news/PostList'
 import ShowPost from '../components/news/ShowPost'
 import UpdatePost from '../components/news/UpdatePost'
 
+import CreateEvent from '../components/event/CreateEvent'
+import EventList from '../components/event/EventList'
+import ShowEvent from '../components/event/ShowEvent'
+import UpdateEvent from '../components/event/UpdateEvent'
+
 import ComplaintList from '../components/complaint/ComplaintList'
 import ShowComplaint from '../components/complaint/ShowComplaint'
 
@@ -148,6 +153,34 @@ let router =  new Router({
               path: 'edit',
               name: 'Edit Location',
               component: UpdateLocation
+            }
+          ]
+        },
+        {
+          path: 'events',
+          meta: { label: 'Event'},
+          component: {
+            render(c) { return c('router-view') }
+          },      
+          children: [
+            {
+              path: '',
+              component: EventList
+            },
+            {
+              path: 'create',
+              name: 'Add Event',
+              component: CreateEvent
+            },
+            {
+              path: 'show',
+              name: 'Show Event',
+              component: ShowEvent
+            },
+            {
+              path: 'edit',
+              name: 'Edit Event',
+              component: UpdateEvent
             }
           ]
         },

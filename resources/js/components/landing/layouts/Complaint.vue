@@ -12,8 +12,75 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <button class="btn btn-primary btn-xl">Buat Aduan</button>
+            <button class="btn btn-primary btn-xl" v-b-modal="'complaintModal'">Buat Aduan</button>
           </div>
+          <b-modal title="Buat Aduan" size="xl" class="modal-primary" id="complaintModal">
+            <b-alert variant="success" dismissible show>Success</b-alert>
+            <b-form>
+              <b-row>
+                <b-col md="6" sm="12">
+                  <b-form-group
+                    label="Nama Lengkap"
+                    label-for="nama"
+                    :label-cols="4"
+                    :horizontal="true">
+                    <b-form-input id="nama" type="text" v-model="complaint.complaint_by"></b-form-input>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Complaint"
+                    label-for="complaint"
+                    :label-cols="4"
+                    :horizontal="true">
+                    <b-form-input id="complaint" type="text" v-model="complaint.complaint"></b-form-input>
+                  </b-form-group>
+
+                </b-col>
+
+                <b-col md="6" sm="12">
+                  <b-form-group
+                    label="Category"
+                    label-for="category"
+                    :label-cols="3"
+                    :horizontal="true">
+                    <b-form-select v-model="selected" :plain="true" class="mb-3">
+                      <option :value="null">-- Please select an option --</option>
+                      <option v-for="category in this.categories.data" :key="category.id" :value="category.id">{{ category.complaint_category }}</option>
+                    </b-form-select>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Description"
+                    label-for="description"
+                    :label-cols="3"
+                    :horizontal="true">
+                    <b-form-textarea
+                      id="description"
+                      v-model.trim="description"
+                      :rows="4">
+                    </b-form-textarea>
+                  </b-form-group>
+                  
+
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    label="Image"
+                    label-for="image"
+                    :label-cols="3"
+                    :horizontal="true">
+                  </b-form-group>
+                  <vue-dropzone
+                      id="dropzoneUpload"
+                      ref="dropzoneUploadRef"
+                      :options="dropzoneOptions" 
+                      class="mb-3"></vue-dropzone>
+                </b-col>
+              </b-row>
+            </b-form>
+          </b-modal>
         </div>
       </div>
 
@@ -23,8 +90,45 @@
 
 <script>
 
+import VueDropzone from 'vue2-dropzone'
+
 export default {
-  name: 'Complaint'
+  name: 'Complaint',
+  components: {
+    'vue-dropzone': VueDropzone
+  },
+  data() {
+    return {
+      complaint: {
+        complaint: '',
+        description: '',
+        category_id: '',
+        complaint_by: ''
+      },
+      selected: null,
+      categories: [],
+      dropzoneOptions: {
+        // url: 'http://localhost:8000/api/images',
+        url: 'http://eprov.id/api/images',
+        thumbnailWidth: 200,
+        autoProcessQueue: false,
+        addRemoveLinks: true,
+        dictDefaultMessage: "<i class='fas fa-upload'></i> Drop here to upload",
+        accept(file, done) {
+          done()
+        }
+      }
+    }
+  },
+  mounted() {
+    axios.get('/api/complaint-categories')
+      .then(response => {
+        this.categories = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 }
 </script>
 

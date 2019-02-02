@@ -20,7 +20,7 @@ class Complaint extends Model
         return $this->belongsTo(Image::class, 'image_id', 'id');
     }
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(ComplaintCategory::class, 'category_id', 'id');
     }

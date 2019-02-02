@@ -8,6 +8,7 @@
           </div>
           <b-row>
             <b-col>
+              <b-alert variant="success" dismissible show>Success</b-alert>
               <b-form @submit.prevent="publish">
                 <b-form-group
                   label="Title"
@@ -132,8 +133,8 @@ export default {
       selected: null,
       categories: [],
       dropzoneOptions: {
-        // url: 'http://localhost:8000/api/images',
-        url: 'http://eprov.id/api/images',
+        url: 'http://localhost:8000/api/images',
+        // url: 'http://eprov.id/api/images',
         thumbnailWidth: 200,
         autoProcessQueue: false,
         addRemoveLinks: true,

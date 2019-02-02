@@ -4,7 +4,7 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong>Location List</strong>
+            <i class="fas fa-map-marker-alt"></i><strong> Location List</strong>
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="4 mb-3">

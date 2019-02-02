@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LocationResource;
 use App\Location;
+use App\LocationCategory;
 
 class LocationController extends Controller
 {
@@ -27,7 +28,24 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'location' => 'required',
+            'description' => 'required',
+            'address' => 'required'
+        ]);
+
+        $location = Location::create([
+            'location' => $request->location,
+            'description' => $request->description,
+            'address' => $request->address,
+            'image_id' => $request->image_id,
+            'posted_by' => $request->posted_by,
+        ]);
+        
+        $locationCategory = PostCategory::find($request->category);
+        $location->categories()->attach($locationCategory);
+
+        return new LocationResource($location);
     }
 
     /**

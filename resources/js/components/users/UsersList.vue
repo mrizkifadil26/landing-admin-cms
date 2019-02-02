@@ -4,7 +4,7 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong>Users List</strong> <small>Muhammad Rizki Fadillah</small>
+            <i class="fas fa-user"></i><strong> Users</strong>
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="3">
@@ -25,17 +25,17 @@
             <b-col>
               <b-table
                 responsive="sm" 
-                :items="items.data" 
-                :fields="captions" 
+                :items="this.users.data" 
+                :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="avatar" slot-scope="data">
                   <b-img rounded="circle" width="64" center thumbnail fluid :src="'/img/' + data.item.avatar" alt="Thumbnail" />
                 </template>
-                <template slot="actions" slot-scope="row">
-                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User' }">{{ row.value = "Show"  }}</b-button>
-                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User' }">{{ row.value = "Edit" }}</b-button>
-                  <b-button class="mb-1" variant="danger">{{ row.value = "Delete" }}</b-button>
+                <template slot="actions" slot-scope="data">
+                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User', path: `users/edit/${data.item.id}`}">{{ data.value = 'Edit' }}</b-button>
+                  <b-button class="mb-1" variant="danger" :to="{ name: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <nav>
@@ -63,24 +63,11 @@
 
 export default {
   name: 'UsersList',
-  props: {
-    hover: {
-      type: Boolean,
-      default: true
-    },
-    perPage: {
-      type: Number,
-      default: 5
-    },
-    dark: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data: () => {
+  data() {
     return {
       currentPage: 1,
-      items: [],
+      perPage: 10,
+      users: [],
       fields: [
         { key: 'avatar', tdClass: "align-middle" },
         { key: 'name', label: 'Name', sortable: true, tdClass: "align-middle" },        
@@ -93,7 +80,7 @@ export default {
   mounted () {
     axios.get('/api/users')
       .then(response => {
-        this.items = response.data
+        this.users = response.data
         console.log(response.data)
       }).catch(error => {
         console.log(error)
@@ -103,16 +90,13 @@ export default {
     totalRows: function () {
       return this.getRowCount()
     },
-    captions: function () {
-      return this.fields
-    }
   },
   methods: {
     getBadge (role) {
       return role === 'Admin' ? 'primary' : 'warning';
     },
     getRowCount: function () {
-      return this.items.length
+      return this.users.length
     }
   }
 }

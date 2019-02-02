@@ -78,14 +78,49 @@ export default {
   },
   data () {
     return {
+      // location: [],
       count: {
-        user: 15,
-        location: 30,
-        post: 20,
-        complaint: 50
+        user: 0,
+        location: 0,
+        post: 0,
+        complaint: 0
       },
       selected: true
     }
+  },
+  mounted() {
+    axios.get('/api/posts')
+      .then(response => {
+        this.count.post = response.data.data.length
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      axios.get('/api/locations')
+      .then(response => {
+        this.count.location = response.data.data.length
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      axios.get('/api/complaints')
+      .then(response => {
+        this.count.complaint = response.data.data.length
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      axios.get('/api/users')
+      .then(response => {
+        this.count.user = response.data.data.length
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
   }
 }
 

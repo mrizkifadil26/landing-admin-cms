@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading">Lokasi Penting</h2>
+          <h2 class="section-heading">Lokasi Istimewa</h2>
           <hr class="my-4 light">
         </div>
       </div>
@@ -22,19 +22,22 @@
                   img-height="480"
             >
             <b-carousel-slide
-                          v-for="(location, index) in data" :key="index" 
-                          :img-src="location.image">
+                          v-for="(location, index) in this.locations.data" :key="index" 
+                          :img-src="location.image.image_link">
                           
               <div class="row">
                 <div class="col-md-9 col-sm-3 text-left">
-                  <h1>{{ location.title }}</h1>
+                  <div class="mb-3">
+                    <h1>{{ location.location }}</h1>
+                    <span>{{ location.address }}</span>
+                  </div>
                   <p>{{ location.description }}</p>
                   <p><i class="fas fa-tag"></i> <a href="#" v-for="(category, index) in location.category" :key="index">{{ category }}, </a></p>
                 </div>
                 <div class="col-md-3 col-sm-3 ml-auto">
                   <!-- <a href="#"><strong>{{ location.category }}</strong></a>  -->
                   <h5>Rated:</h5>
-                  <h1>{{ location.stars }}</h1>
+                  <h1>{{ location.avg_rating }}</h1>
                   <span>
                     <star-rating 
                       :star-size="15"
@@ -42,7 +45,7 @@
                       :read-only="true"
                       :show-rating="false"
                       :round-start-rating="false"
-                      :rating="location.stars"
+                      :rating="parseFloat(location.avg_rating)"
                       text-class="text"
                       >
                     </star-rating>                
@@ -60,30 +63,6 @@
 
 <script>
 
-const data = [
-  {
-    title: 'Hotel Merak',
-    description: 'Hotel di samping pantai',
-    category: ['Hotel', 'Beach'],
-    stars: 5,
-    image: 'https://picsum.photos/1024/480/?image=55',
-  },
-  {
-    title: 'Hotel Merak',
-    description: 'Hotel di samping pantai',
-    category: ['Hotel'],
-    stars: 5,
-    image: 'https://picsum.photos/1024/480/?image=55',
-  },
-  {
-    title: 'Hotel Merak',
-    description: 'Hotel di samping pantai',
-    category: ['Hotel'],
-    stars: 5,
-    image: 'https://picsum.photos/1024/480/?image=55',
-  }
-]
-
 import Rating from 'vue-star-rating'
 
 export default {
@@ -93,8 +72,18 @@ export default {
   },
   data () {
     return {
-      data
+      locations: []
     }
+  },
+  created() {
+    axios.get('/api/locations')
+      .then(response => {
+        this.locations = response.data
+        console.log(this.locations)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>

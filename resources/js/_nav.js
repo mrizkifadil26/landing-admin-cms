@@ -19,6 +19,11 @@ export default {
       icon: 'fas fa-map-marker-alt',
     },
     {
+      name: 'Events',
+      url: '/admin/events',
+      icon: 'fas fa-calendar',
+    },
+    {
       name: 'Complaint',
       url: '/admin/complaints',
       icon: 'fas fa-list',

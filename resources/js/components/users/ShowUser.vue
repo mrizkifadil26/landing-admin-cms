@@ -17,35 +17,10 @@
             </b-col>
 
             <b-col md="8" class="mb-3">
-              <!-- <b-form-group
-                label="Name"
-                label-for="name"
-                :label-cols="3"
-                :horizontal="true">
-                <b-form-input v-model="detail.name" id="name" type="text" :value="detail.name" disabled></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                label="Username"
-                label-for="username"
-                :label-cols="3"
-                :horizontal="true">
-                <b-form-input v-model="detail.username" id="username" type="text" :value="detail.username" disabled></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                label="Roles"
-                label-for="roles"
-                :label-cols="3"
-                :horizontal="true">
-                <b-form-input v-model="detail.roles" id="roles" type="text" :value="detail.roles" disabled></b-form-input>
-              </b-form-group> -->
-
               <b-table 
                 stacked
                 :items="user">
               </b-table>
-
             </b-col>
 
           </b-row>
@@ -65,7 +40,8 @@ export default {
     }
   },
   created() {
-    axios.get('/api/users')
+    const paramUrl = this.$route.params.id
+    axios.get(`/api/users/${paramUrl}`)
       .then(response => {
         console.log(response.data)
         this.user = response.data

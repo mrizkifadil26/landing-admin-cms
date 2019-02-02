@@ -4,7 +4,7 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong>Posts</strong> <small>Muhammad Rizki Fadillah</small>
+            <i class="fas fa-newspaper"></i><strong> Posts</strong>
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="3">
@@ -23,9 +23,14 @@
           </b-row>
           <b-row>
             <b-col>
+              <b-alert variant="success" dismissible show>Success</b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
               <b-table
                 responsive="sm"
-                :items="this.posts.data" 
+                :items="this.posts.data"
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -81,7 +86,11 @@ export default {
     return {
       currentPage: 1,
       posts: [],
-      perPage: 5,
+      offset: 5,
+      pagination: {
+        'current_page': 1
+      },
+      perPage: 10,
       fields: [
         { key: 'title', label: 'Title', sortable: true},
         { key: 'posted_by', sortable: true },
@@ -89,26 +98,57 @@ export default {
         { key: 'status', sortable: true },
         { key: 'actions', label: 'Actions' }
       ],
-      status: ['Published', 'Draft'],
-      actions: ['Show', 'Edit', 'Delete']
     }
   },
   mounted() {
-    axios.get('/api/posts')
+    // this.fetchData()
+    axios.get(`/api/posts`)
       .then(response => {
         this.posts = response.data
-        console.log(response.data)
+        console.log(this.pagination)
       }).catch(error => {
         console.log(error)
       })
   },
   computed: {
-    totalRows: function totalRows() {
+    totalRows() {
       return this.posts.length
       // console.log(this.items.length)
+    },
+    pages() {
+      let pages = []
+      let from = this.pagination.current_page - Math.floor(this.offset / 2)
+      if (from < 1) {
+        from = 1
+      }
+      let to = from + this.offset - 1
+      while (from <= to) {
+        pages.push(from)
+        from++
+      }
+      return pages
     }
   },
   methods: {
+    fetchData() {
+      axios.get(`/api/posts?page=${this.pagination.current_page}`)
+      .then(response => {
+        this.posts = response.data.data
+        this.pagination = response.data.pagination
+        console.log(this.pagination)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    isCurrentPage(page) {
+      return this.pagination.current_page === page
+    },
+    changePage(page) {
+      if (page > this.pagination.last_page) {
+        page = this.pagination.last_page
+      }
+      this.pagination.current_page = page
+    },
     getBadge (status) {
       return status === 'Published' ? 'primary' : 
         status === 'Draft' ? 'danger' : 'default';

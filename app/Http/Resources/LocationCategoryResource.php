@@ -15,9 +15,10 @@ class LocationCategoryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'location_category' => $request->location_category,
-            'created_at' => (string) $request->created_at,
-            'updated_at' => (string) $request->updated_at
+            'id' => $this->id,
+            'location_category' => $this->location_category,
+            'created_at' => (string) $this->created_at,
+            'updated_at' => (string) $this->updated_at
         ];
     }
 }

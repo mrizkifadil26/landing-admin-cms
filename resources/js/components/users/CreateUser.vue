@@ -7,7 +7,6 @@
             <i class="fas fa-user"></i> <strong> Create User</strong>
           </div>
           <b-row>
-            
             <b-col md="4" class="mb-3">
               <b-row class="text-center mb-3">
                 <b-col>
@@ -58,8 +57,7 @@
                 </b-form-select>
               </b-form-group>
 
-              <b-button class="ml-auto" variant="danger">Reset</b-button>
-              <b-button class="ml-auto" variant="primary">Create</b-button>
+              <b-button size="lg" class="float-right mt-2" variant="primary">Create</b-button>
 
             </b-col>
 

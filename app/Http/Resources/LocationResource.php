@@ -21,7 +21,7 @@ class LocationResource extends JsonResource
             'address' => $this->address,
             'category' => $this->category,
             'image' => $this->image,
-            'avg_rating' => $this->ratings->avg('rating'),
+            'avg_rating' => number_format($this->ratings->avg('rating'), 2),
             'ratings' => $this->ratings,
             'posted_by' => $this->user,
             'created_at' => (string) $this->created_at,
