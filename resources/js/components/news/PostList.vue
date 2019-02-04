@@ -29,6 +29,7 @@
           <b-row>
             <b-col>
               <b-table
+                fixed
                 responsive="sm"
                 :items="this.posts.data"
                 :fields="fields" 

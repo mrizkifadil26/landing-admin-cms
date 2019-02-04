@@ -36,13 +36,13 @@ export default new Vuex.Store({
           console.log(response)
           const token = response.data.token
           const status = response.data.status
-          let userid = response.data.user.id
+          const userid = response.data.user.id
           const user = response.data.name
           localStorage.setItem('token', token)
           localStorage.setItem('user_id', userid)
           localStorage.setItem('user', user)
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-          commit('auth_success', token, user, status)        
+          commit('auth_success', token, response.data.user, status)        
           resolve(response)
         })
         .catch(err => {

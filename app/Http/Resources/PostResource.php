@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\UserResource;
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -22,7 +24,10 @@ class PostResource extends JsonResource
             'category' => $this->category,
             'content' => $this->content,
             'image' => $this->image,
-            'posted_by' => $this->user,
+            'posted_by' => [
+                'name' => $this->user->name,
+                'link' => $this->user->avatar->avatar_link
+            ],
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
             

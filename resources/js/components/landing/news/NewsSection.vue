@@ -22,7 +22,7 @@
       <b-row>
         <b-col>
           <h1 class="display-4 mb-3">{{ post.data.title }}</h1>
-          <b-img class="mb-3" :src="'/img/' + post.data.posted_by.avatar" height="32"></b-img> <span><a class="font-weight-bold" href="#">{{ post.data.posted_by.name }}</a></span>
+          <b-img rounded="circle" class="mb-3" :src="post.data.posted_by.link" height="32"></b-img> <span><a class="font-weight-bold" href="#">{{ post.data.posted_by.name }}</a></span>
           <p class="mb-2 font-weight-light">Tags: <a href="#" class="font-weight-normal">{{ post.data.category.post_category }}</a></p>
           <p class="font-weight-light">Posted on: {{ post.data.created_at }}</p>
         </b-col>
