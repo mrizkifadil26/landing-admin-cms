@@ -79,6 +79,7 @@ export default {
   data () {
     return {
       // location: [],
+      loading: false,
       count: {
         user: 0,
         location: 0,
@@ -88,39 +89,59 @@ export default {
       selected: true
     }
   },
-  mounted() {
-    axios.get('/api/posts')
+  methods: {
+    getPostCount: function() {
+      axios.get('/api/posts')
       .then(response => {
+        this.loading = false
         this.count.post = response.data.data.length
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
-
+    },
+    getLocationCount: function() {
       axios.get('/api/locations')
       .then(response => {
+        this.loading = false
         this.count.location = response.data.data.length
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
-
+    },
+    getComplaintCount: function() {
       axios.get('/api/complaints')
       .then(response => {
+        this.loading = false
         this.count.complaint = response.data.data.length
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
-
+    },
+    getUserCount: function() {
       axios.get('/api/users')
       .then(response => {
+        this.loading = false
         this.count.user = response.data.data.length
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
+    }
+  },
+  created() {
+    this.loading = true
 
+    this.getPostCount()
+    this.getLocationCount()
+    this.getComplaintCount()
+    this.getUserCount()
   }
 }
 

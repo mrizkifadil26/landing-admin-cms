@@ -31,8 +31,8 @@ class AvatarController extends Controller
         {
             $avatar = $request->file('file');
             $name = time().$avatar->getClientOriginalName();
-            $link = '/images/avatars/' . $name;
-            $avatar->move(public_path() . '/images/avatars/', $name);
+            $link = 'storage/avatars/' . $name;
+            $avatar->move(public_path() . '/storage/avatars/', $name);
         }
 
         $avatar = new Avatar();

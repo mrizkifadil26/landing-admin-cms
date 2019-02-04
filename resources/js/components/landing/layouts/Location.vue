@@ -22,7 +22,7 @@
                   img-height="480"
             >
             <b-carousel-slide
-                          v-for="(location, index) in this.locations.data" :key="index" 
+                          v-for="(location, index) in this.locations" :key="index" 
                           :img-src="location.image.image_link">
                           
               <div class="row">
@@ -78,7 +78,7 @@ export default {
   created() {
     axios.get('/api/locations')
       .then(response => {
-        this.locations = response.data
+        this.locations = response.data.data
         console.log(this.locations)
       })
       .catch(error => {

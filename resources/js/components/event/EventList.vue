@@ -24,8 +24,7 @@
           <b-row>
             <b-col>
               <b-table
-                fixed
-                class="animated fadeIn"
+                fixed hover
                 responsive="sm"
                 :items="this.events" 
                 :fields="fields" 

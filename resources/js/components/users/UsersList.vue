@@ -24,7 +24,7 @@
           <b-row>
             <b-col>
               <b-table
-                fixed
+                fixed hover
                 class="animated fadeIn"
                 responsive="sm" 
                 :items="this.users" 

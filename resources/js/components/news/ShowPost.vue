@@ -20,7 +20,7 @@
               <p><i class="fas fa-tags"></i> Tags: <b-badge variant="dark">{{ post.category.post_category }}</b-badge></p>
               <br>
               <b-img :src="post.image.image_link" center fluid :alt="post.image.image_name" class="mb-3" />
-              <p>{{ post.content }}</p>
+              <div v-html="post.content"></div>
               <hr>
             </b-col>
           </b-row>

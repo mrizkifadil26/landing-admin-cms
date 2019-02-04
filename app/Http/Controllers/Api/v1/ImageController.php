@@ -31,8 +31,8 @@ class ImageController extends Controller
         {
             $image = $request->file('file');
             $name = time().$image->getClientOriginalName();
-            $link = '/images/' . $name;
-            $image->move(public_path() . '/images/', $name);
+            $link = '/storage/images/' . $name;
+            $image->move(public_path() . '/storage/images/', $name);
         }
 
         $image = new Image();

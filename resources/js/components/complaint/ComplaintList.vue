@@ -24,9 +24,8 @@
           <b-row>
             <b-col>
               <b-table
-                fixed
+                fixed hover
                 responsive="sm" 
-                :hover="hover"
                 :items="this.complaints" 
                 :fields="fields" 
                 :current-page="currentPage" 
@@ -79,21 +78,12 @@
 
 export default {
   name: 'ComplaintList',
-  props: {
-    hover: {
-      type: Boolean,
-      default: true
-    },
-    perPage: {
-      type: Number,
-      default: 5
-    },
-  },
   data () {
     return {
       loading: false,
 
       currentPage: 1,
+      perPage: 10,
       complaints: [],
       fields: [
         { key: 'complaint', label: 'Complaint', sortable: true},

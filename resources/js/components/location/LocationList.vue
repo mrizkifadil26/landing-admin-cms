@@ -24,7 +24,7 @@
           <b-row>
             <b-col>
               <b-table
-                fixed
+                fixed hover
                 responsive="sm" 
                 :items="this.locations" 
                 :fields="fields" 

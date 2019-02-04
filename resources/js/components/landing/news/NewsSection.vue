@@ -45,7 +45,6 @@
 <script>
 
 import Footer from '../layouts/Footer'
-import axios from 'axios'
 
 export default {
   name: 'NewsSection',
