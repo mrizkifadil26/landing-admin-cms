@@ -13,6 +13,6 @@ class Avatar extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'avatar', 'id');
+        return $this->hasMany(User::class, 'avatar_id', 'id');
     }
 }

@@ -18,11 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('password');
-            $table->integer('avatar')->unsigned();
+            $table->integer('avatar_id')->unsigned();
+            $table->integer('role_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('avatar')->references('id')->on('avatars')->onDelete('cascade');
+            $table->foreign('avatar_id')->references('id')->on('avatars')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('user_roles')->onDelete('cascade');
         });
     }
 

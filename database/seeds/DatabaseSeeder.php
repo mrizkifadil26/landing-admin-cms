@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AvatarTableSeeder::class,
+            RoleTableSeeder::class,
             UsersTableSeeder::class,
             PostCategoryTableSeeder::class,
             ImageTableSeeder::class,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Avatar;
+use App\UserRole as Role;
 use Faker\Generator as Faker;
 
 /*
@@ -19,8 +20,11 @@ $factory->define(App\User::class, function (Faker $faker) {
         'name' => $faker->name,
         'username' => $faker->unique()->userName,
         'password' => bcrypt('secret'), // secret
-        'avatar' => function() {
+        'avatar_id' => function() {
             return Avatar::inRandomOrder()->first()->id;
+        },
+        'role_id' => function() {
+            return Role::inRandomOrder()->first()->id;
         },
         'remember_token' => str_random(10),
     ];

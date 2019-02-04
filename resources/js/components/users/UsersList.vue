@@ -29,8 +29,11 @@
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
+                <template slot="role.name" slot-scope="data">
+                  <b-badge :variant="getBadge(data.item.role.name)">{{ data.item.role.name | capitalize }}</b-badge>
+                </template>
                 <template slot="avatar" slot-scope="data">
-                  <b-img rounded="circle" width="64" center thumbnail fluid :src="'/img/' + data.item.avatar" alt="Thumbnail" />
+                  <b-img rounded="circle" width="96" height="96" center thumbnail fluid :src="data.item.avatar.avatar_link" alt="Thumbnail" />
                 </template>
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
@@ -72,9 +75,16 @@ export default {
         { key: 'avatar', tdClass: "align-middle" },
         { key: 'name', label: 'Name', sortable: true, tdClass: "align-middle" },        
         { key: 'username', tdClass: "align-middle" },
-        { key: 'role', tdClass: "align-middle" },
+        { key: 'role.name', label: 'Role', tdClass: "align-middle" },
         { key: 'actions', tdClass: "align-middle" },
       ]
+    }
+  },
+  filters: {
+    capitalize: function(value) {
+      if (!value) return ''
+      value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
   mounted () {
@@ -93,7 +103,7 @@ export default {
   },
   methods: {
     getBadge (role) {
-      return role === 'Admin' ? 'primary' : 'warning';
+      return role === 'admin' ? 'primary' : 'danger';
     },
     getRowCount: function () {
       return this.users.length

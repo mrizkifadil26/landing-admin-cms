@@ -11,7 +11,7 @@
             <b-col md="4" class="mb-3">
               <b-row class="text-center mb-3">
                 <b-col>
-                  <b-img rounded="circle" thumbnail fluid :src="'/img/' + user[0].data.avatar" :alt="user[0].data.name" />
+                  <b-img rounded="circle" thumbnail fluid :src="user[0].data.avatar.avatar_link" :alt="user[0].data.avatar.avatar_name" />
                 </b-col>
               </b-row>
             </b-col>
