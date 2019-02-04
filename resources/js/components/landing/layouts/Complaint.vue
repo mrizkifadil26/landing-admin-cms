@@ -15,7 +15,7 @@
             <button class="btn btn-primary btn-xl" v-b-modal="'complaintModal'">Buat Aduan</button>
           </div>
           <b-modal title="Buat Aduan" size="xl" class="modal-primary" id="complaintModal">
-            <b-alert variant="success" dismissible show>Success</b-alert>
+            <b-alert variant="success" dismissible :show="showMessage">Success</b-alert>
             <b-form>
               <b-row>
                 <b-col md="6" sm="12">
@@ -56,7 +56,7 @@
                     :horizontal="true">
                     <b-form-textarea
                       id="description"
-                      v-model.trim="description"
+                      v-model.trim="complaint.description"
                       :rows="4">
                     </b-form-textarea>
                   </b-form-group>
@@ -99,17 +99,19 @@ export default {
   },
   data() {
     return {
+      showMessage: false,
       complaint: {
         complaint: '',
         description: '',
+        address: '',
+        image_id: '',
         category_id: '',
         complaint_by: ''
       },
       selected: null,
       categories: [],
       dropzoneOptions: {
-        // url: 'http://localhost:8000/api/images',
-        url: 'http://eprov.id/api/images',
+        url: '/api/images',
         thumbnailWidth: 200,
         autoProcessQueue: false,
         addRemoveLinks: true,
@@ -121,13 +123,18 @@ export default {
     }
   },
   mounted() {
-    axios.get('/api/complaint-categories')
+    this.getCategories()
+  },
+  methods: {
+    getCategories: function () {
+      axios.get('/api/complaint-categories')
       .then(response => {
         this.categories = response.data
       })
       .catch(error => {
         console.log(error)
       })
+    }
   }
 }
 </script>

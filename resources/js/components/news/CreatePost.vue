@@ -8,8 +8,11 @@
           </div>
           <b-row>
             <b-col>
-              <b-alert variant="success" dismissible show>Success</b-alert>
-              <b-form @submit.prevent="publish">
+              <b-alert :variant="(this.success.isSuccess === true && this.errors.isError === false) ? 'success' : 
+                (this.errors.isError === true && this.success.isSuccess === false ? 'danger' : '')" dismissible :show="showBadge">
+                {{ (this.success.isSuccess === true && this.errors.isError === false) ? this.success.message : 
+                (this.errors.isError === true && this.success.isSuccess === false ? this.errors.message : '') }}</b-alert>
+              <b-form @submit.prevent="publish" @reset.prevent="resetting" v-if="showForm">
                 <b-form-group
                   label="Title"
                   label-for="title"
@@ -59,9 +62,10 @@
                   @vdropzone-drop="vdrop"
                   @vdropzone-total-upload-progress="vprogress"
                   :options="dropzoneOptions" 
-                  class="mb-3"></vue-dropzone>
+                  class="mb-3"
+                  v-show="showDropzone"></vue-dropzone>
                   <b-col class="text-center">
-                    <b-img v-if="this.image.display === true" fluid :src="this.image.image_link" class="mb-3 text-center" />
+                    <b-img v-show="showImage" fluid :src="this.image.image_link" class="mb-3 text-center" />
                   </b-col>
 
                   <b-col class="text-center">
@@ -77,7 +81,7 @@
                 </b-form-group>
                 <vue-editor v-model="post.content" class="mb-3"></vue-editor>
 
-                <!-- <b-button type="reset" variant="danger" md="3 ml-auto">Reset</b-button> -->
+                <b-button type="reset" variant="danger" md="3 ml-auto">Reset</b-button>
                 <b-button type="submit" variant="primary" md="3 ml-auto">Publish</b-button>
 
               </b-form>
@@ -112,6 +116,14 @@ export default {
         content: '',
         posted_by: ''
       },
+      errors: {
+        isError: false,
+        message: null,
+      },
+      success: {
+        isSuccess: false,
+        message: null,
+      },
       image: {
         display: false,
         image_id: null,
@@ -133,16 +145,21 @@ export default {
       selected: null,
       categories: [],
       dropzoneOptions: {
-        url: 'http://localhost:8000/api/images',
+        url: '/api/images',
         // url: 'http://eprov.id/api/images',
         thumbnailWidth: 200,
         autoProcessQueue: false,
         addRemoveLinks: true,
+        maxFiles: 1,
         dictDefaultMessage: "<i class='fas fa-upload'></i> Drop here to upload",
         accept(file, done) {
           done()
         }
       },
+      showForm: true,
+      showBadge: false,
+      showDropzone: true,
+      showImage: false
     }
   },
   mounted () {
@@ -173,23 +190,29 @@ export default {
         posted_by: localStorage.getItem('user_id')
       }).then(result => {
         console.log(result)
-        this.$router.go(-1)
+        this.showBadge = true
+        this.success.isSuccess = true
+        this.success.message = 'Post successfully published'
+        // this.$router.go(-1)
       }).catch(error => {
         console.log(error)
       })
     },
     setImage: function(e) {
-
       if (this.file.fileAdded == true) {
+        this.showDropzone = true
         this.$refs.dropzoneUploadRef.processQueue()
         this.image.display = true
-        // console.log(this.$refs.dropzoneUploadRef.getUploadedFiles())
+        this.showImage = true
         console.log(`Progress: ${this.file.myProgress}`)
       }
       console.log(`Display: ${this.image.display}`)
       console.log(this.file.uploadProgress)
     },
-    removeImage: function(e) {
+    removeImage: function(file, xhr, error) {
+      this.showDropzone = true
+      this.showImage = false
+      this.$refs.dropzoneUploadRef.removeFile(file)
       if (this.image.display === true) {
         let id = this.image.image_id
         axios.delete(`/api/images/${id}`)
@@ -198,7 +221,27 @@ export default {
         this.image.display = false
         this.file.success = false
         console.log(`Display: ${this.image.display}`)
+        console.log(file)
       }
+    },
+    resetting: function() {
+      this.post.title = '',
+      this.post.description = '',
+      this.post.image_id = null,
+      this.post.content = '',
+      this.post.posted_by = null
+      this.selected = null
+
+      this.showForm = false;
+      this.showBadge = true;
+
+      this.success.isSuccess = true;
+      this.success.message = 'Form resetted'
+      this.errors.isError = false;
+      this.errors.message = null;
+
+      this.$nextTick(() => { this.showForm = true })
+      console.log()
     },
     onChange: function(e) {
       console.log(e)

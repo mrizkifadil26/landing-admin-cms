@@ -17,6 +17,7 @@ class CreateComplaintsTable extends Migration
             $table->increments('id');
             $table->string('complaint');
             $table->text('description');
+            $table->string('address');
             $table->integer('category_id')->unsigned();
             $table->integer('image_id')->unsigned();
             $table->string('status');

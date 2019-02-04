@@ -11,7 +11,7 @@
             <b-col md="4" class="mb-3">
               <b-row class="text-center mb-3">
                 <b-col>
-                  <b-img rounded="square" fluid src="https://picsum.photos/200/200/?image=54" alt="Image" />
+                  <b-img-lazy rounded="square" thumbnail fluid-grow :src="this.complaints[0].data.image.image_link" :alt="this.complaints[0].data.image.image_name" />
                 </b-col>
               </b-row>
             </b-col>
@@ -19,8 +19,9 @@
             <b-col md="8" class="mb-3">
               
               <b-table 
-                stacked
-                :items="items">
+                
+                :items="this.complaints.data"
+                :fields="fields">
                 <template slot="status" slot-scope="data">
                   <b-badge :variant="getBadge(data.item.status)">{{ data.item.status }}</b-badge>
                 </template>
@@ -30,8 +31,8 @@
 
           <b-row>
             <b-col>
-              <h1>Location</h1>
-              <map-view></map-view>
+              <!-- <h1>Location</h1> -->
+              <!-- <map-view></map-view> -->
             </b-col>
           </b-row>
 
@@ -45,16 +46,6 @@
 
 import Maps from '../helpers/Maps'
 
-const data = () => [
-        {
-          title: 'Broken Bridge',
-          description: 'in Montana',
-          category: 'Infrastructure',
-          status: 'Handled',
-          complaintBy: 'Muhammad Rizki'
-        }
-      ]
-
 export default {
   name: 'ShowComplaint',
   components: {
@@ -62,14 +53,34 @@ export default {
   },
   data () {
     return {
-      fields: ['title', 'description', 'category', 'status', 'complaint_by'],
-      items: data,
+      fields: [
+        { key: 'complaint', sortable: true }, 
+        { key: 'description' }, 
+        { key: 'category.complaint_category', label: 'Category', sortable: true }, 
+        { key: 'status' }, 
+        { key: 'complaint_by.name', label: 'Category', sortable: true }
+      ],
+      complaints: [],
     }
   },
   methods: {
     getBadge(status) {
       return status === 'Handled' ? 'success' : 'danger'
+    },
+    getComplaints() {
+      const complaintId = this.$route.params.id
+      axios.get(`/api/complaints/${complaintId}`)
+        .then(response => {
+          this.complaints.push(response.data)
+          console.log(this.complaints)
+        })
+        .catch(error => {
+          console.error(error)
+        })
     }
+  },
+  created() {
+    this.getComplaints()
   }
 }
 </script>

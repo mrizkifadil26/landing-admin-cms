@@ -34,9 +34,9 @@
                 <template slot="status" slot-scope="data">
                   <b-badge :variant="data.item.status === 'Handled' ? 'success' : 'danger' ">{{ data.item.status }}</b-badge>
                 </template>
-                <template slot="actions" slot-scope="row">
-                  <b-button class="mb-1" variant="warning" v-b-modal="'statusChange'">{{ row.value = "Change Status" }}</b-button>
-                  <b-button variant="success" :to="{ path: 'show/' + row.value, name: 'Complaint Details' }">{{ row.value = "Complaint Details" }}</b-button>
+                <template slot="actions" slot-scope="data">
+                  <b-button class="mb-1" variant="warning" v-b-modal="'statusChange'">{{ data.value = "Change Status" }}</b-button>
+                  <b-button variant="success" :to="{ path: `complaints/show/${data.item.id}`, label: 'Complaint Details' }">{{ data.value = "Complaint Details" }}</b-button>
                 </template>
               </b-table>
               <b-modal title="Change Status" size="md" class="modal-warning" id="statusChange">

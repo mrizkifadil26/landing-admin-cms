@@ -11,7 +11,7 @@
             <b-col md="4" class="mb-3">
               <b-row class="text-center mb-3">
                 <b-col>
-                  <b-img rounded="circle" thumbnail fluid :src="user.data.avatar" alt="Thumbnail" />
+                  <b-img rounded="circle" thumbnail fluid :src="'/img/' + user[0].data.avatar" :alt="user[0].data.name" />
                 </b-col>
               </b-row>
             </b-col>
@@ -19,7 +19,8 @@
             <b-col md="8" class="mb-3">
               <b-table 
                 stacked
-                :items="user">
+                :items="user"
+                :fields="fields">
               </b-table>
             </b-col>
 
@@ -35,8 +36,12 @@ export default {
   name: 'ShowUser',
   data () {
     return {
-      fields: ['name', 'username', 'roles'],
-      user: null
+      fields: [
+        { key: 'data.name', label: 'Name' },        
+        { key: 'data.username', label: 'Username' },
+        { key: 'data.role', label: 'Role' },
+      ],
+      user: []
     }
   },
   created() {
@@ -44,8 +49,8 @@ export default {
     axios.get(`/api/users/${paramUrl}`)
       .then(response => {
         console.log(response.data)
-        this.user = response.data
-        console.log(this.user)
+        this.user.push(response.data) 
+        console.log(this.user[0])
       })
       .catch(error => {
         console.log(error)

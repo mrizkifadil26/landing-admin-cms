@@ -125,6 +125,10 @@ let router =  new Router({
               path: 'edit/:id',
               name: 'Edit Post',
               component: UpdatePost
+            },
+            {
+              path: 'delete/:id',
+              name: 'Delete Post',
             }
           ]
         },
@@ -145,14 +149,18 @@ let router =  new Router({
               component: CreateLocation
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Show Location',
               component: ShowLocation
             },
             {
-              path: 'edit',
+              path: 'edit/:id',
               name: 'Edit Location',
               component: UpdateLocation
+            },
+            {
+              path: 'edit/:id',
+              name: 'Delete Location',
             }
           ]
         },
@@ -173,14 +181,18 @@ let router =  new Router({
               component: CreateEvent
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Show Event',
               component: ShowEvent
             },
             {
-              path: 'edit',
+              path: 'edit/:id',
               name: 'Edit Event',
               component: UpdateEvent
+            },
+            {
+              path: 'delete/:id',
+              name: 'Delete Event',
             }
           ]
         },
@@ -196,7 +208,7 @@ let router =  new Router({
               component: ComplaintList
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Complaint Details',
               component: ShowComplaint
             },
@@ -219,12 +231,12 @@ let router =  new Router({
               component: CreateUser,
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Show User',
               component: ShowUser
             },
             {
-              path: 'edit',
+              path: 'edit/:id',
               name: 'Edit User',
               component: UpdateUser
             }

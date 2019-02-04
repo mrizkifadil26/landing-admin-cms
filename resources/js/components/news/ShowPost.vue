@@ -17,7 +17,7 @@
               <div class="display-4">{{ post.data.title }}</div>
               <hr>
               <p>Posted {{ post.data.created_at }} by {{ post.data.posted_by.name }}</p>
-              <p>Tags: <a href="#">{{ post.data.category.post_category }}</a></p>
+              <p>Tags: <b-badge variant="dark">{{ post.data.category.post_category }}</b-badge></p>
               <br>
               <b-img :src="post.data.image.image_link" center fluid :alt="post.data.title" class="mb-3" />
               <p>{{ post.data.content }}</p>

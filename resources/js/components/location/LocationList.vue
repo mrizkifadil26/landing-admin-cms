@@ -29,10 +29,10 @@
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
-                <template slot="actions" slot-scope="row">
-                  <b-button variant="success" :to="{ name: 'Show Location' }">{{ row.value = "Show" }}</b-button>
-                  <b-button variant="warning" :to="{ name: 'Edit Location' }">{{ row.value = "Edit" }}</b-button>
-                  <b-button variant="danger" :to="{ name: 'Delete Location' }">{{ row.value = "Delete" }}</b-button>
+                <template slot="actions" slot-scope="data">
+                  <b-button variant="success" :to="{ path: `locations/show/${data.item.id}`, label: 'Show Location' }">Show</b-button>
+                  <b-button variant="warning" :to="{ path: `locations/edit/${data.item.id}`, label: 'Edit Location' }">Edit</b-button>
+                  <b-button variant="danger" :to="{ path: `locations/delete/${data.item.id}`, label: 'Delete Location' }">Delete</b-button>
                 </template>
               </b-table>
               <nav>
@@ -81,8 +81,9 @@ export default {
       ]
     }
   },
-  created() {
-    axios.get('/api/locations')
+  methods: {
+    getLocations() {
+      axios.get('/api/locations')
       .then(response => {
         this.locations = response.data
         console.log(this.locations)
@@ -90,6 +91,10 @@ export default {
       .catch(error => {
         console.log(error)
       })
+    }
+  },
+  created() {
+    this.getLocations()
   },
   computed: {
     totalRows: function() {

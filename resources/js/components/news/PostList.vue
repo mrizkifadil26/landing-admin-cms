@@ -23,7 +23,7 @@
           </b-row>
           <b-row>
             <b-col>
-              <b-alert variant="success" dismissible show>Success</b-alert>
+              <b-alert variant="success" dismissible :show="showBadge">Success</b-alert>
             </b-col>
           </b-row>
           <b-row>
@@ -84,6 +84,8 @@ export default {
   },
   data: () => {
     return {
+      showBadge: false,
+
       currentPage: 1,
       posts: [],
       offset: 5,

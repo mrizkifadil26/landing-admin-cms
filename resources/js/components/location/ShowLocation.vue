@@ -59,15 +59,6 @@ import Maps from '../helpers/Maps'
 import Rating from 'vue-star-rating'
 import Gallery from '../helpers/Gallery'
 
-const data = () => [
-        {
-          title: 'Hotel Merak',
-          description: 'Hotel dipinggir Pantai Merak',
-          category: 'Hotel',
-          rating: 5
-        }
-      ]
-
 export default {
   name: 'ShowLocation',
   components: {
@@ -77,12 +68,22 @@ export default {
   },
   data () {
     return {
-      fields: ['location', 'description', 'category', 'reted'],
-      items: data,
+      fields: ['location', 'description', 'category', 'rated'],
+      locations: [],
     }
   },
   methods: {
-
+    getLocationData() {
+      const locationId = this.$route.params.id
+      axios.get(`/api/locations/${locationId}`)
+        .then(response => {
+          this.locations = response.data
+          console.log(this.locations)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    }
   }
 }
 </script>

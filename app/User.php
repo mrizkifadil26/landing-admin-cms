@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'password', 'avatar'
+        'name', 'username', 'password', 'avatar', 'roles'
     ];
 
     /**
@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function avatar()
     {
-        return $this->belongsTo(Image::class, 'avatar', 'id');
+        return $this->belongsTo(Avatar::class, 'avatar', 'id');
     }
 
     public function posts()

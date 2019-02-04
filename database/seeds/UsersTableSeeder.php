@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
         $admin->name = 'Muhammad Rizki Fadillah';
         $admin->username = 'mrizkifadil26';
         $admin->password = bcrypt('rizkifadil26');
+        $admin->avatar = 1;
         $admin->save();
         $admin->roles()->attach($role_admin);
 
@@ -27,6 +28,7 @@ class UsersTableSeeder extends Seeder
         $user->name = 'User';
         $user->username = 'user';
         $user->password = bcrypt('user123');
+        $user->avatar = 1;
         $user->save();
         $user->roles()->attach($role_user);
     }

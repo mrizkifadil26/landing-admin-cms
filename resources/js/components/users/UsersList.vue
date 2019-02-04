@@ -33,9 +33,9 @@
                   <b-img rounded="circle" width="64" center thumbnail fluid :src="'/img/' + data.item.avatar" alt="Thumbnail" />
                 </template>
                 <template slot="actions" slot-scope="data">
-                  <b-button class="mb-1" variant="success" :to="{ name: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
-                  <b-button class="mb-1" variant="warning" :to="{ name: 'Edit User', path: `users/edit/${data.item.id}`}">{{ data.value = 'Edit' }}</b-button>
-                  <b-button class="mb-1" variant="danger" :to="{ name: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
+                  <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ label: 'Edit User', path: `users/edit/${data.item.id}`}">{{ data.value = 'Edit' }}</b-button>
+                  <b-button class="mb-1" variant="danger" :to="{ label: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <nav>

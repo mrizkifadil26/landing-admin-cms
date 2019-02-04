@@ -21,11 +21,6 @@ class Image extends Model
         return $this->hasMany(Location::class, 'image_id', 'id');
     }
 
-    public function users()
-    {
-        return $this->hasMany(User::class, 'avatar_id', 'id');
-    }
-
     public function complaints()
     {
         return $this->hasMany(Complaint::class, 'image_id', 'id');

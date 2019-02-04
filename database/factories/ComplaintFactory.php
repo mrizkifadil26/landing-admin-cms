@@ -8,7 +8,8 @@ use Faker\Generator as Faker;
 $factory->define(\App\Complaint::class, function (Faker $faker) {
     return [
         'complaint' => $faker->word,
-        'description' => $faker->sentence(10),
+        'description' => $faker->realText(rand(100, 300)),
+        'address' => $faker->streetAddress,
         'category_id' => function() {
             return ComplaintCategory::inRandomOrder()->first()->id;
         },
