@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
+import VueProgressBar from 'vue-progressbar'
 // import axios from 'axios'
 
 // require('./bootstrap');
@@ -8,7 +9,25 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import Preloader from './components/helpers/Preloader'
+
+const options = {
+  color: '#1b8eb7',
+  failedColor: '#f86c6b',
+  thickness: '0.25rem',
+  transition: {
+    speed: '0.2s',
+    opacity: '0.6s',
+    termination: 300
+  },
+  autoRevert: true,
+  location: 'top',
+  inverse: false
+}
+
+Vue.component('preloader', Preloader)
 Vue.use(BootstrapVue)
+Vue.use(VueProgressBar, options)
 require('./bootstrap')
 // axios.defaults.baseURL = 'https://localhost:8000'
 // const token = localStorage.getItem('token')

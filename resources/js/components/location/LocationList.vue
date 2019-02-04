@@ -24,8 +24,9 @@
           <b-row>
             <b-col>
               <b-table
+                fixed
                 responsive="sm" 
-                :items="this.locations.data" 
+                :items="this.locations" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -35,6 +36,7 @@
                   <b-button variant="danger" :to="{ path: `locations/delete/${data.item.id}`, label: 'Delete Location' }">Delete</b-button>
                 </template>
               </b-table>
+              <preloader :preloader="loading" v-show="loading"></preloader>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -58,19 +60,13 @@
 
 export default {
   name: 'LocationList',
-  props: {
-    hover: {
-      type: Boolean,
-      default: true
-    },
-    perPage: {
-      type: Number,
-      default: 5
-    },
-  },
   data() {
     return {
+
+      loading: false,
+
       currentPage: 1,
+      perPage: 10,
       locations: [],
       fields: [
         { key: 'location', label: 'Place', sortable: true},
@@ -83,12 +79,15 @@ export default {
   },
   methods: {
     getLocations() {
+      this.loading = true
       axios.get('/api/locations')
       .then(response => {
-        this.locations = response.data
+        this.loading = false
+        this.locations = response.data.data
         console.log(this.locations)
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
     }

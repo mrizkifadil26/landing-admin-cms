@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <img src="/img/preloader.gif" class="preloader">
+    <img src="/images/assets/spinner.gif" class="preloader">
   </div>
 </template>
 

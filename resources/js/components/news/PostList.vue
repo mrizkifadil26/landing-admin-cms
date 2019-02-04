@@ -31,7 +31,7 @@
               <b-table
                 fixed
                 responsive="sm"
-                :items="this.posts.data"
+                :items="this.posts"
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -50,6 +50,7 @@
                   <b-button variant="danger" :to="{ path: `news/delete/${data.item.id}`, label: 'Delete Post' }">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
+              <preloader :preloader="loading" v-show="loading"></preloader>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -71,28 +72,17 @@
 
 <script>
 
+import Preloader from '../helpers/Preloader'
+
 export default {
   name: 'PostList',
-  props: {
-    hover: {
-      type: Boolean,
-      default: true
-    },
-    dark: {
-      type: Boolean,
-      default: false
-    },
-  },
-  data: () => {
+  data() {
     return {
       showBadge: false,
+      loading: false,
 
       currentPage: 1,
       posts: [],
-      offset: 5,
-      pagination: {
-        'current_page': 1
-      },
       perPage: 10,
       fields: [
         { key: 'title', label: 'Title', sortable: true},
@@ -103,56 +93,34 @@ export default {
       ],
     }
   },
-  mounted() {
-    // this.fetchData()
-    axios.get(`/api/posts`)
-      .then(response => {
-        this.posts = response.data
-        console.log(this.pagination)
-      }).catch(error => {
-        console.log(error)
-      })
+  components: {
+    Preloader
+  },
+  created() {
+    this.getPosts()
   },
   computed: {
     totalRows() {
-      return this.posts.length
-      // console.log(this.items.length)
+      return this.getRowCount()
     },
-    pages() {
-      let pages = []
-      let from = this.pagination.current_page - Math.floor(this.offset / 2)
-      if (from < 1) {
-        from = 1
-      }
-      let to = from + this.offset - 1
-      while (from <= to) {
-        pages.push(from)
-        from++
-      }
-      return pages
-    }
   },
   methods: {
-    fetchData() {
-      axios.get(`/api/posts?page=${this.pagination.current_page}`)
-      .then(response => {
-        this.posts = response.data.data
-        this.pagination = response.data.pagination
-        console.log(this.pagination)
-      }).catch(error => {
-        console.log(error)
-      })
+    getPosts: function () {
+      this.loading = true
+      axios.get(`/api/posts`)
+        .then(response => {
+          this.loading = false
+          this.posts = response.data.data
+          console.log(this.pagination)
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })   
     },
-    isCurrentPage(page) {
-      return this.pagination.current_page === page
+    getRowCount: function () {
+      return this.posts.length
     },
-    changePage(page) {
-      if (page > this.pagination.last_page) {
-        page = this.pagination.last_page
-      }
-      this.pagination.current_page = page
-    },
-    getBadge (status) {
+    getBadge: function (status) {
       return status === 'Published' ? 'primary' : 
         status === 'Draft' ? 'danger' : 'default';
     },

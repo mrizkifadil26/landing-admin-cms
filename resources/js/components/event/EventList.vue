@@ -24,10 +24,10 @@
           <b-row>
             <b-col>
               <b-table
-                hover
                 fixed
+                class="animated fadeIn"
                 responsive="sm"
-                :items="this.events.data" 
+                :items="this.events" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -37,6 +37,7 @@
                   <b-button variant="danger" :to="{ path: `events/delete/${data.item.id}`, label: 'Delete Event' }"><i class="fas fa-trash"></i></b-button>
                 </template>
               </b-table>
+              <preloader :preloader="loading" v-show="loading"></preloader>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -72,6 +73,8 @@ export default {
   },
   data: () => {
     return {
+      loading: false,
+
       currentPage: 1,
       events: [],
       perPage: 5,
@@ -84,23 +87,28 @@ export default {
       ],
     }
   },
-  mounted() {
-    axios.get('/api/events')
-      .then(response => {
-        this.events = response.data
-        console.log(response.data)
-      }).catch(error => {
-        console.log(error)
-      })
+  created() {
+    this.getEvents()
   },
   computed: {
     totalRows: function totalRows() {
       return this.events.length
-      // console.log(this.items.length)
     }
   },
   methods: {
-    getBadge (status) {
+    getEvents: function () {
+      this.loading = true
+      axios.get('/api/events')
+        .then(response => {
+          this.loading = false
+          this.events = response.data.data
+          console.log(response.data)
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
+    },
+    getBadge: function (status) {
       return status === 'Published' ? 'primary' : 
         status === 'Draft' ? 'danger' : 'default';
     },

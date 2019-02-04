@@ -24,8 +24,10 @@
           <b-row>
             <b-col>
               <b-table
+                fixed
+                class="animated fadeIn"
                 responsive="sm" 
-                :items="this.users.data" 
+                :items="this.users" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -33,7 +35,7 @@
                   <b-badge :variant="getBadge(data.item.role.name)">{{ data.item.role.name | capitalize }}</b-badge>
                 </template>
                 <template slot="avatar" slot-scope="data">
-                  <b-img rounded="circle" width="96" height="96" center thumbnail fluid :src="data.item.avatar.avatar_link" alt="Thumbnail" />
+                  <b-img-lazy rounded="circle" width="96" height="96" center thumbnail fluid :src="data.item.avatar.avatar_link" alt="Thumbnail" />
                 </template>
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
@@ -41,6 +43,7 @@
                   <b-button class="mb-1" variant="danger" :to="{ label: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
+              <preloader :preloader="loading" v-show="loading" />
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -62,13 +65,12 @@
 
 <script>
 
-// let items = []
-
 export default {
   name: 'UsersList',
   data() {
     return {
       currentPage: 1,
+      loading: false,
       perPage: 10,
       users: [],
       fields: [
@@ -87,21 +89,34 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
-  mounted () {
-    axios.get('/api/users')
-      .then(response => {
-        this.users = response.data
-        console.log(response.data)
-      }).catch(error => {
-        console.log(error)
-      })
+  created () {
+    this.getUsers()
   },
   computed: {
-    totalRows: function () {
+    totalRows() {
+      console.log(this.getRowCount())
       return this.getRowCount()
     },
   },
+  mounted() {
+
+  },
+  watch: {
+    
+  },
   methods: {
+    getUsers: function() {
+      this.loading = true
+      axios.get('/api/users')
+        .then(response => {
+          this.loading = false
+          this.users = response.data.data
+          console.log(this.users)
+        }).catch(error => {
+          this.loading = false
+          console.log(error)
+        })
+    },
     getBadge (role) {
       return role === 'admin' ? 'primary' : 'danger';
     },

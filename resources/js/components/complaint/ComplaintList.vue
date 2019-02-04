@@ -27,7 +27,7 @@
                 fixed
                 responsive="sm" 
                 :hover="hover"
-                :items="this.complaints.data" 
+                :items="this.complaints" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -39,6 +39,7 @@
                   <b-button variant="success" :to="{ path: `complaints/show/${data.item.id}`, label: 'Complaint Details' }">{{ data.value = "Complaint Details" }}</b-button>
                 </template>
               </b-table>
+              <preloader :preloader="loading" v-show="loading"></preloader>
               <b-modal title="Change Status" size="md" class="modal-warning" id="statusChange">
                 <b-alert variant="success" dismissible show>Success</b-alert>
                 <b-form>
@@ -90,6 +91,8 @@ export default {
   },
   data () {
     return {
+      loading: false,
+
       currentPage: 1,
       complaints: [],
       fields: [
@@ -103,14 +106,7 @@ export default {
     }
   },
   created () {
-    axios.get('/api/complaints')
-      .then(response => {
-        this.complaints = response.data
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    this.getComplaints()
   },
   computed: {
     totalRows: function () {
@@ -120,6 +116,19 @@ export default {
   methods: {
     getRowCount: function () {
       return this.complaints.length
+    },
+    getComplaints: function () {
+      this.loading = true
+      axios.get('/api/complaints')
+        .then(response => {
+          this.loading = false
+          this.complaints = response.data.data
+          console.log(this.complaints)
+        })
+        .catch(error => {
+          this.loading = false
+          console.log(error)
+        })
     }
   }
 }

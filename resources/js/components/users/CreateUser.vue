@@ -94,7 +94,7 @@ export default {
       },
       image: {
         image_name: '',
-        image_link: 'images/default.png',
+        image_link: 'images/avatars/default.png',
       },
       selected: null,
       options: [
