@@ -21,6 +21,9 @@
                 stacked
                 :items="user"
                 :fields="fields">
+                <template slot="data.role.name" slot-scope="data">
+                  <b-badge :variant="getBadge(data.item.data.role.name)">{{ data.item.data.role.name | capitalize }}</b-badge>
+                </template>
               </b-table>
             </b-col>
 
@@ -39,7 +42,7 @@ export default {
       fields: [
         { key: 'data.name', label: 'Name' },        
         { key: 'data.username', label: 'Username' },
-        { key: 'data.role', label: 'Role' },
+        { key: 'data.role.name', label: 'Role' },
       ],
       user: []
     }
@@ -55,6 +58,18 @@ export default {
       .catch(error => {
         console.log(error)
       })
+  },
+  filters: {
+    capitalize: function(value) {
+      if (!value) return ''
+      value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  },
+  methods: {
+    getBadge (role) {
+      return role === 'admin' ? 'primary' : 'danger';
+    },
   }
 }
 </script>
