@@ -28,8 +28,8 @@ class PostResource extends JsonResource
                 'name' => $this->user->name,
                 'link' => $this->user->avatar->avatar_link
             ],
-            'created_at' => (string) $this->created_at,
-            'updated_at' => (string) $this->updated_at,
+            'created_at' => (string) $this->created_at->diffForHumans(),
+            'updated_at' => (string) $this->updated_at->diffForHumans(),
             
         ];
         // return parent::toArray($request);

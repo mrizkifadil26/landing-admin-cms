@@ -35,11 +35,7 @@ class AvatarController extends Controller
             $avatar = str_replace(' ', '+', $avatar);
             $avatar_name = time().'.'.'png';
             $avatar_link = '/storage/avatars/' . $avatar_name;
-            // $name = time().$avatar->getClientOriginalName();
-            // $link = '/storage/avatars/' . $name;
-            // \File::put(storage_path() . '/avatars/' . $avatar_name, base64_decode($avatar));
             Storage::put('/avatars/' . $avatar_name, base64_decode($avatar));
-            // $avatar->move(public_path() . '/storage/avatars/', $name);
         }
 
         $avatar = new Avatar();

@@ -12,7 +12,7 @@
           </li>
           <li class="nav-item ml-3">
            <b-button class="btn btn-warning js-scroll-trigger" :href="'/login'">Login</b-button>
-           <b-button class="btn btn-warning js-scroll-trigger" :href="'/logout'" v-if="isAuth">Logout</b-button>
+           <b-button class="btn btn-warning js-scroll-trigger" :href="'/logout'" v-if="isLoggedIn">Logout</b-button>
           </li>
         </ul>
       </div>

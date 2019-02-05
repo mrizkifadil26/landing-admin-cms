@@ -8,11 +8,8 @@
           </div>
           <b-row>
             <b-col>
-              <b-alert :variant="(this.success.isSuccess === true && this.errors.isError === false) ? 'success' : 
-                (this.errors.isError === true && this.success.isSuccess === false ? 'danger' : '')" dismissible :show="showBadge">
-                {{ (this.success.isSuccess === true && this.errors.isError === false) ? this.success.message : 
-                (this.errors.isError === true && this.success.isSuccess === false ? this.errors.message : '') }}</b-alert>
-              <b-form @submit.prevent="publish" @reset.prevent="resetting" v-if="showForm">
+              <b-alert :variant="success.isSuccess ? 'success' : 'danger'" :show="success.isSuccess" dismissible>{{ success.message }}</b-alert>
+              <b-form @submit.prevent="publishPost" @reset.prevent="resetForm" v-if="showForm">
                 <b-form-group
                   label="Title"
                   label-for="title"
@@ -118,11 +115,11 @@ export default {
       },
       errors: {
         isError: false,
-        message: null,
+        message: '',
       },
       success: {
         isSuccess: false,
-        message: null,
+        message: '',
       },
       image: {
         display: false,
@@ -176,7 +173,7 @@ export default {
     // axios.post()
   },
   methods: {
-    publish: function() {
+    publishPost: function() {
       
       console.log()
       // alert('Processing!')
@@ -193,6 +190,8 @@ export default {
         this.showBadge = true
         this.success.isSuccess = true
         this.success.message = 'Post successfully published'
+
+        this.resetForm()
         // this.$router.go(-1)
       }).catch(error => {
         console.log(error)
@@ -224,7 +223,7 @@ export default {
         console.log(file)
       }
     },
-    resetting: function() {
+    resetForm: function() {
       this.post.title = '',
       this.post.description = '',
       this.post.image_id = null,

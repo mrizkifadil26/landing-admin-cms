@@ -14,16 +14,17 @@
     <div class="container">
       
       <div class="row">
+        <preloader :preloader="loading" v-show="loading"></preloader>
         <div class="col-lg-4 col-sm-12 mb-4" v-for="post in displayedPosts" :key="post.id">
           <div class="card h-100">
-            <a :href="`/news/show/${post.id}`"><img class="card-img-top" :src="post.image.image_link" alt="" height="200"></a>
+            <b-link :to="{ name: 'News Section', params: { slug: post.slug, id: post.id }}"><b-img-lazy class="card-img-top" :src="post.image.image_link" alt="" height="200" /></b-link>
             <div class="card-body">
               <h4 class="card-title">
-                <a :href="`/news/show/${post.id}`">{{ post.title }}</a>
+                <b-link :to="{ name: 'News Section', params: { slug: post.slug, id: post.id }}">{{ post.title }}</b-link>
               </h4>
               <p class="card-text text-dark" v-html="$options.filters.truncate(post.content, 200, '...')"></p>
               <p class="text-muted">Posted by {{ post.posted_by.name }} on {{ post.created_at }}</p>
-              <b-button class="btn btn-primary" :to="{ path: '/news/show/' + post.id }">Read more <i class="fas fa-arrow-right"></i></b-button>
+              <b-button class="btn btn-primary" :to="{ name: 'News Section', params: { slug: post.slug, id: post.id }}">Read more <i class="fas fa-arrow-right"></i></b-button>
             </div>
           </div>
         </div>
@@ -42,11 +43,11 @@
 
         <li class="page-item">
           <b-button-group size="lg">
-            <b-button variant="light" class="page-link" aria-label="Next" :disabled="this.page >= this.pages.length" @click.prevent="page++">
+            <b-button variant="light" class="page-link" aria-label="Next" :disabled="page >= pages.length" @click.prevent="page++">
               <span aria-hidden="true">Older Posts</span>
               <span class="sr-only">Older Posts</span>
             </b-button>
-            <b-button variant="light" class="page-link" aria-label="Previous" :disabled="this.page <= 1" @click.prevent="page--">
+            <b-button variant="light" class="page-link" aria-label="Previous" :disabled="page <= 1" @click.prevent="page--">
               <span aria-hidden="true">Newest Posts</span>
               <span class="sr-only">Newest Posts</span>
             </b-button>

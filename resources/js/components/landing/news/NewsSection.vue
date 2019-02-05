@@ -1,5 +1,5 @@
 <template>
-  <div class="page-top">
+  <div class="page-top bg-white" >
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="/"><img src="/img/favicon.png" alt="Logo">Cilegon <span>SmartCity</span></a>
@@ -21,20 +21,21 @@
     <b-container>
       <b-row>
         <b-col>
-          <h1 class="display-4 mb-3">{{ post.data.title }}</h1>
-          <b-img rounded="circle" class="mb-3" :src="post.data.posted_by.link" height="32"></b-img> <span><a class="font-weight-bold" href="#">{{ post.data.posted_by.name }}</a></span>
-          <p class="mb-2 font-weight-light">Tags: <a href="#" class="font-weight-normal">{{ post.data.category.post_category }}</a></p>
-          <p class="font-weight-light">Posted on: {{ post.data.created_at }}</p>
+          <preloader :preloader="loading" v-show="loading"></preloader>
+          <h1 class="display-4 mb-3 mt-3">{{ post.title }}</h1>
+          <b-img-lazy rounded="circle" class="mb-3" :src="post.posted_by.link" height="32" /> <span><a class="font-weight-bold" href="#">{{ post.posted_by.name }}</a></span>
+          <p class="mb-2 font-weight-light"><i class="fas fa-tag"></i> Tags: <a href="#" class="font-weight-normal"><b-badge variant="dark">{{ post.category.post_category }}</b-badge></a></p>
+          <p class="font-weight-light">Posted on: {{ post.created_at }}</p>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-img class="mb-4" :src="post.data.image.image_link" fluid-grow :alt="post.data.title"></b-img>
+          <b-img class="mb-4" :src="post.image.image_link" fluid-grow :alt="post.title"></b-img>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <p class="content text-justify text-wrap">{{ post.data.content }}</p>
+          <p class="content text-justify text-wrap" v-html="post.content"></p>
         </b-col>  
       </b-row>
     </b-container>
@@ -48,12 +49,14 @@ import Footer from '../layouts/Footer'
 
 export default {
   name: 'NewsSection',
+  props: ['id'],
   components: {
     'the-footer': Footer
   },
   data () {
     return {
       post: null,
+      loading: false,
       navs: [
         {
           name: 'Berita',
@@ -74,16 +77,27 @@ export default {
       ]
     }
   },
-  mounted () {
-    const paramUrl = this.$route.params.id
-    axios.get(`/api/posts/${paramUrl}`)
-      .then(response => {
-        this.post = response.data
-        console.log(this.post.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  methods: {
+    getPost: function () {
+      const paramUrl = this.$route.params.slug
+      const postId = this.id
+      this.loading = true
+      axios.get(`/api/posts/${postId}`)
+        .then(response => {
+          this.loading = false
+          this.post = response.data.data
+        })
+        .catch(error => {
+          this.loading = false
+          console.log(error)
+        })
+    }
+  },
+  created () {
+    this.getPost()
+  },
+  watch: {
+    '$route': 'getPost'
   }
 }
 </script>
@@ -122,7 +136,7 @@ export default {
 #mainNav .navbar-brand {
   font-weight: 700;
   text-transform: uppercase;
-  color: #2C9DD9;
+  color: #fff;
   font-size: 1rem;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -146,7 +160,7 @@ export default {
   font-size: .9rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #212529;
+  color: #fff;
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link.active,
@@ -215,7 +229,6 @@ export default {
 
 .fixed-top {
   position: sticky;
-  margin-bottom: 1.5rem;
 }
 
 </style>

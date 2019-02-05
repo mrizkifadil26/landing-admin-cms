@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ImageResource;
 use App\Image;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -30,7 +31,7 @@ class ImageController extends Controller
         if ($request->file('file'))
         {
             $image = $request->file('file');
-            $name = time().$image->getClientOriginalName();
+            $name = time() . '+' . str_replace(' ', '+', $image->getClientOriginalName());
             $link = '/storage/images/' . $name;
             $image->move(public_path() . '/storage/images/', $name);
         }

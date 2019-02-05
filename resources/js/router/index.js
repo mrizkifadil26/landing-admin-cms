@@ -71,7 +71,8 @@ let router =  new Router({
               component: NewsLayout
             },
             {
-              path: 'show/:id',
+              path: '/news/:slug-p-:id',
+              name: 'News Section',
               component: NewsSection,
               props: true
             },

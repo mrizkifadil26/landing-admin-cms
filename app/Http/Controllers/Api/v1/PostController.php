@@ -30,7 +30,7 @@ class PostController extends Controller
         //     'data' => $data
         // ];
         // return response()->json($response);
-        return PostResource::collection(Post::all());
+        return PostResource::collection(Post::all()->sortByDesc('created_at'));
     }
 
     /**
