@@ -33,7 +33,13 @@ class UserController extends Controller
             'name' => 'required',
         ]);
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'avatar_id' => $request->avatar_id,
+            'role_id' => $request->role_id,
+        ]);
 
         return new UserResource($user);
     }

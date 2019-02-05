@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AvatarResource;
 use App\Avatar;
+use Illuminate\Support\Facades\Storage;
 
 class AvatarController extends Controller
 {
@@ -27,17 +28,23 @@ class AvatarController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->file('file'))
+        if ($request->file)
         {
-            $avatar = $request->file('file');
-            $name = time().$avatar->getClientOriginalName();
-            $link = 'storage/avatars/' . $name;
-            $avatar->move(public_path() . '/storage/avatars/', $name);
+            $avatar = $request->file;
+            $avatar = str_replace('data:image/png;base64,', '', $avatar);
+            $avatar = str_replace(' ', '+', $avatar);
+            $avatar_name = time().'.'.'png';
+            $avatar_link = '/storage/avatars/' . $avatar_name;
+            // $name = time().$avatar->getClientOriginalName();
+            // $link = '/storage/avatars/' . $name;
+            // \File::put(storage_path() . '/avatars/' . $avatar_name, base64_decode($avatar));
+            Storage::put('/avatars/' . $avatar_name, base64_decode($avatar));
+            // $avatar->move(public_path() . '/storage/avatars/', $name);
         }
 
         $avatar = new Avatar();
-        $avatar->avatar_name = $name;
-        $avatar->avatar_link = $link;
+        $avatar->avatar_name = $avatar_name;
+        $avatar->avatar_link = $avatar_link;
         $avatar->save();
 
         return new AvatarResource($avatar);

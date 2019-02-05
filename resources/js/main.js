@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueProgressBar from 'vue-progressbar'
+import VueCroppie from 'vue-croppie'
 // import axios from 'axios'
 
 // require('./bootstrap');
@@ -26,6 +27,7 @@ const options = {
 }
 
 Vue.component('preloader', Preloader)
+Vue.use(VueCroppie)
 Vue.use(BootstrapVue)
 Vue.use(VueProgressBar, options)
 require('./bootstrap')
