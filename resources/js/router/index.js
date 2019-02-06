@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VueProgressBar from 'vue-progressbar'
 
 import Layout from '../components/layouts/Layout'
 

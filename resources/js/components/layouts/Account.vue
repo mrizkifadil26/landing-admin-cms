@@ -2,8 +2,8 @@
   <AppHeaderDropdown right no-caret>
     <template slot="header">
       <img 
-        src="http://placehold.it/200x200" 
-        alt="avatar"
+        :src="user.avatar.avatar_link" 
+        :alt="user.avatar.avatar_name"
         class="img-avatar">
     </template>\
     <template slot="dropdown">
@@ -13,7 +13,7 @@
         <strong>Account</strong>
       </b-dropdown-header>
 
-      <b-dropdown-item>Muhammad Rizki Fadillah</b-dropdown-item>
+      <b-dropdown-item>{{ user.name }}</b-dropdown-item>
       <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item>
@@ -37,7 +37,10 @@ export default {
   },
   methods: {
     logout() {
-      
+      this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
     }
   },
   computed: {

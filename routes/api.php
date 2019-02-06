@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::apiResource('posts', 'Api\v1\PostController');
 Route::apiResource('locations', 'Api\v1\LocationController');
@@ -35,18 +35,29 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('authenticated', 'AuthController@authenticated');
 }); */
 
-Route::post('auth/login', 'AuthController@login');
-Route::post('auth/logout', 'AuthController@logout');
-Route::group(['middleware' => 'jwt.auth'], function() {
-    Route::get('auth/user', 'AuthController@me');
+Route::prefix('auth')->group(function () {
+    Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
+    Route::post('refresh', 'AuthController@refresh');
 });
 
-Route::group(['middleware' => 'jwt.refresh'], function() {
-    Route::get('auth/refresh', 'AuthController@refresh');
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('user', 'AuthController@user');
+    Route::post('logout', 'AuthController@logout');
 });
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('admin', function () {
-        return response()->json(['data' => 'Test Data']);
-    });
-});
+// Route::post('auth/login', 'AuthController@login');
+// Route::post('auth/logout', 'AuthController@logout');
+// Route::group(['middleware' => 'jwt.auth'], function() {
+//     Route::get('auth/user', 'AuthController@me');
+// });
+
+// Route::group(['middleware' => 'jwt.refresh'], function() {
+//     Route::get('auth/refresh', 'AuthController@refresh');
+// });
+
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('admin', function () {
+//         return response()->json(['data' => 'Test Data']);
+//     });
+// });

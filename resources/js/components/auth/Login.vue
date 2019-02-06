@@ -5,10 +5,10 @@
         <b-col md="6">          
           <b-card no-body class="p-4">
             <b-card-body>
-              <b-form v-on:submit.prevent="signIn">
+              <b-form v-on:submit.prevent="authenticate">
                 <h1>Login</h1>
                 <p class="text-muted">Sign In to your account</p>
-                <b-alert :show="error.state === true" dismissible variant="danger">{{ error.message }}</b-alert>
+                <b-alert :show="error === true" dismissible variant="danger">{{ authError }}</b-alert>
                 <b-input-group class="mb-3" validated>
                   <b-input-group-prepend><b-input-group-text><i class="fas fa-user"></i></b-input-group-text></b-input-group-prepend>
                   <b-form-input type="text" class="form-control is-valid" placeholder="Username" autocomplete="username" v-model="login.username" />
@@ -47,6 +47,8 @@
 
 <script>
 
+import { login } from '../../helpers/auth'
+
 export default {
   name: 'Login',
   data () {
@@ -55,32 +57,53 @@ export default {
         username: '',
         password: '',
       },
-      error: {
-        isError: false,
-        message: '',
-      },
-      success: {
-        isSuccess: false,
-        message: '',
-      }
+      error: null
+      // error: {
+      //   isError: false,
+      //   message: '',
+      // },
+      // success: {
+      //   isSuccess: false,
+      //   message: '',
+      // }
     }
   },
   methods: {
-    signIn () {
+    // signIn () {
       
-      this.error.state = false;
-      let username = this.login.username
-      let password = this.login.password
+    //   this.error.state = false;
+    //   let username = this.login.username
+    //   let password = this.login.password
 
-      this.$store.dispatch('login', { username, password })
-        .then((res) => {
-          this.$router.push('/admin')
+    //   this.$store.dispatch('login', { username, password })
+    //     .then((res) => {
+    //       this.$router.push('/admin')
+    //     })
+    //     .catch(err => {
+    //       this.error.state = true
+    //       this.error.message = err
+    //       console.log(err)
+    //     })
+    // }
+    authenticate () {
+      this.$store.dispatch('login')
+
+      login(this.$data.login)
+        .then(response => {
+          this.$store.commit('loginSuccess', response)
+          this.$router.push({ path: '/admin' })
         })
-        .catch(err => {
-          this.error.state = true
-          this.error.message = err
-          console.log(err)
+        .catch(error => {
+          this.$store.commit('loginFailed', { error })
         })
+    }
+  },
+  computed: {
+    authError() {
+      return this.$store.getters.authError
+    },
+    registeredUser() {
+      return this.$store.getters.registeredUser
     }
   }
 }
