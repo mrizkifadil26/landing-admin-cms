@@ -43,7 +43,7 @@
                   <b-button class="mb-1" variant="danger" :to="{ label: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
-              <preloader :preloader="loading" v-show="loading" />
+              <spinner v-show="loading"></spinner>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"

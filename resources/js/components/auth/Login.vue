@@ -7,19 +7,26 @@
             <b-card-body>
               <b-form v-on:submit.prevent="authenticate">
                 <h1>Login</h1>
-                <p class="text-muted">Sign In to your account</p>
+                <b-row>
+                  <b-col>
+                    <p class="text-muted">Sign In to your account</p>
+                  </b-col>
+                  <b-col class="ml-auto text-right">
+                    <b-link :to="'/'"><i class="fas fa-long-arrow-alt-left"></i> Back</b-link>  
+                  </b-col>            
+                </b-row>
                 <b-alert :show="error === true" dismissible variant="danger">{{ authError }}</b-alert>
                 <b-input-group class="mb-3" validated>
                   <b-input-group-prepend><b-input-group-text><i class="fas fa-user"></i></b-input-group-text></b-input-group-prepend>
                   <b-form-input type="text" class="form-control is-valid" placeholder="Username" autocomplete="username" v-model="login.username" />
-                  <b-form-valid-feedback>
+                  <b-form-valid-feedback v-if="success.isSuccess === true">
                     Input is valid.
                   </b-form-valid-feedback>
                 </b-input-group>
                 <b-input-group class="mb-3" validated>
                   <b-input-group-prepend><b-input-group-text><i class="fas fa-lock"></i></b-input-group-text></b-input-group-prepend>
                   <b-form-input type="password" class="form-control is-invalid" placeholder="Password" autocomplete="current-password" v-model="login.password" />
-                  <b-form-invalid-feedback>
+                  <b-form-invalid-feedback v-if="error.isError === false">
                     Input is invalid.
                   </b-form-invalid-feedback>
                 </b-input-group>
@@ -57,15 +64,15 @@ export default {
         username: '',
         password: '',
       },
-      error: null
-      // error: {
-      //   isError: false,
-      //   message: '',
-      // },
-      // success: {
-      //   isSuccess: false,
-      //   message: '',
-      // }
+      // error: null
+      error: {
+        isError: false,
+        message: '',
+      },
+      success: {
+        isSuccess: false,
+        message: '',
+      }
     }
   },
   methods: {

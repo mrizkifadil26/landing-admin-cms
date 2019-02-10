@@ -50,7 +50,7 @@
                   <b-button variant="danger" :to="{ path: `news/delete/${data.item.id}`, label: 'Delete Post' }">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
-              <preloader :preloader="loading" v-show="loading"></preloader>
+              <spinner v-show="loading"></spinner>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -72,8 +72,6 @@
 
 <script>
 
-import Preloader from '../helpers/Preloader'
-
 export default {
   name: 'PostList',
   data() {
@@ -92,9 +90,6 @@ export default {
         { key: 'actions', label: 'Actions' }
       ],
     }
-  },
-  components: {
-    Preloader
   },
   created() {
     this.getPosts()

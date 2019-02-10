@@ -39,9 +39,8 @@
       <!-- ./ Action Button -->
 
       <!-- Pagination -->
-      <ul class="pagination justify-content-center">
-
-        <li class="page-item">
+      <b-row>
+        <b-col class="text-center">
           <b-button-group size="lg">
             <b-button variant="light" class="page-link" aria-label="Next" :disabled="page >= pages.length" @click.prevent="page++">
               <span aria-hidden="true">Older Posts</span>
@@ -52,10 +51,9 @@
               <span class="sr-only">Newest Posts</span>
             </b-button>
           </b-button-group>
-        </li>
+        </b-col>
+      </b-row>
 
-      </ul>
-    
     </div>
     <!-- /.container -->
 
@@ -136,7 +134,7 @@ export default {
 .btn {
   text-transform: capitalize;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 0.25rem;
   color: #fff;
 }
 

@@ -38,7 +38,7 @@
                   <b-button variant="success" :to="{ path: `complaints/show/${data.item.id}`, label: 'Complaint Details' }">{{ data.value = "Complaint Details" }}</b-button>
                 </template>
               </b-table>
-              <preloader :preloader="loading" v-show="loading"></preloader>
+              <spinner v-show="loading"></spinner>
               <b-modal title="Change Status" size="md" class="modal-warning" id="statusChange">
                 <b-alert variant="success" dismissible show>Success</b-alert>
                 <b-form>

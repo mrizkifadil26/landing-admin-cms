@@ -23,31 +23,8 @@
           </b-row>
           <b-row>
             <b-col>
-              <b-table
-                fixed hover
-                responsive="sm"
-                :items="this.events" 
-                :fields="fields" 
-                :current-page="currentPage" 
-                :per-page="perPage">
-                <template slot="actions" slot-scope="data">
-                  <b-button variant="success" :to="{ path: `events/show/${data.item.id}`, label: 'Show Event' }"><i class="fas fa-eye"></i></b-button>
-                  <b-button variant="warning" :to="{ path: `events/edit/${data.item.id}`, label: 'Edit Event' }"><i class="fas fa-marker"></i></b-button>
-                  <b-button variant="danger" :to="{ path: `events/delete/${data.item.id}`, label: 'Delete Event' }"><i class="fas fa-trash"></i></b-button>
-                </template>
-              </b-table>
-              <preloader :preloader="loading" v-show="loading"></preloader>
-              <nav>
-                <b-pagination
-                  :total-rows="totalRows"
-                  :per-page="perPage" 
-                  v-model="currentPage" 
-                  prev-text="Prev" 
-                  next-text="Next" 
-                  hide-goto-end-buttons
-                >
-                </b-pagination>
-              </nav>
+              <full-calendar :events="popEvents"></full-calendar>
+              <spinner v-show="loading"></spinner>
             </b-col>
           </b-row>
         </b-card>
@@ -58,8 +35,14 @@
 
 <script>
 
+import FullCalendar from 'vue-fullcalendar'
+import moment from 'moment'
+
 export default {
   name: 'EventList',
+  components: {
+    FullCalendar
+  },
   props: {
     hover: {
       type: Boolean,
@@ -70,7 +53,7 @@ export default {
       default: false
     },
   },
-  data: () => {
+  data () {
     return {
       loading: false,
 
@@ -84,6 +67,19 @@ export default {
         { key: 'location', sortable: true },
         { key: 'actions', label: 'Actions' }
       ],
+      popEvents: [
+				{
+					title: 'test',
+					allDay: true,
+					start: moment(),
+					end: moment().add(1, 'd'),
+				},
+				{
+					title: 'another test',
+					start: moment().add(2,'d'),
+					end: moment().add(2, 'd').add(2, 'h'),
+				},
+			],
     }
   },
   created() {
@@ -114,3 +110,8 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>
+

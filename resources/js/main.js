@@ -10,7 +10,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import Preloader from './components/helpers/Preloader'
+import Spinner from './components/helpers/Spinner'
 
 const options = {
   color: '#1b8eb7',
@@ -26,7 +26,7 @@ const options = {
   inverse: false
 }
 
-Vue.component('preloader', Preloader)
+Vue.component('spinner', Spinner)
 Vue.use(VueCroppie)
 Vue.use(BootstrapVue)
 Vue.use(VueProgressBar, options)

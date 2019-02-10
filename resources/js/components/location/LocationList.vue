@@ -36,7 +36,7 @@
                   <b-button variant="danger" :to="{ path: `locations/delete/${data.item.id}`, label: 'Delete Location' }">Delete</b-button>
                 </template>
               </b-table>
-              <preloader :preloader="loading" v-show="loading"></preloader>
+              <spinner v-show="loading"></spinner>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"
@@ -62,9 +62,7 @@ export default {
   name: 'LocationList',
   data() {
     return {
-
       loading: false,
-
       currentPage: 1,
       perPage: 10,
       locations: [],
