@@ -8,8 +8,13 @@
           </div>
           <b-row>
             <b-col md="8">
-              <full-calendar :events="popEvents"></full-calendar>
-              <spinner v-show="loading"></spinner>
+              <full-calendar 
+                :events="events"
+                @eventClick="eventClick"></full-calendar>
+              <b-modal ref="calendarModal" title="Event">
+                <b-table stacked :items="[eventModal]"></b-table>
+              </b-modal>
+              <spinner v-if="loading"></spinner>
             </b-col>
             <b-col md="4" class="py-5 text-center">
               <h2 class="mb-3">Add Event</h2>
@@ -78,6 +83,14 @@ export default {
   data () {
     return {
       loading: false,
+      popoverShow: false,
+      eventModal: {
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        location: ''
+      },
       event: {
         title: '',
         description: '',
@@ -92,36 +105,45 @@ export default {
         dateFormat: 'Y-m-d H:i',
       }, 
       events: [],
-      popEvents: [
-				{
-					title: 'test',
-					allDay: true,
-					start: moment(),
-					end: moment().add(1, 'd'),
-				},
-				{
-					title: 'another test',
-					start: moment().add(2,'d'),
-					end: moment().add(2, 'd').add(2, 'h'),
-				},
-			],
+      popEvents: [],
     }
   },
   created() {
     this.getEvents()
   },
   methods: {
+    eventClick (event, js, pos) {
+      this.$refs.calendarModal.show()
+      this.eventModal.title = event.title
+      this.eventModal.startDate = moment(event.start).format('MMMM DD, YYYY HH:mm')
+      this.eventModal.endDate = moment(event.end).format('MMMM DD, YYYY HH:mm')
+      this.eventModal.location = event.location
+      this.eventModal.description = event.description
+    },
     getEvents () {
       this.loading = true
       axios.get('/api/events')
         .then(response => {
           this.loading = false
           this.events = response.data.data
-          console.log(response.data)
+          this.keyChange('event', 'title', this.events)
+          this.keyChange('start_date', 'start', this.events)
+          this.keyChange('end_date', 'end', this.events)
+          console.log(this.events)
         }).catch(error => {
           this.loading = false
           console.log(error)
         })
+    },
+    keyChange: function(orgKey, newKey, arr) {
+      let newArr = []
+      for (let i = 0; i < arr.length; i++) {
+        let obj = arr[i]
+        obj[newKey] = obj[orgKey]
+        delete(obj[orgKey])
+        newArr.push(obj)
+      }
+      return newArr
     },
     schedule () {
       console.log({

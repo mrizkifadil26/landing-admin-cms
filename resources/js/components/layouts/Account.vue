@@ -29,7 +29,6 @@
       </b-dropdown-item>
 
       <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
-      <b-dropdown-divider />
       <b-dropdown-item>
         <logout @click="this.$emit('logout')" />
       </b-dropdown-item>
