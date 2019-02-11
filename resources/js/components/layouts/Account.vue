@@ -37,15 +37,13 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout')
-        .then(() => {
-          this.$router.push('/login')
-        })
+      this.$store.commit('authentication/LOGOUT')
+      this.$router.push('/login')
     }
   },
   computed: {
     user() {
-      return this.$store.getters.currentUser
+      return this.$store.getters['authentication/currentUser']
     }
   }
 }

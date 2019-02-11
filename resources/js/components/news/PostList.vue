@@ -50,7 +50,7 @@
                   <b-button variant="danger" :to="{ path: `news/delete/${data.item.id}`, label: 'Delete Post' }">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
-              <spinner v-show="loading"></spinner>
+              <spinner v-if="loading"></spinner>
               <nav>
                 <b-pagination
                   :total-rows="totalRows"

@@ -3,12 +3,17 @@ import Router from 'vue-router'
 
 import Layout from '../components/layouts/Layout'
 
+import Page404 from '../components/error/Page404'
+import Page401 from '../components/error/Page401'
+import Page500 from '../components/error/Page500'
+
 import Landing from '../components/landing/Landing'
 import NewsLayout from '../components/landing/news/NewsLayout'
 import NewsSection from '../components/landing/news/NewsSection'
 
 import Login from '../components/auth/Login'
 import Logout from '../components/auth/Logout'
+import Register from '../components/auth/Register'
 
 import Dashboard from '../components/Dashboard'
 
@@ -34,6 +39,7 @@ import CreateLocation from '../components/location/CreateLocation'
 import LocationList from '../components/location/LocationList'
 import ShowLocation from '../components/location/ShowLocation'
 import UpdateLocation from '../components/location/UpdateLocation'
+
 import store from '../store';
 
 
@@ -262,16 +268,41 @@ let router =  new Router({
       ]
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: Register,
+      meta: { auth: false },
+    },
+    {
+      path: '/404',
+      path: '404 Page',
+      component: Page404
+    },
+    {
+      path: '/401',
+      path: '401 Page',
+      component: Page401
+    },
+    {
+      path: '/500',
+      path: '500 Page',
+      component: Page500
+    },
+    {
       path: '/logout',
       name: 'Logout',
       component: Logout
+    },
+    {
+      path: '*',
+      component: Page404
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
+    if (store.getters['authentication/isLoggedIn']) {
       next()
       return
     }

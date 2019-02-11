@@ -12,9 +12,9 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <button class="btn btn-primary btn-xl" v-b-modal="'complaintModal'">Buat Aduan</button>
+            <button class="btn btn-primary btn-xl" @click="!isLoggedIn ? showAlert() : showComplaint()">Buat Aduan</button>
           </div>
-          <b-modal title="Buat Aduan" size="xl" class="modal-primary" id="complaintModal">
+          <b-modal title="Buat Aduan" size="xl" class="modal-primary" ref="complaintModalRef">
             <b-alert variant="success" dismissible :show="showMessage">Success</b-alert>
             <b-form>
               <b-row>
@@ -91,6 +91,7 @@
 <script>
 
 import VueDropzone from 'vue2-dropzone'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Complaint',
@@ -125,8 +126,25 @@ export default {
   mounted() {
     this.getCategories()
   },
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn
+    }
+  },
   methods: {
-    getCategories: function () {
+    showAlert () {
+      Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'You must login first!',
+      })
+    },
+
+    showComplaint () {
+      this.$refs.complaintModalRef.show()
+    },
+
+    getCategories: () => {
       axios.get('/api/complaint-categories')
       .then(response => {
         this.categories = response.data

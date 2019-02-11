@@ -11,8 +11,8 @@
             <a class="nav-link js-scroll-trigger" v-scroll-to="nav.href" :href="nav.href">{{ nav.name }}</a>
           </li>
           <li class="nav-item ml-3">
-           <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-if="isLoggedIn === false">Login</b-button>
-           <b-button class="btn btn-warning js-scroll-trigger" v-if="isLoggedIn === true" @click="logout">Logout</b-button>
+            <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn === true">Logout</b-button>
+           <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
           </li>
         </ul>
       </div>

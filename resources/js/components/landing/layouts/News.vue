@@ -12,9 +12,8 @@
 
     <!-- Page Content -->
     <div class="container">
-      
       <div class="row">
-        <preloader :preloader="loading" v-show="loading"></preloader>
+        <spinner v-if="loading"></spinner>
         <div class="col-lg-4 col-sm-12 mb-4" v-for="post in displayedPosts" :key="post.id">
           <div class="card h-100">
             <b-link :to="{ name: 'News Section', params: { slug: post.slug, id: post.id }}"><b-img-lazy class="card-img-top" :src="post.image.image_link" alt="" height="200" /></b-link>
