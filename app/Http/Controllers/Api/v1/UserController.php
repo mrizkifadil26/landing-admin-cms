@@ -37,7 +37,7 @@ class UserController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'password' => bcrypt($request->password),
-            'avatar_id' => $request->avatar_id,
+            'avatar_id' => $request->has('field') ? $request->avatar_id : 1,
             'role_id' => $request->role_id,
         ]);
 

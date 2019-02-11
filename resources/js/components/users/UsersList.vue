@@ -27,7 +27,7 @@
                 fixed hover
                 class="animated fadeIn"
                 responsive="sm" 
-                :items="this.users" 
+                :items="users" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
@@ -40,7 +40,7 @@
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
                   <b-button class="mb-1" variant="warning" :to="{ label: 'Edit User', path: `users/edit/${data.item.id}`}">{{ data.value = 'Edit' }}</b-button>
-                  <b-button class="mb-1" variant="danger" :to="{ label: 'Delete User', path: `users/delete/${data.item.id}`}">{{ data.value = 'Delete' }}</b-button>
+                  <b-button class="mb-1" variant="danger" @click="deleteUser(data.item.id)">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+
+import Swal from 'sweetalert2'
 
 export default {
   name: 'UsersList',
@@ -98,14 +100,8 @@ export default {
       return this.getRowCount()
     },
   },
-  mounted() {
-
-  },
-  watch: {
-    
-  },
   methods: {
-    getUsers: function() {
+    getUsers () {
       this.loading = true
       axios.get('/api/users')
         .then(response => {
@@ -117,12 +113,45 @@ export default {
           console.log(error)
         })
     },
+    deleteUser (id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You will delete the selected user.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete'
+      }).then((result) => {
+        if (result.value) {
+          window.axios.delete(`/api/users/${id}`)
+            .then(response => {
+              Swal.fire(
+                'Deleted!',
+                'The user has been deleted.',
+                'success'
+              )
+              const index = this.users.findIndex(user => user.id === id)
+              if (~index) {
+                this.users.splice(index, 1)
+              }
+            })
+            .catch(error => {
+              Swal.fire(
+                'Error!',
+                'Error deleting user',
+                'error'
+              )
+            })
+        }
+      })
+    },
     getBadge (role) {
       return role === 'admin' ? 'primary' : 'danger';
     },
     getRowCount: function () {
       return this.users.length
-    }
-  }
+    },
+  },
 }
 </script>
