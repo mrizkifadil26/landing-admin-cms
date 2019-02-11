@@ -17,7 +17,8 @@ class CreateEventsTable extends Migration
             $table->increments('id');
             $table->string('event');
             $table->string('description');
-            $table->date('date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->string('location');
             $table->integer('posted_by')->unsigned();
             $table->timestamps();

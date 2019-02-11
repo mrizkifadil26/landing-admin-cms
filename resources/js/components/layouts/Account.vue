@@ -4,8 +4,8 @@
       <img 
         :src="user.avatar.avatar_link" 
         :alt="user.avatar.avatar_name"
-        class="img-avatar">
-    </template>\
+        class="img-avatar" />
+    </template>
     <template slot="dropdown">
       <b-dropdown-header 
         tag="div" 
@@ -13,7 +13,21 @@
         <strong>Account</strong>
       </b-dropdown-header>
 
-      <b-dropdown-item>{{ user.name }}</b-dropdown-item>
+      <b-dropdown-item disabled>
+        <b-row>
+          <b-col class="text-center mb-3">
+            <img 
+              :src="user.avatar.avatar_link" 
+              :alt="user.avatar.avatar_name"
+              class="img-avatar">
+          </b-col>
+          <b-col class="text-center">
+            <strong>{{ user.name }}</strong>
+            <p>@{{ user.username }}</p>
+          </b-col>
+        </b-row>
+      </b-dropdown-item>
+
       <b-dropdown-item><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item>

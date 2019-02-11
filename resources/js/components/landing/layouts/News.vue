@@ -85,7 +85,7 @@ export default {
   methods: {
     getPosts () {
       this.loading = true
-      axios.get('/api/posts')
+      window.axios.get('/api/posts')
         .then(response => {
           this.loading = false
           this.posts = response.data.data

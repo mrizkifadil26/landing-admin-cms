@@ -41,6 +41,10 @@ export default {
           href: '#complaint'
         },
         {
+          name: 'Events',
+          href: '#events'
+        },
+        {
           name: 'Lokasi Istimewa',
           href: '#location'
         },  

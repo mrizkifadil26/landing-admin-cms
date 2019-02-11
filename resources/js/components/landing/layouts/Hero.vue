@@ -11,7 +11,7 @@
         </div>
         <div class="col-lg-8 mx-auto">
           <p class="text-faded mb-5">Akur Sedulur Jujur Adil Makmur </p>
-          <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Mulai Jelajahi</a>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" v-scroll-to="{el: '#about', duration: 1500}">Mulai Jelajahi</a>
         </div>
       </div>
     </div>
@@ -20,8 +20,13 @@
 
 <script>
 
+import ScrollTo from 'vue-scrollto'
+
 export default {
   name: 'Hero',
+  directives: {
+    ScrollTo
+  },
 }
 </script>
 

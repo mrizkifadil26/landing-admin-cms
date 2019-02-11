@@ -6,25 +6,55 @@
           <div slot="header">
             <i class="fas fa-calendar"></i><strong> Events</strong>
           </div>
-          <b-row class="mb-3">
-            <b-col md="3" sm="3">
-              <b-button :to="{ name: 'Add Event' }" variant="primary"><i class="fas fa-plus"></i> Add Event</b-button>
-            </b-col>
-            <b-col md="4 ml-auto" sm="6 ml-auto">
-              <b-form-group>
-                <b-input-group>
-                  <b-form-input type="text"></b-form-input>
-                  <b-input-group-append>
-                    <b-button variant="primary">Search</b-button>
-                  </b-input-group-append>
-                </b-input-group>
-              </b-form-group>
-            </b-col>
-          </b-row>
           <b-row>
-            <b-col>
+            <b-col md="8">
               <full-calendar :events="popEvents"></full-calendar>
               <spinner v-show="loading"></spinner>
+            </b-col>
+            <b-col md="4" class="py-5 text-center">
+              <h2 class="mb-3">Add Event</h2>
+              <b-form @submit.prevent="schedule">
+                <b-form-input id="title"
+                  placeholder="Event Title" 
+                  type="text" 
+                  v-model="event.title" 
+                  class="form-control mb-3"></b-form-input>
+
+                <flat-pickr
+                  v-model="event.startDate"
+                  :config="config"                                                          
+                  class="form-control mb-3" 
+                  placeholder="Start Date"               
+                  name="startDate"
+                  onChange="">
+                </flat-pickr>
+                
+                <flat-pickr
+                  v-model="event.endDate"
+                  :config="config"
+                  :minDate="event.startDate"                                                          
+                  class="form-control mb-3" 
+                  placeholder="End Date"               
+                  name="endDate">
+                </flat-pickr>
+                
+                <b-form-input id="location"
+                  placeholder="Event Location" 
+                  type="text" 
+                  v-model="event.location" 
+                  class="form-control mb-3"></b-form-input>
+                
+                <b-form-textarea id="description"
+                    v-model="event.description"
+                    placeholder="Event Description"
+                    :rows="3"
+                    :max-rows="6"
+                    class="form-control mb-3">
+                </b-form-textarea>
+
+                <b-button type="submit" variant="primary" size="lg" md="3" class="text-center">Schedule</b-button>
+
+              </b-form>
             </b-col>
           </b-row>
         </b-card>
@@ -36,37 +66,32 @@
 <script>
 
 import FullCalendar from 'vue-fullcalendar'
+import flatPickr from 'vue-flatpickr-component'
 import moment from 'moment'
 
 export default {
   name: 'EventList',
   components: {
-    FullCalendar
-  },
-  props: {
-    hover: {
-      type: Boolean,
-      default: true
-    },
-    dark: {
-      type: Boolean,
-      default: false
-    },
+    FullCalendar,
+    flatPickr
   },
   data () {
     return {
       loading: false,
-
-      currentPage: 1,
+      event: {
+        title: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        location: ''
+      },
+      config: {
+        enableTime: true,
+        altFormat: 'j M, Y H:i',
+        altInput: true,
+        dateFormat: 'Y-m-d H:i',
+      }, 
       events: [],
-      perPage: 5,
-      fields: [
-        { key: 'event', sortable: true},
-        { key: 'description', sortable: true },
-        { key: 'date' },
-        { key: 'location', sortable: true },
-        { key: 'actions', label: 'Actions' }
-      ],
       popEvents: [
 				{
 					title: 'test',
@@ -85,13 +110,8 @@ export default {
   created() {
     this.getEvents()
   },
-  computed: {
-    totalRows: function totalRows() {
-      return this.events.length
-    }
-  },
   methods: {
-    getEvents: function () {
+    getEvents () {
       this.loading = true
       axios.get('/api/events')
         .then(response => {
@@ -103,15 +123,21 @@ export default {
           console.log(error)
         })
     },
-    getBadge: function (status) {
-      return status === 'Published' ? 'primary' : 
-        status === 'Draft' ? 'danger' : 'default';
-    },
+    schedule () {
+      console.log({
+        title: this.event.title,
+        description: this.event.description,
+        location: this.event.location,
+        startDate: this.event.startDate,
+        endDate: this.event.endDate,
+      })
+    }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  @import '~flatpickr/dist/flatpickr.css';
 </style>
+
 

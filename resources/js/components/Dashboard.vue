@@ -78,7 +78,6 @@ export default {
   },
   data () {
     return {
-      // location: [],
       loading: false,
       count: {
         user: 0,
