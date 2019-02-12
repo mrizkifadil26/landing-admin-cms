@@ -306,7 +306,7 @@ router.beforeEach((to, from, next) => {
       next()
       return
     }
-    next('/login')
+    next('/500')
   } else {
     next()
   }

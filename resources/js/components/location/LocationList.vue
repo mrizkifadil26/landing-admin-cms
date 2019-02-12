@@ -31,9 +31,9 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="actions" slot-scope="data">
-                  <b-button variant="success" :to="{ path: `locations/show/${data.item.id}`, label: 'Show Location' }">Show</b-button>
-                  <b-button variant="warning" :to="{ path: `locations/edit/${data.item.id}`, label: 'Edit Location' }">Edit</b-button>
-                  <b-button variant="danger" :to="{ path: `locations/delete/${data.item.id}`, label: 'Delete Location' }">Delete</b-button>
+                  <b-button class="mb-1" variant="success" :to="{ path: `locations/show/${data.item.id}`, label: 'Show Location' }">Show</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ path: `locations/edit/${data.item.id}`, label: 'Edit Location' }">Edit</b-button>
+                  <b-button variant="danger" @click="deleteLocation(data.item.id)">Delete</b-button>
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+
+import Swal from 'sweetalert2'
 
 export default {
   name: 'LocationList',
@@ -88,7 +90,41 @@ export default {
         this.loading = false
         console.log(error)
       })
-    }
+    },
+    deleteLocation (id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You will delete the selected location.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete'
+      })
+        .then((result) => {
+          if (result.value) {
+            window.axios.delete(`/api/locations/${id}`)
+              .then(response => {
+                Swal.fire(
+                  'Deleted!',
+                  'This location has been deleted.',
+                  'success'
+                )
+                const index = this.locations.findIndex(location => location.id === id)
+                if (~index) {
+                  this.locations.splice(index, 1)
+                }
+              })
+              .catch(error => {
+                Swal.fire(
+                  'Error!',
+                  'Error deleting location',
+                  'error'
+                )
+              })
+          }
+      })
+    },
   },
   created() {
     this.getLocations()

@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 Route::apiResource('posts', 'Api\v1\PostController');
 Route::apiResource('locations', 'Api\v1\LocationController');
 Route::apiResource('complaints', 'Api\v1\ComplaintController');
+Route::apiResource('comments', 'Api\v1\CommentController');
+Route::apiResource('ratings', 'Api\v1\RatingController');
 Route::apiResource('users', 'Api\v1\UserController');
 Route::apiResource('avatars', 'Api\v1\AvatarController');
 Route::apiResource('images', 'Api\v1\ImageController');

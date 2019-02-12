@@ -89,7 +89,12 @@ export default {
       this.submitted = true
       this.$validator.validateAll()
         .then((result) => {
-
+          console.log({
+            name: this.name,
+            username: this.username,
+            password: this.password,
+            role_id: 2
+          })
         })
         .catch(error => {
           

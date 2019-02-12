@@ -56,7 +56,7 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        return LocationResource::findOrFail($id);
+        return new LocationResource(Location::findOrFail($id));
     }
 
     /**
@@ -68,7 +68,7 @@ class LocationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $location = LocationResource::findOrFail($id);
+        $location = Location::findOrFail($id);
         $location->update($request->all());
 
         return new LocationResource($location);
@@ -82,7 +82,7 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        $location = LocationResource::findOrFail($id);
+        $location = Location::findOrFail($id);
         $location->delete();
 
         return response()->json([

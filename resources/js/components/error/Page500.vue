@@ -8,6 +8,7 @@
             <h4 class="pt-3">Houston, we have a problem!</h4>
             <p class="text-muted">The page you are looking for is temporarily unavailable.</p>
           </div>
+          <b-link class="float-right" :to="{ path: '/' }"><i class="fas fa-long-arrow-alt-left"></i> to Login Page</b-link>
         </b-col>
       </b-row>
     </div>

@@ -38,9 +38,9 @@
                   <b-img-lazy rounded="circle" width="96" height="96" center thumbnail fluid :src="data.item.avatar.avatar_link" alt="Thumbnail" />
                 </template>
                 <template slot="actions" slot-scope="data">
-                  <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: `users/show/${data.item.id}` }">{{ data.value = 'Show' }}</b-button>
-                  <b-button class="mb-1" variant="warning" :to="{ label: 'Edit User', path: `users/edit/${data.item.id}`}">{{ data.value = 'Edit' }}</b-button>
-                  <b-button class="mb-1" variant="danger" @click="deleteUser(data.item.id)">{{ data.value = 'Delete' }}</b-button>
+                  <b-button class="mb-1" variant="success" :to="{ label: 'Show User', path: 'users/show/', params: { id: data.item.id } }">{{ data.value = 'Show' }}</b-button>
+                  <b-button class="mb-1" variant="warning" :to="{ label: 'Edit User', path: 'users/edit/', params: { id: data.item.id }}">{{ data.value = 'Edit' }}</b-button>
+                  <b-button variant="danger" @click="deleteUser(data.item.id)">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
@@ -96,7 +96,6 @@ export default {
   },
   computed: {
     totalRows() {
-      console.log(this.getRowCount())
       return this.getRowCount()
     },
   },
@@ -128,7 +127,7 @@ export default {
             .then(response => {
               Swal.fire(
                 'Deleted!',
-                'The user has been deleted.',
+                'This user has been deleted.',
                 'success'
               )
               const index = this.users.findIndex(user => user.id === id)

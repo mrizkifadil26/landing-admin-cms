@@ -43,6 +43,9 @@ export default {
         { key: 'data.name', label: 'Name' },        
         { key: 'data.username', label: 'Username' },
         { key: 'data.role.name', label: 'Role' },
+        { key: 'data.complaints.length', label: 'Complaints' },
+        { key: 'data.posts.length', label: 'Posts' },
+        { key: 'data.comments.length', label: 'Comments' },
       ],
       user: []
     }
