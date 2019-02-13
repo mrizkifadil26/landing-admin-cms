@@ -29,14 +29,14 @@
                       <h5 class="mb-1"><strong>{{ event.start_date | toDayName }}</strong></h5>
                       <h1 class="display-3">{{ event.start_date | toDay }}</h1>
                       <h5>{{ event.start_date | toMonth }} {{ event.start_date | toYear }}</h5>
-                      <p>{{ event.start_date | toTime }}</p>
+                      <h4>{{ event.start_date | toTime }}</h4>
                     </b-col>
                     <h1 class="display-3 my-4">-</h1>
                     <b-col>
                       <h5 class="mb-1"><strong>{{ event.end_date | toDayName }}</strong></h5>
                       <h1 class="display-3">{{ event.end_date | toDay }}</h1>
                       <h5>{{ event.end_date | toMonth }} {{ event.end_date | toYear }}</h5>
-                      <p>{{ event.end_date | toTime }}</p>
+                      <h4>{{ event.end_date | toTime }}</h4>
                     </b-col>
                   </b-row>
                 </b-col>

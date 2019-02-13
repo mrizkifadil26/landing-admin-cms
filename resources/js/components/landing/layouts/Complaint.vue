@@ -19,13 +19,6 @@
             <b-form>
               <b-row>
                 <b-col md="6" sm="12">
-                  <b-form-group
-                    label="Nama Lengkap"
-                    label-for="nama"
-                    :label-cols="4"
-                    :horizontal="true">
-                    <b-form-input id="nama" type="text" v-model="complaint.complaint_by"></b-form-input>
-                  </b-form-group>
 
                   <b-form-group
                     label="Complaint"
@@ -35,9 +28,30 @@
                     <b-form-input id="complaint" type="text" v-model="complaint.complaint"></b-form-input>
                   </b-form-group>
 
+                  <b-form-group
+                    label="Description"
+                    label-for="description"
+                    :label-cols="4"
+                    :horizontal="true">
+                    <b-form-textarea
+                      id="description"
+                      v-model.trim="complaint.description"
+                      :rows="4">
+                    </b-form-textarea>
+                  </b-form-group>
+
                 </b-col>
 
                 <b-col md="6" sm="12">
+
+                  <b-form-group
+                    label="Nama Lengkap"
+                    label-for="nama"
+                    :label-cols="3"
+                    :horizontal="true">
+                    <b-form-input id="nama" type="text" v-model="complaint.complaint_by"></b-form-input>
+                  </b-form-group>
+
                   <b-form-group
                     label="Category"
                     label-for="category"
@@ -48,19 +62,6 @@
                       <option v-for="category in this.categories.data" :key="category.id" :value="category.id">{{ category.complaint_category }}</option>
                     </b-form-select>
                   </b-form-group>
-
-                  <b-form-group
-                    label="Description"
-                    label-for="description"
-                    :label-cols="3"
-                    :horizontal="true">
-                    <b-form-textarea
-                      id="description"
-                      v-model.trim="complaint.description"
-                      :rows="4">
-                    </b-form-textarea>
-                  </b-form-group>
-                  
 
                 </b-col>
               </b-row>
@@ -128,7 +129,7 @@ export default {
   },
   computed: {
     isLoggedIn: function () {
-      return this.$store.getters.isLoggedIn
+      return this.$store.getters['authentication/isLoggedIn']
     }
   },
   methods: {

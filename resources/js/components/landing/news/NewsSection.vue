@@ -20,12 +20,19 @@
     </nav>
     <b-container>
       <b-row>
-        <b-col>
-          <preloader :preloader="loading" v-show="loading"></preloader>
-          <h1 class="display-4 mb-3 mt-3">{{ post.title }}</h1>
-          <b-img-lazy rounded="circle" class="mb-3" :src="post.posted_by.link" height="32" /> <span><a class="font-weight-bold" href="#">{{ post.posted_by.name }}</a></span>
-          <p class="mb-2 font-weight-light"><i class="fas fa-tag"></i> Tags: <a href="#" class="font-weight-normal"><b-badge variant="dark">{{ post.category.post_category }}</b-badge></a></p>
-          <p class="font-weight-light">Posted on: {{ post.created_at }}</p>
+        <b-col md="12">
+          <spinner v-if="loading"></spinner>
+          <h1 class="display-4 mb-5 mt-3">{{ post.title }}</h1>
+          <b-row>
+            <b-col md="1 px-0" sm="2" class="text-center">
+              <b-img-lazy rounded="circle" class="mb-3" :src="post.posted_by.link" width="48" />
+            </b-col>
+            <b-col class="px-0">
+              <a class="font-weight-bold" href="#">{{ post.posted_by.name }}</a>
+              <p><small>{{ post.created_at }}</small></p>
+            </b-col>
+          </b-row>
+          <h6 class="mb-2 font-weight-light">Tags <i class="fas fa-tag"></i> : <a href="#" class="font-weight-normal"><b-badge variant="dark">{{ post.category.post_category }}</b-badge></a></h6>
         </b-col>
       </b-row>
       <b-row>
@@ -38,6 +45,7 @@
           <p class="content text-justify text-wrap" v-html="post.content"></p>
         </b-col>  
       </b-row>
+      <comments :post="post.id"></comments>
     </b-container>
     <the-footer></the-footer>
   </div>
@@ -46,12 +54,14 @@
 <script>
 
 import Footer from '../layouts/Footer'
+import Comments from '../../helpers/Comments'
 
 export default {
   name: 'NewsSection',
   props: ['id'],
   components: {
-    'the-footer': Footer
+    'the-footer': Footer,
+    Comments
   },
   data () {
     return {

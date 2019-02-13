@@ -25,7 +25,7 @@ const options = {
 }
 
 Vue.component('spinner', Spinner)
-Vue.use(VeeValidate)
+Vue.use(VeeValidate, { fieldsBagName: 'formFields' })
 Vue.use(VueCroppie)
 Vue.use(BootstrapVue)
 Vue.use(VueProgressBar, options)

@@ -155,6 +155,9 @@ export default {
       return status === 'Published' ? 'primary' : 
         status === 'Draft' ? 'danger' : 'default';
     },
+  },
+  watch: {
+    '$route': 'getPosts'
   }
 }
 </script>

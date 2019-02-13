@@ -16,7 +16,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return EventResource::collection(Event::all());
+        return EventResource::collection(Event::all()->sortBy('start_date'));
     }
 
     /**
@@ -30,11 +30,20 @@ class EventController extends Controller
         $this->validate($request, [
             'event' => 'required',
             'description' => 'required',
-            'date' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
             'location' => 'required',
+            'posted_by' => 'filled'
         ]);
 
-        $event = Event::create($request->all());
+        $event = Event::create([
+            'event' => $request->event,
+            'description' => $request->description,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'location' => $request->location,
+            'posted_by' => $request->posted_by
+        ]);
         return new EventResource($event);
     }
 
