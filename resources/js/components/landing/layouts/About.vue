@@ -11,7 +11,7 @@
 
       <b-container>
         <b-row>
-          <b-col md="5" class="text-center">
+          <b-col md="5" class="text-center mb-3">
             <b-img
               src="/img/favicon.png"
               alt="Logo"

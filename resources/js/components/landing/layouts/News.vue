@@ -29,15 +29,7 @@
         </div>
         
       </div>
-      <!-- /.row -->
       
-      <!-- Action Button -->
-      <!-- <preloader
-        :preloader="this.preloader"
-        class="mb-3"></preloader> -->
-      <!-- ./ Action Button -->
-
-      <!-- Pagination -->
       <b-row>
         <b-col class="text-center">
           <b-button-group size="lg">

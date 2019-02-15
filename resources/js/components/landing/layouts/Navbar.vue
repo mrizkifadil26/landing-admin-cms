@@ -11,7 +11,7 @@
             <a class="nav-link js-scroll-trigger" v-scroll-to="nav.href" :href="nav.href">{{ nav.name }}</a>
           </li>
           <li class="nav-item ml-3">
-            <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn === true">Logout</b-button>
+            <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn"><logout @click="this.$emit('logout')" /></b-button>
            <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
           </li>
         </ul>
@@ -23,9 +23,13 @@
 <script>
 
 import ScrollTo from 'vue-scrollto'
+import Logout from '../../auth/Logout'
 
 export default {
   name: 'Navbar',
+  components: {
+    Logout
+  },
   directives: {
     ScrollTo
   },
@@ -84,7 +88,7 @@ export default {
   },
   computed: {
     isLoggedIn: function () {
-      return this.$store.getters.isLoggedIn
+      return this.$store.getters['authentication/isLoggedIn']
     }
   }
 }

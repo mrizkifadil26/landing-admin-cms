@@ -30,7 +30,7 @@
 
       <b-dropdown-item @click="$router.push('profile')"><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-item>
-        <logout @click="this.$emit('logout')" />
+        <i class="fas fa-sign-out-alt" /> <logout @click="this.$emit('logout')" />
       </b-dropdown-item>
 
     </template>

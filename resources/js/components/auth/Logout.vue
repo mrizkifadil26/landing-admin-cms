@@ -1,7 +1,7 @@
 <template>
-  <div @click="logout">
-    <i class="fas fa-sign-out-alt" /> Logout
-  </div>
+  <span @click="logout">
+    Logout
+  </span>
 </template>
 
 <script>
@@ -25,18 +25,13 @@ export default {
         showCancelButton: true,
       })
       .then((logout) => {
-
         if (logout.value) {
+          this.$store.dispatch('authentication/logout')
           Swal.fire({
             title: 'Logout Success',
             text: 'Logging out...',
             backdrop: 'rgba(0, 0, 0, 0.5)',
-            timer: 1000,
             showConfirmButton: false,
-            allowOutsideClick: false,
-            preConfirm: () => {
-              this.$store.dispatch('authentication/logout')
-            }
           }).then(() => {
             this.$router.push('/login')
           }) 

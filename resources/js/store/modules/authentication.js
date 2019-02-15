@@ -77,14 +77,10 @@ const actions = {
 
   logout ({ commit }) {
     return new Promise((resolve, reject) => {
-      if (commit('LOGOUT')) {
-        localStorage.removeItem('token')
-        delete window.axios.defaults.headers.common['Authorization']
-        resolve()
-      } else {
-        reject('Error logging out. Please try again later.')
-      }
-      
+      commit('LOGOUT')
+      localStorage.removeItem('token')
+      delete window.axios.defaults.headers.common['Authorization']
+      resolve()
     })
   }
 
