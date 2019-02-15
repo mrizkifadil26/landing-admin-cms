@@ -23,7 +23,8 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users',
             'name' => 'required',
-            'password' => 'required|min:3|confirmed',
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6'
         ]);
 
         if ($validator->fails())
@@ -35,13 +36,14 @@ class AuthController extends Controller
         }
 
         $user = new User;
-        $user->username = $request->username;
         $user->name = $request->name;
+        $user->username = $request->username;
         $user->password = bcrypt($request->password);
         $user->save();
 
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'user' => $user
         ], 200);
 
     }
@@ -65,32 +67,16 @@ class AuthController extends Controller
         
 
         return $this->respondWithToken($token);
-        // return response([
-        //     'status' => 'success',
-            // 'user' => Auth::user(),
-            // 'name' => Auth::user()->name,
-            // 'token' => $token,
-        // ], 200)->header('Authorization', 'Bearer ' . $token);
     }
 
     public function user(Request $request)
     {
         return response()->json(auth()->user());
-        // $user = User::find(Auth::user()->id);
-        
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => $user
-        // ]);
     }
 
     public function logout()
     {
         auth('api')->logout();
-        // return response()->json([
-        //     'message' => 'Successfully logged out'
-        // ]);
-        // $this->guard()->logout();
 
         return response()->json([
             'status' => 'success',
@@ -101,15 +87,6 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth('api')->refresh());
-        // if ($token = $this->guard()->refresh()) {
-        //     return response()->json([
-        //         'status' => 'success'
-        //     ], 200)->header('Authorization', 'Bearer ' . $token);
-        // }
-
-        // return response()->json([
-        //     'error' => 'refresh_token_error'
-        // ], 201);
     }
 
     public function respondWithToken($token)
@@ -124,7 +101,6 @@ class AuthController extends Controller
 
     private function guard()
     {
-        // return Auth::guard();
         return Auth::Guard('api');
     }
 

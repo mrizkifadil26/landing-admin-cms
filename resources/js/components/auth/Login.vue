@@ -115,10 +115,10 @@ export default {
   },
   computed: {
     authError() {
-      return this.$store.getters.authError
+      return this.$store.getters['authentication/authError']
     },
     registeredUser() {
-      return this.$store.getters.registeredUser
+      return this.$store.getters['authentication/registeredUser']
     }
   }
 }
