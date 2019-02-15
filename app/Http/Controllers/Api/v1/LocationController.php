@@ -42,7 +42,7 @@ class LocationController extends Controller
             'posted_by' => $request->posted_by,
         ]);
         
-        $locationCategory = PostCategory::find($request->category);
+        $locationCategory = LocationCategory::find($request->category);
         $location->categories()->attach($locationCategory);
 
         return new LocationResource($location);

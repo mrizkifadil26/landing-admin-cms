@@ -8,7 +8,6 @@
           </div>
           <b-row>
             <b-col>
-              <b-alert :variant="success.isSuccess ? 'success' : 'danger'" :show="success.isSuccess" dismissible>{{ success.message }}</b-alert>
               <b-form @submit.prevent="publishPost" @reset.prevent="resetForm" v-if="showForm">
                 <b-form-group
                   label="Title"

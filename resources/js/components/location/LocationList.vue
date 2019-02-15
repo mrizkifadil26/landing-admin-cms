@@ -33,7 +33,7 @@
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ path: `locations/show/${data.item.id}`, label: 'Show Location' }">Show</b-button>
                   <b-button class="mb-1" variant="warning" :to="{ path: `locations/edit/${data.item.id}`, label: 'Edit Location' }">Edit</b-button>
-                  <b-button variant="danger" @click="deleteLocation(data.item.id)">Delete</b-button>
+                  <b-button class="mb-1" variant="danger" @click="deleteLocation(data.item.id)">Delete</b-button>
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
@@ -66,11 +66,11 @@ export default {
     return {
       loading: false,
       currentPage: 1,
-      perPage: 10,
+      perPage: 5,
       locations: [],
       fields: [
         { key: 'location', label: 'Place', sortable: true},
-        { key: 'description' },
+        { key: 'category' },
         { key: 'address' },
         { key: 'avg_rating', label: 'Rating' },
         { key: 'actions' }

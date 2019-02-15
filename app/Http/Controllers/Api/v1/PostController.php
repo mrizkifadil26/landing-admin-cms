@@ -101,4 +101,11 @@ class PostController extends Controller
             'message' => 'Post successfully removed.'
         ], 204);
     }
+
+    public function search(Request $request) 
+    {
+        $post = Post::where('title', $request->keywords)->get();
+
+        return response()->json($post);
+    }
 }

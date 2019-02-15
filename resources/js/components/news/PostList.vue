@@ -13,17 +13,12 @@
             <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
-                  <b-form-input type="text"></b-form-input>
+                  <b-form-input type="text" v-model.lazy="keywords"></b-form-input>
                   <b-input-group-append>
                     <b-button variant="primary">Search</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-alert variant="success" dismissible :show="showBadge">Success</b-alert>
             </b-col>
           </b-row>
           <b-row>
@@ -47,7 +42,7 @@
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ path: `news/show/${data.item.id}`, label: 'Show Post' }">{{ data.value = 'Show' }}</b-button>
                   <b-button class="mb-1" variant="warning" :to="{ path: `news/edit/${data.item.id}`, label: 'Edit Post' }">{{ data.value = 'Edit' }}</b-button>
-                  <b-button variant="danger" @click="deletePost(data.item.id)">{{ data.value = 'Delete' }}</b-button>
+                  <b-button class="mb-1" variant="danger" @click="deletePost(data.item.id)">{{ data.value = 'Delete' }}</b-button>
                 </template>
               </b-table>
               <spinner v-if="loading"></spinner>
@@ -78,8 +73,10 @@ export default {
   name: 'PostList',
   data() {
     return {
-      showBadge: false,
       loading: false,
+      search: false,
+      keywords: '',
+      results: [],
 
       currentPage: 1,
       posts: [],
@@ -102,6 +99,11 @@ export default {
     },
   },
   methods: {
+    fetchPosts () {
+      window.axios.get('/api/posts', { params: { keywords: this.keywords } })
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
+    },
     getPosts: function () {
       this.loading = true
       axios.get(`/api/posts`)
@@ -157,7 +159,10 @@ export default {
     },
   },
   watch: {
-    '$route': 'getPosts'
+    '$route': 'getPosts',
+    keywords(after, before) {
+      this.fetchPosts()
+    }
   }
 }
 </script>

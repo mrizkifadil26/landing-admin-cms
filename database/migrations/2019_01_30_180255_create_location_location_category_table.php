@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLocationCategoryTable extends Migration
+class CreateLocationLocationCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateLocationCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('location_category', function (Blueprint $table) {
+        Schema::create('location_location_category', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unsigned();
+            $table->integer('location_category_id')->unsigned();
             $table->integer('location_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('location_categories')->onDelete('cascade');
+            $table->foreign('location_category_id')->references('id')->on('location_categories')->onDelete('cascade');
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');            
         });
     }

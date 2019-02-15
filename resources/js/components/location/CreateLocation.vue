@@ -18,11 +18,12 @@
                 </b-form-group>
 
                 <b-form-group
-                  label="Description"
-                  label-for="description"
+                  label="Address"
+                  label-for="address"
                   :label-cols="3"
                   :horizontal="true">
-                  <b-form-input id="description" type="text" v-model="location.description"></b-form-input>
+                  <!-- <b-form-input id="mapLocation" type="text" v-model="location.mapLocation" :value="location.mapLocation"></b-form-input> -->
+                  <b-form-input id="address" type="text" v-model="location.address"></b-form-input>
                 </b-form-group>
 
                 <b-form-group
@@ -42,14 +43,17 @@
                 </b-form-group>
 
                 <b-form-group
-                  label="Address"
-                  label-for="address"
+                  label="Description"
+                  label-for="description"
                   :label-cols="3"
                   :horizontal="true">
-                  <!-- <b-form-input id="mapLocation" type="text" v-model="location.mapLocation" :value="location.mapLocation"></b-form-input> -->
-                  <b-form-input id="address" type="text" v-model="location.address"></b-form-input>
+                  <b-form-textarea 
+                    id="description"
+                    rows="3"
+                    max-rows="6" 
+                    v-model="location.description"></b-form-textarea>
                 </b-form-group>
-                
+
                 <b-form-group>
                   <!-- <map-view
                     :marker-lat-lng="location.latLng"
@@ -58,7 +62,7 @@
                 </b-form-group>
 
                 <!-- <b-button variant="warning" md="3 ml-auto">Save As Draft</b-button> -->
-                <b-button type="submit" variant="primary" md="3 ml-auto">Create</b-button>
+                <b-button type="submit" variant="primary" md="3" class="float-right">Create</b-button>
 
               </b-form>
             </b-col>
@@ -73,6 +77,7 @@
 
 import Maps from '../helpers/Maps'
 import VueTagsInput from '@johmun/vue-tags-input'
+import Swal from 'sweetalert2'
 import { clearTimeout, setTimeout } from 'timers';
 
 export default {
@@ -103,7 +108,9 @@ export default {
     }
   },
   computed: {
-
+    user () {
+      return this.$store.getters['authentication/currentUser']
+    }
   },
   methods: {
     changeKey: function(orgKey, newKey, arr) {
@@ -137,21 +144,33 @@ export default {
       
     },
     submitLocation: function() {
-      this.changeKey('text', 'location_category', this.tags)
-      axios.post('api/locations', {
-        location: this.location.name,
-        description: this.location.description,
-        address: this.location.address,
-        category: this.tags,
-        image_id: 2,
-        posted_by: localStorage.getItem('user_id'),
+      Swal.fire({
+        type: 'warning',
+        title: 'Are you sure want to schedule this event?',
+        text: 'This event will be published.',
+        showCancelButton: true
       })
       .then(result => {
-        console.log(result)
-        this.$router.go(-1)
-      })
-      .catch(error => {
-        console.log(error)
+        if (result.value) {
+          this.changeKey('text', 'location_category', this.tags)
+          window.axios.post('/api/locations', {
+            location: this.location.name,
+            description: this.location.description,
+            address: this.location.address,
+            category: this.tags,
+            image_id: 2,
+            posted_by: this.user.id,
+          })
+          .then(response => {
+            Swal.fire('Publish success!', 'Location successfully published.', 'success')
+            console.log(response)
+            this.$router.back()
+          })
+          .catch(error => {
+            Swal.fire('Error!', 'Error publishing event.', 'error')
+            console.log(error)
+          })
+        }
       })
       
       // console.log({

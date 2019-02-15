@@ -6,7 +6,7 @@
           <strong></strong>
           <b-row class="mb-3">
             <b-col md="3" sm="3" class="text-left">
-              <b-button variant="warning"><i class="fas fa-arrow-left" /> Back</b-button>
+              <b-button variant="warning" @click="$router.back()"><i class="fas fa-arrow-left" /> Back</b-button>
             </b-col>
           </b-row>
           <b-row>
