@@ -73,11 +73,7 @@
                     :label-cols="3"
                     :horizontal="true">
                   </b-form-group>
-                  <vue-dropzone
-                      id="dropzoneUpload"
-                      ref="dropzoneUploadRef"
-                      :options="dropzoneOptions" 
-                      class="mb-3"></vue-dropzone>
+
                 </b-col>
               </b-row>
             </b-form>

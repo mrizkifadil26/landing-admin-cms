@@ -63,8 +63,14 @@ class ImageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $image_name = $request->image_name;
+
+        $image = Image::findOrFail($id);
+        $image->image_name = $image_name;
+        $image->save();
+
+        return new ImageResource($image);
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LocationResource;
 use App\Location;
+use App\Image;
 use App\LocationCategory;
 
 class LocationController extends Controller
@@ -44,6 +45,9 @@ class LocationController extends Controller
         
         $locationCategory = LocationCategory::find($request->category);
         $location->categories()->attach($locationCategory);
+
+        $locationGallery = Image::find($request->image);
+        $location->gallery()->attach($locationGallery);
 
         return new LocationResource($location);
     }

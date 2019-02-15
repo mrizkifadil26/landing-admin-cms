@@ -31,7 +31,7 @@
                 :current-page="currentPage" 
                 :per-page="perPage">
                 <template slot="posted_by" slot-scope="data">
-                  {{ data.item.posted_by.name }}
+                  <b-link :to="{ path: `/admin/users/show/${data.item.posted_by.id}` }">{{ data.item.posted_by.name }}</b-link>
                 </template>
                 <template slot="category_id" slot-scope="data">
                   {{ data.item.category.post_category }}

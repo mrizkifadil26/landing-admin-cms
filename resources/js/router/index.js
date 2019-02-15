@@ -17,6 +17,10 @@ import Register from '../components/auth/Register'
 
 import Dashboard from '../components/Dashboard'
 
+import Profile from '../components/profile/Profile'
+
+import Gallery from '../components/gallery/Gallery'
+
 import CreateUser from '../components/users/CreateUser'
 import UsersList from '../components/users/UsersList'
 import UpdateUser from '../components/users/UpdateUser'
@@ -103,6 +107,16 @@ let router =  new Router({
           path: 'dashboard',
           name: 'Dashboard',
           component: Dashboard
+        },
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: Profile
+        },
+        {
+          path: 'gallery',
+          name: 'Gallery',
+          component: Gallery
         },
         {
           path: 'news',

@@ -23,6 +23,11 @@ class Location extends Model
         return $this->belongsToMany(LocationCategory::class);
     }
 
+    public function gallery()
+    {
+        return $this->belongsToMany(Image::class);
+    }
+
     public function image()
     {
         return $this->belongsTo(Image::class, 'image_id', 'id');

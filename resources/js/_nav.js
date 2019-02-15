@@ -29,6 +29,11 @@ export default {
       icon: 'fas fa-list',
     },
     {
+      name: 'Gallery',
+      url: '/admin/gallery',
+      icon: 'fas fa-image'
+    },
+    {
       name: 'Users',
       url: '/admin/users',
       icon: 'fas fa-user',
