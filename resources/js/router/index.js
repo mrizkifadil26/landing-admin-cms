@@ -100,7 +100,7 @@ let router =  new Router({
       path: '/admin',
       redirect: '/admin/dashboard',
       name: 'Home',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, isAdmin: true },
       component : Layout,
       children: [
         {
@@ -294,11 +294,21 @@ let router =  new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters['authentication/isLoggedIn']) {
-      next()
-      return
+    if (store.getters['authentication/isLoggedIn'] == null) {
+      next('/500')
+    } else {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if (to.matched.some(record => record.meta.isAdmin)) {
+        if (user.role.id === 1) {
+          next()
+          return
+        } else {
+          next({ name: 'Landing' })
+        }
+      } else {
+        next()
+      }
     }
-    next('/500')
   } else {
     next()
   }
