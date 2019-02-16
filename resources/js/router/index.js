@@ -12,7 +12,6 @@ import NewsLayout from '../components/landing/news/NewsLayout'
 import NewsSection from '../components/landing/news/NewsSection'
 
 import Login from '../components/auth/Login'
-import Logout from '../components/auth/Logout'
 import Register from '../components/auth/Register'
 
 import Dashboard from '../components/Dashboard'
@@ -272,21 +271,17 @@ let router =  new Router({
     },
     {
       path: '/401',
-      path: '401 Page',
+      name: '401 Page',
       component: Page401
     },
     {
       path: '/500',
-      path: '500 Page',
+      name: '500 Page',
       component: Page500
     },
     {
-      path: '/logout',
-      name: 'Logout',
-      component: Logout
-    },
-    {
       path: '*',
+      name: '404 Page',
       component: Page404
     }
   ]
@@ -294,8 +289,8 @@ let router =  new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters['authentication/isLoggedIn'] == null) {
-      next('/500')
+    if (store.getters['authentication/isLoggedIn'] === false) {
+      next('/401')
     } else {
       let user = JSON.parse(localStorage.getItem('user'))
       if (to.matched.some(record => record.meta.isAdmin)) {
@@ -306,7 +301,7 @@ router.beforeEach((to, from, next) => {
           next({ name: 'Landing' })
         }
       } else {
-        next()
+        next('/401')
       }
     }
   } else {

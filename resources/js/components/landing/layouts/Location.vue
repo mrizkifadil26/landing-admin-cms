@@ -12,6 +12,7 @@
     <b-container>
       <b-row>
         <b-col>
+          <spinner v-if="loading"></spinner>
           <swiper :options="swiperOption">
             <swiper-slide class="text-center" v-for="location in locations" :key="location.id">
               <b-card
@@ -111,6 +112,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       locations: [],
 
       swiperOption: {
@@ -132,12 +134,14 @@ export default {
       },
   },
   created() {
+    this.loading = true
     axios.get('/api/locations')
       .then(response => {
+        this.loading = false
         this.locations = response.data.data
-        console.log(this.locations)
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
   }

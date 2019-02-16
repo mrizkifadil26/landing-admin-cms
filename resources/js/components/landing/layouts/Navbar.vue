@@ -11,7 +11,7 @@
             <a class="nav-link js-scroll-trigger" v-scroll-to="nav.href" :href="nav.href">{{ nav.name }}</a>
           </li>
           <li class="nav-item ml-3">
-            <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn"><logout @click="this.$emit('logout')" /></b-button>
+            <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn">Logout</b-button>
            <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
           </li>
         </ul>
@@ -23,13 +23,10 @@
 <script>
 
 import ScrollTo from 'vue-scrollto'
-import Logout from '../../auth/Logout'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Navbar',
-  components: {
-    Logout
-  },
   directives: {
     ScrollTo
   },
@@ -61,10 +58,23 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$store.dispatch('logout')
-        .then(() => {
-          this.$router.push('/login')
-        })
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out.",
+        type: 'warning',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch('authentication/logout')
+          Swal.fire({
+            title: 'Logout Success',
+            text: 'Logging out...',
+            backdrop: 'rgba(0, 0, 0, 0.5)',
+            showConfirmButton: false,
+          })
+          return this.$router.push('/login')
+        } 
+      })
     }
   },
   mounted() {

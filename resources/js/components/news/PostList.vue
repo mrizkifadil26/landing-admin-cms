@@ -34,7 +34,7 @@
                   <b-link :to="{ path: `/admin/users/show/${data.item.posted_by.id}` }">{{ data.item.posted_by.name }}</b-link>
                 </template>
                 <template slot="category_id" slot-scope="data">
-                  {{ data.item.category.post_category }}
+                  <b-badge variant="warning">{{ data.item.category.post_category }}</b-badge>
                 </template>
                 <template slot="status" slot-scope="row">
                   <b-badge :variant="row.value == 'Published' ? 'danger': 'success' ">Published</b-badge>

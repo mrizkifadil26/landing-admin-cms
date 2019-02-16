@@ -29,8 +29,8 @@
       </b-dropdown-item>
 
       <b-dropdown-item @click="$router.push('profile')"><i class="fas fa-user" /> Profile</b-dropdown-item>
-      <b-dropdown-item>
-        <i class="fas fa-sign-out-alt" /> <logout @click="this.$emit('logout')" />
+      <b-dropdown-item @click="logout">
+        <i class="fas fa-sign-out-alt" /> Logout
       </b-dropdown-item>
 
     </template>
@@ -40,18 +40,32 @@
 <script>
 
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
-import Logout from '../auth/Logout'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Account',
   components: {
     AppHeaderDropdown,
-    'logout': Logout
   },
   methods: {
     logout() {
-      this.$store.commit('authentication/LOGOUT')
-      this.$router.push('/login')
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out.",
+        type: 'warning',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch('authentication/logout')
+          Swal.fire({
+            title: 'Logout Success',
+            text: 'Logging out...',
+            backdrop: 'rgba(0, 0, 0, 0.5)',
+            showConfirmButton: false,
+          })
+          return this.$router.push('/login')
+        } 
+      })
     }
   },
   computed: {
