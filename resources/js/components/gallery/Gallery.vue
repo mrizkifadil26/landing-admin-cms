@@ -126,15 +126,14 @@ export default {
       })
       .then((result) => {
         if (result.value) {
-          window.axios.patch(`/api/images/${id}`, {
-            image_name: this.image_name
-            })
+          window.axios.patch(`/api/images/${id}`, { image_name: this.image_name })
             .then(response => {
               Swal.fire(
                 'Updated!',
                 'This image has been deleted.',
                 'success'
               )
+              this.$router.go(0)
             })
             .catch(error => {
               Swal.fire(

@@ -9,6 +9,7 @@ $factory->define(\App\Complaint::class, function (Faker $faker) {
     return [
         'complaint' => $faker->word,
         'description' => $faker->realText(rand(100, 300)),
+        'full_name' => $faker->name,
         'address' => $faker->streetAddress,
         'category_id' => function() {
             return ComplaintCategory::inRandomOrder()->first()->id;

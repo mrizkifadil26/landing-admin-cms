@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Complaint extends Model
 {
     protected $fillable = [
-        'complaint', 'description', 'category_id', 'image_id', 'status', 'complaint_by'
+        'complaint', 'description', 'full_name', 'address', 'category_id', 'image_id', 'status', 'complaint_by'
     ];
 
     public function user()

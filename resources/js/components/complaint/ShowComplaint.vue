@@ -7,32 +7,34 @@
             <i class="fas fa-list"></i> <strong> Complaint Details</strong>
           </div>
           <b-row>
-            
-            <b-col md="4" class="mb-3">
-              <b-row class="text-center mb-3">
-                <b-col>
-                  <b-img-lazy rounded="square" thumbnail fluid-grow :src="this.complaints[0].data.image.image_link" :alt="this.complaints[0].data.image.image_name" />
-                </b-col>
-              </b-row>
-            </b-col>
-
-            <b-col md="8" class="mb-3">
-              
-              <b-table 
-                
-                :items="this.complaints.data"
+            <b-col md="12" class="mb-3">
+              <b-table
+                stacked 
+                :items="[complaints]"
                 :fields="fields">
                 <template slot="status" slot-scope="data">
                   <b-badge :variant="getBadge(data.item.status)">{{ data.item.status }}</b-badge>
                 </template>
+                <template slot="complaint_by.name" slot-scope="data">
+                  <b-link :to="{ path: `/admin/users/show/${ data.item.complaint_by.id }` }">{{ data.item.complaint_by.name }}</b-link>
+                </template>
               </b-table>
             </b-col>
-          </b-row>
 
-          <b-row>
-            <b-col>
-              <!-- <h1>Location</h1> -->
-              <!-- <map-view></map-view> -->
+            <b-col md="12" class="mb-3">
+              <b-row class="text-center mb-3">
+                <b-col>
+                  <h3 class="mb-3">Photos</h3>
+                  <b-row>
+                    <b-col>
+                      <b-img-lazy 
+                        fluid 
+                        :src="complaints.image.image_link" 
+                        :alt="complaints.image.image_name" />
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
 
@@ -56,11 +58,13 @@ export default {
       fields: [
         { key: 'complaint', sortable: true }, 
         { key: 'description' }, 
+        { key: 'full_name' },
+        { key: 'address' },
         { key: 'category.complaint_category', label: 'Category', sortable: true }, 
         { key: 'status' }, 
-        { key: 'complaint_by.name', label: 'Category', sortable: true }
+        { key: 'complaint_by.name', label: 'Complained by', sortable: true }
       ],
-      complaints: [],
+      complaints: {},
     }
   },
   methods: {
@@ -71,7 +75,7 @@ export default {
       const complaintId = this.$route.params.id
       axios.get(`/api/complaints/${complaintId}`)
         .then(response => {
-          this.complaints.push(response.data)
+          this.complaints = response.data.data
           console.log(this.complaints)
         })
         .catch(error => {

@@ -14,8 +14,7 @@
           <div class="col-lg-12 text-center">
             <button class="btn btn-primary btn-xl" @click="!isLoggedIn ? showAlert() : showComplaint()">Buat Aduan</button>
           </div>
-          <b-modal title="Buat Aduan" size="xl" class="modal-primary" ref="complaintModalRef">
-            <b-alert variant="success" dismissible :show="showMessage">Success</b-alert>
+          <b-modal title="Buat Aduan" size="xl" class="modal-primary" ref="complaintModalRef" ok-title="Send Complaint" @ok.prevent="sendComplaint">
             <b-form>
               <b-row>
                 <b-col md="6" sm="12">
@@ -24,19 +23,32 @@
                     label="Complaint"
                     label-for="complaint"
                     :label-cols="4"
-                    :horizontal="true">
-                    <b-form-input id="complaint" type="text" v-model="complaint.complaint"></b-form-input>
+                    :horizontal="true"
+                    :state="!errors.has('complaint') ? null : false"
+                    :invalid-feedback="errors.first('complaint')">
+                    <b-form-input id="complaint"
+                      type="text"
+                      name="complaint" 
+                      class="form-control"
+                      :state="!errors.has('complaint') ? null : false"
+                      v-model="complaint.complaint"
+                      v-validate="'required'"></b-form-input>
                   </b-form-group>
 
                   <b-form-group
                     label="Description"
                     label-for="description"
                     :label-cols="4"
-                    :horizontal="true">
-                    <b-form-textarea
-                      id="description"
-                      v-model.trim="complaint.description"
-                      :rows="4">
+                    :horizontal="true"
+                    :state="!errors.has('description') ? null : false"
+                    :invalid-feedback="errors.first('description')">
+                    <b-form-textarea id="description"
+                      name="description"
+                      :state="!errors.has('description') ? null : false"
+                      v-model="complaint.description"
+                      v-validate="'required'"
+                      rows="3"
+                      max-rows="6">
                     </b-form-textarea>
                   </b-form-group>
 
@@ -45,21 +57,52 @@
                 <b-col md="6" sm="12">
 
                   <b-form-group
-                    label="Nama Lengkap"
-                    label-for="nama"
-                    :label-cols="3"
+                    label="Full Name"
+                    label-for="fullName"
+                    :state="!errors.has('full-name') ? null : false" 
+                    :invalid-feedback="errors.first('full-name')"
+                    :label-cols="4"
                     :horizontal="true">
-                    <b-form-input id="nama" type="text" v-model="complaint.complaint_by"></b-form-input>
+                    <b-form-input id="fullName"
+                      name="full-name" 
+                      type="text"
+                      :state="!errors.has('full-name') ? null : false" 
+                      v-model="complaint.fullName"
+                      v-validate="'required'"></b-form-input>
+                  </b-form-group>
+
+                  <b-form-group
+                    label="Address"
+                    label-for="address"
+                    :state="!errors.has('address') ? null : false" 
+                    :invalid-feedback="errors.first('address')"
+                    :label-cols="4"
+                    :horizontal="true">
+                    <b-form-input id="address"
+                      name="address" 
+                      type="address"
+                      :state="!errors.has('address') ? null : false" 
+                      v-model="complaint.address"
+                      v-validate="'required'"></b-form-input>
                   </b-form-group>
 
                   <b-form-group
                     label="Category"
                     label-for="category"
-                    :label-cols="3"
+                    :label-cols="4"
+                    :state="!errors.has('category') ? null : false" 
+                    :invalid-feedback="errors.first('category')"
                     :horizontal="true">
-                    <b-form-select v-model="selected" :plain="true" class="mb-3">
+                    <b-form-select
+                      id="category"
+                      name="category" 
+                      v-model="selected"
+                      :state="!errors.has('category') ? null : false" 
+                      v-validate="'required'"
+                      :plain="true" 
+                      class="mb-3">
                       <option :value="null">-- Please select an option --</option>
-                      <option v-for="category in this.categories.data" :key="category.id" :value="category.id">{{ category.complaint_category }}</option>
+                      <option v-for="category in this.categories" :key="category.id" :value="category.id">{{ category.complaint_category }}</option>
                     </b-form-select>
                   </b-form-group>
 
@@ -70,7 +113,7 @@
                   <b-form-group
                     label="Image"
                     label-for="image"
-                    :label-cols="3"
+                    :label-cols="4"
                     :horizontal="true">
                   </b-form-group>
 
@@ -87,48 +130,81 @@
 
 <script>
 
-import VueDropzone from 'vue2-dropzone'
 import Swal from 'sweetalert2'
 
 export default {
   name: 'Complaint',
-  components: {
-    'vue-dropzone': VueDropzone
-  },
   data() {
     return {
-      showMessage: false,
+      loading: false,
       complaint: {
         complaint: '',
         description: '',
+        fullName: '',
         address: '',
         image_id: '',
         category_id: '',
         complaint_by: ''
       },
       selected: null,
-      categories: [],
-      dropzoneOptions: {
-        url: '/api/images',
-        thumbnailWidth: 200,
-        autoProcessQueue: false,
-        addRemoveLinks: true,
-        dictDefaultMessage: "<i class='fas fa-upload'></i> Drop here to upload",
-        accept(file, done) {
-          done()
-        }
-      }
+      categories: []
     }
   },
-  mounted() {
+  mounted () {
     this.getCategories()
   },
   computed: {
-    isLoggedIn: function () {
+    isLoggedIn () {
       return this.$store.getters['authentication/isLoggedIn']
+    },
+    user () {
+      return this.$store.getters['authentication/currentUser']
     }
   },
   methods: {
+    sendComplaint () {
+      Swal.fire({
+        type: 'warning',
+        title: 'Are you sure to sending this complaint?',
+        text: 'This complaint will be sent.',
+        showCancelButton: true
+      })
+      .then(result => {
+        if (result.value) {
+          window.axios.post('/api/complaints', {
+            complaint: this.complaint.complaint,
+            description: this.complaint.description,
+            full_name: this.complaint.fullName,
+            address: this.complaint.address,
+            category_id: this.selected,
+            image_id: 1,
+            complaint_by: this.user.id,
+          })
+          .then(response => {
+            Swal.fire('Complaint success!', 'Complaint successfully sent.', 'success')
+            console.log(response)
+          })
+          .catch(error => {
+            Swal.fire('Error!', 'Error sending complaint.', 'error')
+            console.log(error)
+          })
+          console.log({
+            complaint: this.complaint.complaint,
+            description: this.complaint.description,
+            fullName: this.complaint.fullName,
+            address: this.complaint.address,
+            category_id: this.selected,
+            image_id: 1,
+            complaint_by: this.user.name,
+          }) 
+        }
+      })
+      .catch(error => {
+        Swal.fire('Error!', 'Try again later.', 'error')
+        console.log(error)
+      })
+    },
+
     showAlert () {
       Swal.fire({
         type: 'error',
@@ -141,12 +217,16 @@ export default {
       this.$refs.complaintModalRef.show()
     },
 
-    getCategories: () => {
-      axios.get('/api/complaint-categories')
+    getCategories () {
+      this.loading = true
+      window.axios.get('/api/complaint-categories')
       .then(response => {
-        this.categories = response.data
+        this.loading = false
+        this.categories = response.data.data
+        console.log(this.categories)
       })
       .catch(error => {
+        this.loading = false
         console.log(error)
       })
     }

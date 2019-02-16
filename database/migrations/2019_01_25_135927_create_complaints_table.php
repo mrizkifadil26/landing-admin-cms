@@ -17,10 +17,11 @@ class CreateComplaintsTable extends Migration
             $table->increments('id');
             $table->string('complaint');
             $table->text('description');
+            $table->string('full_name');
             $table->string('address');
             $table->integer('category_id')->unsigned();
             $table->integer('image_id')->unsigned();
-            $table->string('status');
+            $table->string('status')->default('Pending');
             $table->integer('complaint_by')->unsigned();
             $table->timestamps();
 

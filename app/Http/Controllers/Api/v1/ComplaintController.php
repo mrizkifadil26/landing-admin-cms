@@ -27,9 +27,11 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate([
+        $this->validate($request, [
             'complaint' => 'required',
             'description' => 'required',
+            'full_name' => 'required',
+            'address' => 'required',
             'category_id' => 'required',
             'image_id' => 'required',
         ]);
@@ -37,9 +39,10 @@ class ComplaintController extends Controller
         $complaint = Complaint::create([
             'complaint' => $request->complaint,
             'description' => $request->description,
+            'full_name' => $request->full_name,
+            'address' => $request->address,
             'category_id' => $request->category_id,
             'image_id' => $request->image_id,
-            'status' => $request->status,
             'complaint_by' => $request->complaint_by
         ]);
 
@@ -67,8 +70,11 @@ class ComplaintController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $status = $request->status;
+
         $complaint = Complaint::findOrFail($id);
-        $complaint->update($request->all());
+        $complaint->status = $status;
+        $complaint->save();
 
         return new ComplaintResource($complaint);
     }
