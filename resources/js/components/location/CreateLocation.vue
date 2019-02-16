@@ -9,59 +9,60 @@
           <b-row>
             <b-col>
               <b-form @submit.prevent="submitLocation">
-                <b-form-group
-                  label="Location Name"
-                  label-for="location"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <b-form-input id="location" type="text" v-model="location.name"></b-form-input>
-                </b-form-group>
+                <b-row>
+                  <b-col md="6" sm="12">
+                    <b-form-group
+                      label="Location Name"
+                      label-for="location"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <b-form-input id="location" type="text" v-model="location.name"></b-form-input>
+                    </b-form-group>
 
-                <b-form-group
-                  label="Address"
-                  label-for="address"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <!-- <b-form-input id="mapLocation" type="text" v-model="location.mapLocation" :value="location.mapLocation"></b-form-input> -->
-                  <b-form-input id="address" type="text" v-model="location.address"></b-form-input>
-                </b-form-group>
+                    <b-form-group
+                      label="Description"
+                      label-for="description"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <b-form-textarea 
+                        id="description"
+                        rows="3"
+                        max-rows="6" 
+                        v-model="location.description"></b-form-textarea>
+                    </b-form-group>
 
-                <b-form-group
-                  label="Category"
-                  label-for="category"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <!-- <b-form-input id="category" type="text" v-model="location.category"></b-form-input>
-                   -->
-                  <vue-tags-input
-                    v-model="tag"
-                    :tags="tags"
-                    :autocomplete-items="autoCompleteItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="updateTag"
-                  ></vue-tags-input>
-                </b-form-group>
+                  </b-col>
+                  <b-col md="6" sm="12">
 
-                <b-form-group
-                  label="Description"
-                  label-for="description"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <b-form-textarea 
-                    id="description"
-                    rows="3"
-                    max-rows="6" 
-                    v-model="location.description"></b-form-textarea>
-                </b-form-group>
+                    <b-form-group
+                      label="Category"
+                      label-for="category"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <vue-tags-input
+                        v-model="tag"
+                        :tags="tags"
+                        :autocomplete-items="autoCompleteItems"
+                        :add-only-from-autocomplete="true"
+                        @tags-changed="updateTag"
+                      ></vue-tags-input>
+                    </b-form-group>
 
-                <b-form-group>
-                  <!-- <map-view
-                    :marker-lat-lng="location.latLng"
-                    :draggable="true"
-                    ></map-view> -->
-                </b-form-group>
+                    <b-form-group
+                      label="Address"
+                      label-for="address"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <b-form-textarea 
+                        id="address"
+                        rows="3"
+                        max-rows="6" 
+                        v-model="location.address"></b-form-textarea>
+                    </b-form-group>
 
-                <!-- <b-button variant="warning" md="3 ml-auto">Save As Draft</b-button> -->
+                  </b-col>
+                </b-row>
+
                 <b-button type="submit" variant="primary" md="3" class="float-right">Create</b-button>
 
               </b-form>
@@ -75,7 +76,7 @@
 
 <script>
 
-import Maps from '../helpers/Maps'
+// import Maps from '../helpers/Maps'
 import VueTagsInput from '@johmun/vue-tags-input'
 import Swal from 'sweetalert2'
 import { clearTimeout, setTimeout } from 'timers';
@@ -83,7 +84,7 @@ import { clearTimeout, setTimeout } from 'timers';
 export default {
   name: 'CreateLocation',
   components: {
-    'map-view': Maps,
+    // 'map-view': Maps,
     'vue-tags-input': VueTagsInput
   },
   data () {
@@ -95,11 +96,6 @@ export default {
         category: [],
         image_id: null,
         posted_by: null,
-        // latLng: {
-        //   lat: -6.009544,
-        //   lng: 106.042156, 
-        // },
-        // mapLocation: [],
       },
       tag: '',
       tags: [],
@@ -157,14 +153,16 @@ export default {
             location: this.location.name,
             description: this.location.description,
             address: this.location.address,
-            category: this.tags,
+            category: this.tags.map(i => {
+              return i.id
+            }),
             image_id: 2,
             posted_by: this.user.id,
           })
           .then(response => {
             Swal.fire('Publish success!', 'Location successfully published.', 'success')
             console.log(response)
-            this.$router.back()
+            return this.$router.back()
           })
           .catch(error => {
             Swal.fire('Error!', 'Error publishing event.', 'error')
@@ -172,15 +170,6 @@ export default {
           })
         }
       })
-      
-      // console.log({
-      //   location: this.location.name,
-      //   description: this.location.description,
-      //   address: this.location.address,
-      //   category: this.tags,
-      //   image_id: 2,
-      //   posted_by: localStorage.getItem('user_id'),
-      // })
     },
     updateTag(newTag) {
       this.autoCompleteItems = [],

@@ -30,12 +30,15 @@
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
+                <template slot="category.complaint_category" slot-scope="data">
+                  <b-badge variant="warning">{{ data.item.category.complaint_category }}</b-badge>
+                </template>
                 <template slot="status" slot-scope="data">
                   <b-badge :variant="data.item.status === 'Handled' ? 'success' : 'danger' ">{{ data.item.status }}</b-badge>
                 </template>
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="warning" @click="showChangeModal(data.item)">{{ data.value = "Change Status" }}</b-button>
-                  <b-button variant="success" :to="{ path: `complaints/show/${data.item.id}`, label: 'Complaint Details' }">{{ data.value = "Complaint Details" }}</b-button>
+                  <b-button variant="success" :to="{ path: `complaints/show/${data.item.id}`, label: 'Complaint Details' }">{{ data.value = "Details" }}</b-button>
                 </template>
               </b-table>
               <spinner v-if="loading"></spinner>

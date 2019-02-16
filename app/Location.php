@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-    protected $fillable = ['location', 'description', 'address', 'category', 'image_id', 'posted_by'];
+    protected $fillable = ['location', 'description', 'address', 'image_id', 'posted_by'];
 
     public function user()
     {

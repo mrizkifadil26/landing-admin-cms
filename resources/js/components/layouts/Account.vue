@@ -28,7 +28,7 @@
         </b-row>
       </b-dropdown-item>
 
-      <b-dropdown-item @click="$router.push('profile')"><i class="fas fa-user" /> Profile</b-dropdown-item>
+      <b-dropdown-item @click="$router.push('/admin/profile')"><i class="fas fa-user" /> Profile</b-dropdown-item>
       <b-dropdown-item @click="logout">
         <i class="fas fa-sign-out-alt" /> Logout
       </b-dropdown-item>

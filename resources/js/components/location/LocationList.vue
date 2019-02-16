@@ -13,9 +13,15 @@
             <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
-                  <b-form-input type="text"></b-form-input>
+                  <b-form-input 
+                    type="text" 
+                    placeholder="Type to Search"
+                    v-model="filter"></b-form-input>
                   <b-input-group-append>
-                    <b-button variant="primary">Search</b-button>
+                    <b-button 
+                      variant="primary"
+                      :disabled="!filter" 
+                      @click="filter = ''">Clear</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
@@ -29,7 +35,24 @@
                 :items="this.locations" 
                 :fields="fields" 
                 :current-page="currentPage" 
-                :per-page="perPage">
+                :per-page="perPage"
+                :filter="filter"
+                @filtered="onFiltered">
+                <template slot="category" slot-scope="data">
+                  <b-badge v-for="(category, index) in data.item.category" :key="index" variant="warning" class="mr-1">{{ category.location_category }}</b-badge>
+                </template>
+                <template slot="avg_rating" slot-scope="data">
+                  <span class="custom-text">{{ data.item.avg_rating }}</span>
+                  <br>
+                  <rating 
+                    :star-size="20"
+                    :read-only="true"
+                    :round-start-rating="false"
+                    :inline="true"
+                    :show-rating="false"
+                    :rating="parseFloat(data.item.avg_rating)">
+                  </rating>
+                </template>
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ path: `locations/show/${data.item.id}`, label: 'Show Location' }">Show</b-button>
                   <b-button class="mb-1" variant="warning" :to="{ path: `locations/edit/${data.item.id}`, label: 'Edit Location' }">Edit</b-button>
@@ -59,20 +82,25 @@
 <script>
 
 import Swal from 'sweetalert2'
+import Rating from 'vue-star-rating'
 
 export default {
   name: 'LocationList',
+  components: {
+    Rating
+  },
   data() {
     return {
       loading: false,
       currentPage: 1,
       perPage: 5,
+      filter: null,
       locations: [],
       fields: [
-        { key: 'location', label: 'Place', sortable: true},
-        { key: 'category' },
-        { key: 'address' },
-        { key: 'avg_rating', label: 'Rating' },
+        { key: 'location', label: 'Place', sortable: true },
+        { key: 'category', label: 'Category', sortable: true },
+        { key: 'address', sortable: true },
+        { key: 'avg_rating', label: 'Rating', sortable: true, tdClass: 'text-center' },
         { key: 'actions' }
       ]
     }
@@ -125,6 +153,10 @@ export default {
           }
       })
     },
+    onFiltered (filteredItems) {
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
+    }
   },
   created() {
     this.getLocations()
@@ -132,7 +164,31 @@ export default {
   computed: {
     totalRows: function() {
       return this.locations.length
+    },
+    sortOptions() {
+      // Create an options list from our fields
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key }
+        })
     }
   }
 }
 </script>
+
+<style scoped>
+
+.custom-text {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+  border: 1px solid #cfcfcf;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  color: #999;
+  background: #fff;
+}
+
+</style>

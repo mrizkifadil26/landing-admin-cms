@@ -43,7 +43,7 @@ class LocationController extends Controller
             'posted_by' => $request->posted_by,
         ]);
         
-        $locationCategory = LocationCategory::find($request->category);
+        $locationCategory = LocationCategory::findOrFail($request->category);
         $location->categories()->attach($locationCategory);
 
         $locationGallery = Image::find($request->image);
