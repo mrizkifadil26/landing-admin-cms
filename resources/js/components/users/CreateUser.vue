@@ -48,7 +48,14 @@
                     </b-row>
                     <b-row>
                       <b-col>
-                        <b-form-file ref="browseImageRef" id="browseImage" @change="changeAvatar" class="mb-3" v-model="file" :state="Boolean(file)" placeholder="Change Avatar">Change Avatar</b-form-file>
+                        <input
+                          @change="changeAvatar($event)" 
+                          name="file"
+                          type="file"
+                          ref="avatar" 
+                          style="display: none" />
+                        <!-- <b-form-file ref="browseImageRef" id="browseImage" @change="changeAvatar" class="mb-3" v-model="file" :state="Boolean(file)" placeholder="Change Avatar">Change Avatar</b-form-file> -->
+                        <b-button variant="success" @click="browseAvatar()">Change Avatar</b-button>
                         <b-button @click.prevent="rotate(-90)" variant="primary">Rotate Left</b-button>
                         <b-button @click.prevent="rotate(90)" variant="primary">Rotate Right</b-button>
                         <b-button @click.prevent="cropAvatar()" variant="primary">Crop</b-button>
@@ -88,7 +95,7 @@
                   label-for="confirmPassword"
                   :label-cols="3"
                   :horizontal="true">
-                  <b-form-input id="confirmPassword" type="password" v-model="user.password_conf"></b-form-input>
+                  <b-form-input id="confirmPassword" type="password" v-model="user.password_confirmation"></b-form-input>
                 </b-form-group>
 
                 <b-form-group
@@ -125,7 +132,7 @@ export default {
       user: {
         name: '',
         password: '',
-        password_conf: '',
+        password_confirmation: '',
       },
       cropped: null,
       file: null,
@@ -175,28 +182,18 @@ export default {
         name: this.user.name,
         username: this.user.username,
         password: this.user.password,
-        // password_conf: this.user.password_conf,
+        password_confirmation: this.user.password_confirmation,
         avatar_id: this.avatar.avatar_id,
         role_id: this.selected
       })
       .then(response => {
         this.success.isSuccess = true
         this.success.message = 'User successfully added'
-
         this.resetForm()
       })
       .catch(error => {
         this.error.isError = true
         this.error.message = 'Error adding user'
-      })
-
-      console.log({
-        name: this.user.name,
-        username: this.user.username,
-        password: this.user.password,
-        password_conf: this.user.password_conf,
-        avatar_id: this.avatar.avatar_id,
-        roles: this.selected
       })
     },
     uploadAvatar: function () {
@@ -217,9 +214,10 @@ export default {
         console.error(error)
       })
     },
+    browseAvatar () {
+      this.$refs.avatar.click()
+    },
     changeAvatar: function (input) {
-      // this.$emit('input', e.target.files[0])
-      // console.log(e)
       let reader = new FileReader()
       reader.readAsDataURL(input.target.files[0])
       reader.onload = () => {

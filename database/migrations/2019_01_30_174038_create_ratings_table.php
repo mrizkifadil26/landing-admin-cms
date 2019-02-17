@@ -18,6 +18,7 @@ class CreateRatingsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('location_id')->unsigned();
             $table->integer('rating')->unsigned();
+            $table->text('review')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

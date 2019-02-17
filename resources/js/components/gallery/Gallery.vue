@@ -14,8 +14,10 @@
               <h6>Total Image: {{ images.length }}</h6>
             </b-col>
             <b-col md="12" class="text-center">
-              <spinner v-if="loading"></spinner>
               <b-row>
+                <b-col v-if="loading">
+                  <spinner></spinner>
+                </b-col>
                 <b-col v-for="image in displayedPosts" :key="image.id" md="6">
                   <b-card
                     :img-src="image.image_link"

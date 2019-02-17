@@ -9,38 +9,35 @@
           <b-row>
             <b-col>
               <b-form @submit.prevent="publishPost" @reset.prevent="resetForm" v-if="showForm">
-                <b-form-group
-                  label="Title"
-                  label-for="title"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <b-form-input id="title" type="text" v-model="post.title"></b-form-input>
-                </b-form-group>
-
-                <b-form-group
-                  label="Description"
-                  label-for="description"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <b-form-input id="description" type="text" v-model="post.description"></b-form-input>
-                </b-form-group>
-
-                <b-form-group
-                  label="Category"
-                  label-for="category"
-                  :label-cols="3"
-                  :horizontal="true">
-                  <!-- <vue-tags-input
-                    v-model="post.category"
-                    :tags="tags"
-                    @tags-changed="newTags => tags = newTags"
-                  ></vue-tags-input> -->
-                  <b-form-select @change="onChange" v-model="selected" :plain="true" class="mb-3">
-                    <option :value="null">-- Please select an option --</option>
-                    <option v-for="category in this.categories.data" :key="category.id" :value="category.id">{{ category.post_category }}</option>
-                  </b-form-select>
-                </b-form-group>
-
+                <b-row>
+                  <b-col>
+                    <b-form-group
+                      label="Title"
+                      label-for="title"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <b-form-input id="title" type="text" v-model="post.title"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col>
+                    <b-form-group
+                      label="Category"
+                      label-for="category"
+                      :label-cols="3"
+                      :horizontal="true">
+                      <!-- <vue-tags-input
+                        v-model="post.category"
+                        :tags="tags"
+                        @tags-changed="newTags => tags = newTags"
+                      ></vue-tags-input> -->
+                      <b-form-select @change="onChange" v-model="selected" :plain="true" class="mb-3">
+                        <option :value="null">-- Please select an option --</option>
+                        <option v-for="category in this.categories.data" :key="category.id" :value="category.id">{{ category.post_category }}</option>
+                      </b-form-select>
+                    </b-form-group>
+                  </b-col>  
+                </b-row>
+              
                 <b-form-group
                   label="Main Image"
                   label-for="image"

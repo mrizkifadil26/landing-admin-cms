@@ -13,5 +13,6 @@ $factory->define(App\Rating::class, function (Faker $faker) {
             return Location::inRandomOrder()->first()->id;
         },
         'rating' => $faker->numberBetween(0, 5),
+        'review' => $faker->realText(rand(10, 300))
     ];
 });

@@ -232,8 +232,7 @@ export default {
         title: 'Are you sure want to schedule this event?',
         text: 'This event will be published.',
         showCancelButton: true
-      })
-      .then(result => {
+      }).then(result => {
         if (result.value) {
           window.axios.post('/api/events', {
             event: this.event.title,
@@ -243,15 +242,16 @@ export default {
             end_date: moment(this.event.endDate).format('YYYY-MM-DD HH:mm:ss'),
             posted_by: this.user.id
           })
-            .then(response => {
-              Swal.fire('Publish success!', 'Event successfully published.', 'success')
-              console.log(response)
-            })
-            .catch(error => {
-              Swal.fire('Error!', 'Error publishing event.', 'error')
-              console.log(error)
-            })
-          
+          .then(response => {
+            Swal.fire('Publish success!', 'Event successfully published.', 'success')
+            console.log(response)
+          })
+          .catch(error => {
+            Swal.fire('Error!', 'Error publishing event.', 'error')
+            console.log(error)
+          })
+        } else {
+          Swal.fire('Error!', 'Error publishing event.', 'error')
         }
       })
       .catch(error => {
@@ -307,9 +307,8 @@ export default {
         title: 'Are you sure?',
         text: 'This event will be deleted.',
         showCancelButton: true
-      })
-      .then(result => {
-        if (result) {
+      }).then(result => {
+        if (result.value) {
           window.axios.delete(`/api/events/${id}`)
             .then(response => {
               Swal.fire(

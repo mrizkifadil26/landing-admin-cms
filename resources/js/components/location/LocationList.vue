@@ -87,7 +87,7 @@ import Rating from 'vue-star-rating'
 export default {
   name: 'LocationList',
   components: {
-    Rating
+    Rating,
   },
   data() {
     return {

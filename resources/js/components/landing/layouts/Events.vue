@@ -13,7 +13,7 @@
         <div class="row">
           <b-col>
             <spinner v-if="loading"></spinner>
-            <b-card v-for="event in displayedEvents" :key="event.id">
+            <!-- <b-card v-for="event in displayedEvents" :key="event.id">
               <b-row>
                 <b-col md="5" class="text-center text-dark">
                   <b-row v-if="moment(event.start_date).format('YYYY-MM-DD') == moment(event.end_date).format('YYYY-MM-DD')">
@@ -46,25 +46,51 @@
                   <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
                 </b-col>
               </b-row>
-            </b-card>
+            </b-card> -->
+            <swiper :options="swiperOption">
+              <swiper-slide class="text-center" v-for="event in events" :key="event.id">
+                <b-card class="mx-2">
+                  <b-row>
+                    <b-col md="12" class="text-center text-dark">
+                      <b-row v-if="moment(event.start_date).format('YYYY-MM-DD') == moment(event.end_date).format('YYYY-MM-DD')">
+                        <b-col>
+                          <h6 class="mb-1"><strong>{{ event.start_date | toDayName }}</strong></h6>
+                          <h3 class="display-4">{{ event.start_date | toDay }}</h3>
+                          <h6>{{ event.start_date | toMonth }} {{ event.start_date | toYear }}</h6>
+                          <h5>{{ event.start_date | toTime }} - {{ event.end_date | toTime }}</h5>
+                        </b-col>
+                      </b-row>
+                      <b-row v-else>
+                        <b-col>
+                          <h6 class="mb-1"><strong>{{ event.start_date | toDayName }}</strong></h6>
+                          <h3 class="display-4">{{ event.start_date | toDay }}</h3>
+                          <h6>{{ event.start_date | toMonth }} {{ event.start_date | toYear }}</h6>
+                          <h5>{{ event.start_date | toTime }}</h5>
+                        </b-col>
+                        <h3 class="display-4 my-4">-</h3>
+                        <b-col>
+                          <h6 class="mb-1"><strong>{{ event.end_date | toDayName }}</strong></h6>
+                          <h3 class="display-4">{{ event.end_date | toDay }}</h3>
+                          <h6>{{ event.end_date | toMonth }} {{ event.end_date | toYear }}</h6>
+                          <h5>{{ event.end_date | toTime }}</h5>
+                        </b-col>
+                      </b-row>
+                    </b-col>
+                    <b-col md="12" class="text-dark">
+                      <hr>
+                      <h4>{{ event.event }}</h4>
+                      <p>{{ event.description }}</p>
+                      <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </swiper-slide>
+              <div class="swiper-button-prev" slot="button-prev"></div>
+              <div class="swiper-button-next" slot="button-next"></div>
+            </swiper>
           </b-col>
         </div>
       </div>
-
-      <b-row>
-        <b-col class="text-center" align-self-bottom>
-          <b-button-group size="lg">
-            <b-button variant="light" class="page-link" aria-label="Previous" :disabled="page <= 1" @click.prevent="page--">
-              <span aria-hidden="true">Previous</span>
-              <span class="sr-only">Previous</span>
-            </b-button>
-            <b-button variant="light" class="page-link" aria-label="Next" :disabled="page >= this.pages.length" @click.prevent="page++">
-              <span aria-hidden="true">Next</span>
-              <span class="sr-only">Next</span>
-            </b-button>
-          </b-button-group>
-        </b-col>
-      </b-row>
 
     </div>
 
@@ -74,9 +100,14 @@
 <script>
 
 import moment from 'moment'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   name: 'Events',
+  components: {
+    'swiper': swiper,
+    'swiper-slide': swiperSlide
+  },
   data () {
     return {
       loading: false,
@@ -84,7 +115,16 @@ export default {
       currentPage: 1,
       perPage: 3,
       page: 1,
-      pages: []
+      pages: [],
+
+      swiperOption: {
+        autoplay: true,
+        slidesPerView: '3',
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      }
     }
   },
   created () {

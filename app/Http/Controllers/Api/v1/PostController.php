@@ -17,19 +17,6 @@ class PostController extends Controller
      */
     public function index()
     {
-        // $posts = Post::latest()->paginate(6);
-        // $data = PostResource::collection($posts);
-        // $response = [
-        //     'pagination' => [
-        //         'total' => $posts->total(),
-        //         'per_page' => $posts->perPage(),
-        //         'current_page' => $posts->currentPage(),
-        //         'last_page' => $posts->firstItem(),
-        //         'to' => $posts->lastItem()
-        //     ],
-        //     'data' => $data
-        // ];
-        // return response()->json($response);
         return PostResource::collection(Post::all()->sortByDesc('created_at'));
     }
 

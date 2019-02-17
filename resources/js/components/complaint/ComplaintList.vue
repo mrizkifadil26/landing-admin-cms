@@ -30,6 +30,10 @@
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage">
+                <template slot="complaint" slot-scope="data">
+                  {{ data.item.complaint }}
+                  <p><small>{{ data.item.created_at }}</small></p>
+                </template>
                 <template slot="category.complaint_category" slot-scope="data">
                   <b-badge variant="warning">{{ data.item.category.complaint_category }}</b-badge>
                 </template>
@@ -111,7 +115,6 @@ export default {
         { key: 'complaint', label: 'Complaint', sortable: true},
         { key: 'address', sortable: true },
         { key: 'category.complaint_category', label: 'Category', sortable: true },
-        { key: 'created_at', label: 'Complained at', sortable: true },
         { key: 'status', sortable: true },
         { key: 'actions' }
       ],

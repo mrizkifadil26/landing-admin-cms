@@ -16,12 +16,15 @@ class RatingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'location_id' => $this->location_id,
+            'user' => [
+                'name' => $this->user->name,
+                'link' => $this->user->avatar->avatar_link
+            ],
+            'location' => $this->location,
             'rating' => $this->rating,
-            'created_at' => (string) $this->created_at,
-            'updated_at' => (string) $this->updated_at,
-            'location' => $this->location
+            'review' => $this->review,
+            'created_at' => (string) $this->created_at->diffForHumans(),
+            'updated_at' => (string) $this->updated_at->diffForHumans(), 
         ];
     }
 }

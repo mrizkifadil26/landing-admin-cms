@@ -36,11 +36,13 @@
             <b-col>
               <h3 class="mb-2">Photos</h3>
               <b-row>
-                <spinner v-if="loading"></spinner>
-                <b-col class="text-center text-muted" v-if="location.gallery < 1">
+                <b-col v-if="loading" md="12">
+                  <spinner></spinner>
+                </b-col>
+                <b-col class="text-center text-muted" v-if="location.gallery < 1" md="12" sm="12">
                   <p>No Image</p>
                 </b-col>
-                <b-col v-else>
+                <b-col md="12" sm="12" v-else>
                   <b-img-lazy
                     v-for="(photo, index) in location.gallery" :key="index"
                     class="mr-3 mb-3"
@@ -52,7 +54,53 @@
               </b-row>
             </b-col>
           </b-row>
-
+          <hr>
+          <b-row>
+            <b-col class="mb-3">
+              <h2>Write a review:</h2>
+            </b-col>
+          </b-row>
+          <b-container v-if="!isLoggedIn">
+            <b-row>
+              <b-col class="text-center">
+                <h4 class="mb-2">You must login first.</h4>
+                <b-button variant="primary" :to="{ path: '/login' }" size="lg">Login</b-button>
+              </b-col>
+            </b-row>
+            <hr>
+          </b-container>
+          <b-container v-else>
+            <b-form @submit.prevent="addReview()">
+              <b-row>
+                <b-col md="1.5">
+                  <b-img-lazy
+                      rounded
+                      class="mb-3" 
+                      :src="user.avatar.avatar_link" 
+                      width="96" />
+                </b-col>
+                <b-col class="mb-3">
+                  <star-rating
+                    class="mb-3 text-center"
+                    :show-rating="false"
+                    v-model="review.rating"></star-rating>
+                  <b-form-textarea
+                    id="review"
+                    v-model="review.review"
+                    placeholder="Write a review..."
+                    :rows="4"
+                    :max-rows="6"></b-form-textarea>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col class="text-right">
+                  <b-button type="submit" variant="primary">Add Review</b-button>
+                </b-col>
+              </b-row>
+              <hr>
+            </b-form>
+          </b-container>
+          <review :location="location.id"></review>
         </b-card>
       </b-col>
     </b-row>
@@ -63,16 +111,24 @@
 
 // import Maps from '../helpers/Maps'
 import Rating from 'vue-star-rating'
+import Review from '../helpers/Review'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'ShowLocation',
   components: {
     // 'map-view': Maps,
     'star-rating': Rating,
+    Review
   },
   data () {
     return {
       loading: false,
+
+      review: {
+        rating: null,
+        review: ''
+      },
 
       fields: [
         { key: 'location' }, 
@@ -82,8 +138,16 @@ export default {
         { key: 'avg_rating', label: 'Rating' },
         { key: 'ratings', label: 'Rated by'}
       ],
-      location: null,
+      location: {},
       // locations: [],
+    }
+  },
+  computed: {
+    isLoggedIn () {
+      return this.$store.getters['authentication/isLoggedIn']
+    },
+    user () {
+      return this.$store.getters['authentication/currentUser']
     }
   },
   created () {
@@ -103,12 +167,42 @@ export default {
           this.loading = false
           console.error(error)
         })
+    },
+    addReview () {
+      window.axios.post('/api/ratings', {
+        location_id: this.location.id,
+        user_id: this.user.id,
+        rating: this.review.rating,
+        review: this.review.review
+      }).then(response => {
+          Swal.fire({
+            type: 'success',
+            title: 'Review Sent!',
+            text: 'Your review successfully sent.'
+          })
+          this.review.rating = ''
+          this.review.review = ''
+          console.log({
+            location_id: this.location.id,
+            user_id: this.user.id,
+            rating: this.review.rating,
+            review: this.review.review
+          })
+        })
+        .catch(error => {
+          Swal.fire({
+            type: 'error',
+            title: 'Error!',
+            text: 'Please try again later.'
+          })
+          console.log(error)
+        })
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 .custom-text {
   font-family: 'Raleway', sans-serif;

@@ -46,6 +46,9 @@ class ComplaintController extends Controller
             'complaint_by' => $request->complaint_by
         ]);
 
+        $photos = Image::find($request->image);
+        $complaint->photos()->attach($photos);
+
         return new ComplaintResource($complaint);
 
     }

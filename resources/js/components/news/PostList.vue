@@ -32,6 +32,7 @@
                 :per-page="perPage">
                 <template slot="posted_by" slot-scope="data">
                   <b-link :to="{ path: `/admin/users/show/${data.item.posted_by.id}` }">{{ data.item.posted_by.name }}</b-link>
+                  <p><small>{{ data.item.created_at }}</small></p>
                 </template>
                 <template slot="category_id" slot-scope="data">
                   <b-badge variant="warning">{{ data.item.category.post_category }}</b-badge>

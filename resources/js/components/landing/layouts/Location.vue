@@ -16,14 +16,14 @@
           <swiper :options="swiperOption">
             <swiper-slide class="text-center" v-for="location in locations" :key="location.id">
               <b-card
-                :img-src="location.image.image_link"
+                :img-src="location.gallery.length < 1 ? 'https://via.placeholder.com/800x350' : location.gallery[0].image_link"
                 :img-alt="location.image.image_name" 
                 class="mx-2 text-dark text-left">
                 <h3>{{ location.location }}</h3>
                 <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ location.address }}</p>
-                <p>Tags <i class="fas fa-tag"></i></p>
-                <b-badge v-for="(category, index) in location.category" :key="index">{{ category.location_category }}</b-badge>
-                <b-row>
+                <span>Tags <i class="fas fa-tag"></i></span>
+                <b-badge v-for="(category, index) in location.category" :key="index" class="mr-1" variant="warning">{{ category.location_category }}</b-badge>
+                <b-row class="mt-3">
                   <b-col md="8">
                     <p>{{ location.description | truncate(50, '...') }}</p>
                     <b-button variant="primary">Read more</b-button>

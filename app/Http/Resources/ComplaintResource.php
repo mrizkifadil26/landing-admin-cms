@@ -22,6 +22,7 @@ class ComplaintResource extends JsonResource
             'address' => $this->address,
             'category' => $this->category,
             'image' => $this->image,
+            'photos' => $this->photos,
             'status' => $this->status,
             'complaint_by' => $this->user,
             'created_at' => (string) $this->created_at->diffForHumans(),

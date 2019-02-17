@@ -30,4 +30,9 @@ class Image extends Model
     {
         return $this->belongsToMany(Location::class);
     }
+
+    public function complaintPhotos()
+    {
+        return $this->belongsToMany(Complaint::class);
+    }
 }

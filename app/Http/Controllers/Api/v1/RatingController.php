@@ -14,9 +14,9 @@ class RatingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RatingResource::collection(Rating::all()->sortByDesc('created_at'));
+        return RatingResource::collection(Rating::all()->where('location_id', $request->location_id)->sortByDesc('created_at'));
     }
 
     /**
@@ -27,7 +27,20 @@ class RatingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'user_id' => 'filled',
+            'location_id' => 'filled',
+            'rating' => 'required',
+        ]);
+
+        $review = Rating::create([
+            'user_id' => $request->user_id,
+            'location_id' => $request->location_id,
+            'rating' => $request->rating,
+            'review' => $request->review
+        ]);
+
+        return new RatingResource($review);
     }
 
     /**
