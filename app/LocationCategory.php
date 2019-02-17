@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LocationCategory extends Model
 {
-
     protected $fillable = [
         'location_category'
     ];

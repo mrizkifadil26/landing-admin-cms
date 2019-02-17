@@ -8,7 +8,7 @@
           </div>
           <b-row class="mb-3">
             <b-col md="3" sm="4 mb-3">
-              <b-button variant="primary"><i class="fas fa-plus"></i> Add Category</b-button>
+              <b-button variant="primary" @click="addPostCategory"><i class="fas fa-plus"></i> Add Category</b-button>
             </b-col>
             <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
@@ -32,7 +32,7 @@
               <b-table
                 fixed hover
                 responsive="sm" 
-                :items="this.postCategories" 
+                :items="postCategories" 
                 :fields="fields" 
                 :current-page="currentPage" 
                 :per-page="perPage"
@@ -44,13 +44,14 @@
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
-              <b-modal id="statusChange"
+              <b-modal id="postCategoriesModal"
                 ref="showPostCategory"
-                title="Change Post Category" 
+                :title="!isEditing ? 'Add Post Category' : 'Change Post Category'" 
                 size="md" 
-                class="modal-warning" 
-                @ok="updatePostCategory(updatePostCategory.id)"
-                ok-title="Change">
+                :class="!isEditing ? 'modal-primary' : 'modal-warning'"  
+                @ok.prevent="!isEditing ? storePostCategory() : updatePostCategory(updatePostCategories.id)"
+                @hidden="isEditing = false"
+                :ok-title="!isEditing ? 'Add' : 'Change'">
                 <b-form-group
                   label="Category Name"
                   label-for="postCategory"
@@ -58,7 +59,8 @@
                   :horizontal="true">
                   <b-form-input id="postCategory"
                     name="postCategory"
-                    v-model="updatePostCategory.postCategory"></b-form-input>
+                    v-model="postCategory"
+                    :value="!isEditing ? '' : updatePostCategories.postCategory"></b-form-input>
                 </b-form-group>
               </b-modal>
               <nav>
@@ -92,7 +94,10 @@ export default {
       perPage: 10,
       filter: null,
 
+      isEditing: false,
+
       postCategories: [],
+      postCategory: '',
       updatePostCategories: {
         id: null,
         postCategory: '',
@@ -118,13 +123,57 @@ export default {
         console.log(error)
       })
     },
-    showPostCategory (item) {
+    addPostCategory () {
+      this.isEditing = false
       this.$refs.showPostCategory.show()
-      this.postCategory.id = item.id
-      this.postCategory.postCategory = item.post_category
+    },
+    storePostCategory () {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You will add the selected category.",
+        type: 'warning',
+        showCancelButton: true,
+      })
+      .then(result => {
+        if (result.value) {
+          window.axios.post(`/api/post-categories/`, { post_category: this.postCategory })
+          .then(response => {
+            Swal.fire('Category added!', 'Successfully added the category.', 'success')
+            this.$router.go(0)
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        }
+      })
+    },
+    showPostCategory (item) {
+      this.isEditing = true
+      this.$refs.showPostCategory.show()
+      this.updatePostCategories.id = item.id
+      this.updatePostCategories.postCategory = item.post_category
     },
     updatePostCategory (id) {
-
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You will change the selected category.",
+        type: 'warning',
+        showCancelButton: true,
+      })
+      .then(result => {
+        if (result.value) {
+          window.axios.patch(`/api/post-categories/${id}`, { post_category: this.postCategory })
+          .then(response => {
+            Swal.fire('Category changed!', 'Successfully changed the category.', 'success')
+            this.$router.go(0)
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        }
+      })
     },
     deletePostCategory (id) {
       Swal.fire({
@@ -182,6 +231,9 @@ export default {
           return { text: f.label, value: f.key }
         })
     },    
+  },
+  watch: {
+    '$route': 'getPostCategories'
   }
 }
 </script>

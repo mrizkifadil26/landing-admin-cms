@@ -227,6 +227,9 @@ export default {
           return { text: f.label, value: f.key }
         })
     }
+  },
+  watch: {
+    '$route': 'getPostCategories'
   }
 }
 

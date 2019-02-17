@@ -58,7 +58,7 @@ class PostCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $postCategory = PostCategoryResource::findOrFail($id);
+        $postCategory = PostCategory::findOrFail($id);
         $postCategory->update($request->all());
 
         return new PostCategoryResource($postCategory);
