@@ -8,27 +8,38 @@
           </div>
           <b-row>
             <b-col>
-              <b-form @submit.prevent="submitLocation">
+              <b-form @submit.prevent="addLocation">
                 <b-row>
                   <b-col md="6" sm="12">
                     <b-form-group
                       label="Location Name"
                       label-for="location"
                       :label-cols="3"
-                      :horizontal="true">
-                      <b-form-input id="location" type="text" v-model="location.name"></b-form-input>
+                      :horizontal="true"
+                      :state="!errors.has('location') ? null : false"
+                      :invalid-feedback="errors.first('location')">
+                      <b-form-input id="location"
+                        name="location" 
+                        type="text"
+                        v-model="location.name"
+                        :state="!errors.has('location') ? null : false" 
+                        v-validate="'required'"></b-form-input>
                     </b-form-group>
 
                     <b-form-group
                       label="Description"
                       label-for="description"
                       :label-cols="3"
-                      :horizontal="true">
-                      <b-form-textarea 
-                        id="description"
+                      :horizontal="true"
+                      :state="!errors.has('description') ? null : false"
+                      :invalid-feedback="errors.first('description')">
+                      <b-form-textarea id="description"
+                        name="description"
                         rows="3"
                         max-rows="6" 
-                        v-model="location.description"></b-form-textarea>
+                        v-model="location.description"
+                        :state="!errors.has('description') ? null : false" 
+                        v-validate="'required'"></b-form-textarea>
                     </b-form-group>
 
                   </b-col>
@@ -44,20 +55,23 @@
                         :tags="tags"
                         :autocomplete-items="autoCompleteItems"
                         :add-only-from-autocomplete="true"
-                        @tags-changed="updateTag"
-                      ></vue-tags-input>
+                        @tags-changed="updateTag"></vue-tags-input>
                     </b-form-group>
 
                     <b-form-group
                       label="Address"
                       label-for="address"
                       :label-cols="3"
-                      :horizontal="true">
-                      <b-form-textarea 
-                        id="address"
+                      :horizontal="true"
+                      :state="!errors.has('address') ? null : false"
+                      :invalid-feedback="errors.first('address')">
+                      <b-form-textarea id="address"
+                        name="address"
                         rows="3"
                         max-rows="6" 
-                        v-model="location.address"></b-form-textarea>
+                        v-model="location.address"
+                        :state="!errors.has('address') ? null : false" 
+                        v-validate="'required'"></b-form-textarea>
                     </b-form-group>
 
                   </b-col>
@@ -66,15 +80,17 @@
                     <b-form-group
                       label="Photos"
                       label-for="photos">
-                      <vue-dropzone id="dropzone"
-                        ref="dropZone"
-                        :options="dropzoneOptions"
-                        @vdropzone-file-added="addedPhotos" 
-                        @vdropzone-success="sendSuccess" 
-                        @vdropzone-error="errorSending" 
-                        @vdropzone-removed-file="removePhotos" 
-                        @vdropzone-sending="sendPhotos"  
-                        @vdropzone-duplicate-file="duplicateFile"></vue-dropzone>
+                      <vue-upload-multiple-image
+                        dragText="Upload your file here"
+                        browseText="or click to Upload"
+                        primaryText="Main Image"
+                        markIsPrimaryText="Set as main image"
+                        popupText=""
+                        @upload-success="uploadImageSuccess"
+                        @before-remove="beforeRemove"
+                        @edit-image="editImage"
+                        @data-change="dataChange"
+                        :data-images="images"></vue-upload-multiple-image>
                     </b-form-group>
                   </b-col>
                 </b-row>
@@ -92,8 +108,7 @@
 
 <script>
 
-// import Maps from '../helpers/Maps'
-import VueDropzone from 'vue2-dropzone'
+import VueUploadMultipleImage from 'vue-upload-multiple-image'
 import VueTagsInput from '@johmun/vue-tags-input'
 import Swal from 'sweetalert2'
 import { clearTimeout, setTimeout } from 'timers';
@@ -101,9 +116,8 @@ import { clearTimeout, setTimeout } from 'timers';
 export default {
   name: 'CreateLocation',
   components: {
-    // 'map-view': Maps,
-    'vue-tags-input': VueTagsInput,
-    VueDropzone
+    VueTagsInput,
+    VueUploadMultipleImage
   },
   data () {
     return {
@@ -111,21 +125,9 @@ export default {
         name: '',
         description: '',
         address: '',
-        category: [],
-        image_id: null,
         posted_by: null,
       },
-      dropzoneOptions: {
-        url: '/api/images',
-        acceptedFiles: 'image/*',
-        thumbnailWidth: 150,
-        maxFilesize: 1,
-        maxFiles: 4,
-        addRemoveLinks: true,
-        accept(file, done) {
-          done()
-        }
-      },
+      images: [],
       photos: [],
       tag: '',
       tags: [],
@@ -139,16 +141,6 @@ export default {
     }
   },
   methods: {
-    changeKey: function(orgKey, newKey, arr) {
-      let newArr = []
-      for (let i = 0; i < arr.length; i++) {
-        let obj = arr[i]
-        obj[newKey] = obj[orgKey]
-        delete(obj[orgKey])
-        newArr.push(obj)
-      }
-      return newArr
-    },
     getCategories: function() {
       if (this.tag.length < 2) return;
       clearTimeout(this.debounce)
@@ -168,59 +160,83 @@ export default {
         })
       }, 600)
     },
-    submitLocation: function() {
+    addLocation: function() {
       Swal.fire({
         type: 'warning',
-        title: 'Are you sure want to schedule this event?',
-        text: 'This event will be published.',
+        title: 'Are you sure want to add this location?',
+        text: 'This location will be published.',
         showCancelButton: true
       })
       .then(result => {
         if (result.value) {
-          this.changeKey('text', 'location_category', this.tags)
-          window.axios.post('/api/locations', {
-            location: this.location.name,
-            description: this.location.description,
-            address: this.location.address,
-            category: this.tags.map(i => {
-              return i.id
-            }),
-            image_id: 2,
-            posted_by: this.user.id,
-          })
-          .then(response => {
-            Swal.fire('Publish success!', 'Location successfully published.', 'success')
-            console.log(response)
-            return this.$router.back()
-          })
-          .catch(error => {
-            Swal.fire('Error!', 'Error publishing event.', 'error')
-            console.log(error)
+          this.$validator.validate()
+          .then((result) => {
+            if (result) {
+              window.axios.post('/api/locations', {
+                location: this.location.name,
+                description: this.location.description,
+                address: this.location.address,
+                category: this.tags.map(i => {
+                  return i.id
+                }),
+                photos: this.photos,
+                posted_by: this.user.id,
+              })
+              .then(response => {
+                Swal.fire('Publish success!', 'Location successfully published.', 'success')
+                console.log(response)
+                return this.$router.back()
+              })
+              .catch(error => {
+                Swal.fire('Error!', 'Error publishing event.', 'error')
+                console.log(error)
+              })
+            } else {
+              Swal.fire('Error!', 'Try again later.', 'error')
+              console.log(error)
+            }
           })
         }
       })
-    },
-    addedPhotos (file) {
-      console.log(file)
-    },
-    sendPhotos (file, xhr, formData) {
-      console.log(file)
-      console.log(formData)
-    },
-    removePhotos (file, xhr, error) {
-      console.log(file)
-      console.log(error)
-    },
-    sendSuccess(file, response) {
-      console.log(response)
     },
     updateTag(newTag) {
       this.autoCompleteItems = [],
       this.tags = newTag
     },
+    uploadImageSuccess(formData, index, fileList) {
+      console.log('data', formData, index, fileList)
+      window.axios.post('/api/images', formData).then(response => {
+        let id = response.data.data.id
+        this.photos.push(id)
+        console.log(response)
+      })
+    },
+    beforeRemove (index, done, fileList) {
+      console.log('index', index, fileList)
+      Swal.fire({
+        type: 'warning',
+        title: 'Are you sure want to remove this image?',
+        text: 'This image will be deleted.',
+        showCancelButton: true
+      })
+      .then(result => {
+        if (result.value) {
+          Swal.fire('Removed!', 'Your image has renoved', 'success')
+          done()
+        }
+      })
+    },
+    editImage (formData, index, fileList) {
+      console.log('edit data', formData, index, fileList)
+    },
+    dataChange (data) {
+      console.log(data)
+    }
   },
-  created() {
-    // this.getCategories()
+  computed: {
+    user () {
+      return this.$store.getters['authentication/currentUser']
+    }
   },
   watch: {
     'tag': 'getCategories'

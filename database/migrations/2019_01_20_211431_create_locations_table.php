@@ -18,12 +18,10 @@ class CreateLocationsTable extends Migration
             $table->string('location');
             $table->string('description');
             $table->string('address');
-            $table->integer('image_id')->unsigned();
             $table->integer('posted_by')->unsigned();
             $table->timestamps();
 
             $table->foreign('posted_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
         });
     }
 

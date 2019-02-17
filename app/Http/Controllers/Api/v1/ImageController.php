@@ -31,9 +31,9 @@ class ImageController extends Controller
         if ($request->file('file'))
         {
             $image = $request->file('file');
-            $name = time() . '+' . str_replace(' ', '+', $image->getClientOriginalName());
+            $name = time() . '.jpg';
             $link = '/storage/images/' . $name;
-            $image->move(public_path() . '/storage/images/', $name);
+            Storage::putFileAs('/images/', $image, $name);
         }
 
         $image = new Image();

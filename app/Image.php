@@ -26,7 +26,7 @@ class Image extends Model
         return $this->hasMany(Complaint::class, 'image_id', 'id');
     }
 
-    public function locationGalleries()
+    public function locationPhotos()
     {
         return $this->belongsToMany(Location::class);
     }

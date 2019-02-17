@@ -39,17 +39,31 @@
                 <b-col v-if="loading" md="12">
                   <spinner></spinner>
                 </b-col>
-                <b-col class="text-center text-muted" v-if="location.gallery < 1" md="12" sm="12">
+                <b-col class="text-center text-muted" v-if="location.photos < 1" md="12" sm="12">
                   <p>No Image</p>
                 </b-col>
                 <b-col md="12" sm="12" v-else>
-                  <b-img-lazy
-                    v-for="(photo, index) in location.gallery" :key="index"
-                    class="mr-3 mb-3"
-                    blank-color="#bbb"
-                    width="330"
-                    :src="photo.image_link"
-                    :alt="photo.image_name" />
+                  <b-row>
+                    <b-col md="3" sm="4" 
+                      v-for="(photo, index) in location.photos" :key="index">
+                      <b-link
+                        @click="openLightbox(index)">
+                        <b-img-lazy                        
+                          thumbnail
+                          class="mr-3 mb-3"
+                          blank-color="#bbb"
+                          width="200"
+                          :src="photo.image_link"
+                          :alt="photo.image_name" />
+                      </b-link>
+                    </b-col>
+                  </b-row>
+                  <vue-image-lightbox-carousel 
+                    ref="lightbox"
+                    :show="showLightbox"
+                    @close="showLightbox = false"
+                    :images="photos"
+                    @change="changeImage"></vue-image-lightbox-carousel>
                 </b-col>
               </b-row>
             </b-col>
@@ -109,17 +123,17 @@
 
 <script>
 
-// import Maps from '../helpers/Maps'
 import Rating from 'vue-star-rating'
+import VueImageLightboxCarousel from 'vue-image-lightbox-carousel'
 import Review from '../helpers/Review'
 import Swal from 'sweetalert2'
 
 export default {
   name: 'ShowLocation',
   components: {
-    // 'map-view': Maps,
     'star-rating': Rating,
-    Review
+    Review,
+    VueImageLightboxCarousel
   },
   data () {
     return {
@@ -139,7 +153,7 @@ export default {
         { key: 'ratings', label: 'Rated by'}
       ],
       location: {},
-      // locations: [],
+      showLightbox: false,
     }
   },
   computed: {
@@ -148,12 +162,33 @@ export default {
     },
     user () {
       return this.$store.getters['authentication/currentUser']
+    },
+    photos () {
+      return this.getPhotos()
     }
   },
   created () {
     this.getLocation()
   },
   methods: {
+
+    getPhotos () {
+      return this.location.photos.map(i => {
+        return {
+          url: i.image_link,
+          caption: i.image_name
+        }
+      })
+    },
+
+    openLightbox (id) {
+      this.showLightbox = true
+      this.$refs.lightbox.showImage(id)
+    },
+    changeImage (index) {
+      console.log(index)
+    },
+
     getLocation() {
       this.loading = true
       const locationId = this.$route.params.id

@@ -35,7 +35,7 @@ class AvatarController extends Controller
             $avatar = str_replace(' ', '+', $avatar);
             $avatar_name = time().'.'.'png';
             $avatar_link = '/storage/avatars/' . $avatar_name;
-            Storage::put('/avatars/' . $avatar_name, base64_decode($avatar));
+            Storage::putFileAs('/avatars/', base64_decode($avatar), $avatar_name);
         }
 
         $avatar = new Avatar();

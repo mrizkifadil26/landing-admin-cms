@@ -45,8 +45,8 @@ class LocationController extends Controller
         $locationCategory = LocationCategory::findOrFail($request->category);
         $location->categories()->attach($locationCategory);
 
-        $locationGallery = Image::find($request->image);
-        $location->gallery()->attach($locationGallery);
+        $locationGallery = Image::find($request->photos);
+        $location->photos()->attach($locationGallery);
 
         return new LocationResource($location);
     }

@@ -81,6 +81,7 @@
 import { VueEditor, Quill } from 'vue2-editor'
 import VueTagsInput from '@johmun/vue-tags-input'
 import VueUploadMultipleImage from 'vue-upload-multiple-image'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'CreatePost',
@@ -94,7 +95,6 @@ export default {
       post: {
         title: '',
         description: '',
-        category_id: '',
         image_id: '',
         content: '',
         posted_by: ''
@@ -107,81 +107,60 @@ export default {
       debounce: null
     }
   },
-  mounted () {
-    window.axios.get(`/api/post-categories`)
-      .then(response => {
-        this.categories = response.data
-        console.log(this.categories)
-      }).catch(error => {
-        console.log(error)
-      })
-
-    console.log(this.post.category_id)
-    console.log(this.$refs.dropzoneUploadRef)
+  computed: {
+    user () {
+      return this.$store.getters['authentication/currentUser']
+    }
+  },
+  created () {
+    
   },
   methods: {
     publishPost: function() {
-      axios.post(`/api/posts`, {
-        title: this.post.title,
-        description: this.post.description,
-        category_id: this.selected,
-        image_id: this.post.image_id,
-        content: this.post.content,
-        posted_by: localStorage.getItem('user_id')
-      }).then(result => {
-        console.log(result)
-        this.showBadge = true
-        this.success.isSuccess = true
-        this.success.message = 'Post successfully published'
-        this.resetForm()
-        this.$router.go(-1)
-      }).catch(error => {
-        console.log(error)
+      Swal.fire({
+        type: 'warning',
+        title: 'Are you sure want to publish this post?',
+        text: 'Your post will be published.',
+        showCancelButton: true
       })
-    },
-    setImage: function(e) {
-      if (this.file.fileAdded == true) {
-        this.showDropzone = true
-        this.$refs.dropzoneUploadRef.processQueue()
-        this.image.display = true
-        this.showImage = true
-        console.log(`Progress: ${this.file.myProgress}`)
-      }
-      console.log(`Display: ${this.image.display}`)
-      console.log(this.file.uploadProgress)
-    },
-    removeImage: function(file, xhr, error) {
-      this.showDropzone = true
-      this.showImage = false
-      this.$refs.dropzoneUploadRef.removeFile(file)
-      if (this.image.display === true) {
-        let id = this.image.image_id
-        axios.delete(`/api/images/${id}`)
-          .then(response => console.log(response))
-          .catch(error => console.log(error))
-        this.image.display = false
-        this.file.success = false
-        console.log(`Display: ${this.image.display}`)
-        console.log(file)
-      }
-    },
-    resetForm: function() {
-      this.post.title = '',
-      this.post.description = '',
-      this.post.image_id = null,
-      this.post.content = '',
-      this.post.posted_by = null
-      this.selected = null
-
-      this.showForm = false;
-      this.showBadge = true;
-
-      this.success.isSuccess = true;
-      this.success.message = 'Form resetted'
-      this.errors.isError = false;
-      this.errors.message = null;
-
-      this.$nextTick(() => { this.showForm = true })
+      .then(result => {
+        if (result.value) {
+          this.$validator.validate()
+            .then(result => {
+              if (result) {
+                window.axios.post(`/api/posts`, {
+                  title: this.post.title,
+                  category: this.tags.map(i => {
+                    return i.id
+                  }),
+                  image_id: this.post.image_id,
+                  content: this.post.content,
+                  posted_by: this.user.id
+                }).then(result => {
+                  Swal.fire('Publish success!', 'This post successfully published.', 'success')
+                  console.log(response)
+                  return this.$router.back()
+                }).catch(error => {
+                  Swal.fire('Error!', 'Error publishing post.', 'error')
+                  console.log(error)
+                })
+              } else {
+                Swal.fire('Error!', 'Try again later.', 'error')
+                console.log(error)
+              }
+            })
+          
+        }
+      })
+      // console.log({
+      //   title: this.post.title,
+      //   category: this.tags.map(i => {
+      //     return i.id
+      //   }),
+      //   image_id: this.post.image_id,
+      //   content: this.post.content,
+      //   posted_by: this.user.id
+      // })
     },
     getCategories: function() {
       if (this.tag.length < 2) return;
@@ -208,10 +187,9 @@ export default {
     },
     uploadImageSuccess(formData, index, fileList) {
       console.log('data', formData, index, fileList)
-      // Upload image api
-      // axios.post('http://your-url-upload', formData).then(response => {
-      //   console.log(response)
-      // })
+      window.axios.post('/api/images', formData).then(response => {
+        this.post.image_id = response.data.data.id
+      })
     },
     beforeRemove (index, done, fileList) {
       console.log('index', index, fileList)
