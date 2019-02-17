@@ -52,7 +52,9 @@ export default {
     }
   },
   created () {
-    this.getComments(this.post)
+    setTimeout(() => {
+      this.getComments(this.post)
+    })
   },
   watch: {
     '$route': 'getComments'

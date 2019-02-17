@@ -27,13 +27,15 @@ class ComplaintCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate([
-            'Complaint_category' => 'required'
+        $this->validate($request, [
+            'complaint_category' => 'required'
         ]);
 
-        $ComplaintCategory = ComplaintCategory::create($request->all());
+        $complaintCategory = ComplaintCategory::create([
+            'complaint_category' => $request->complaint_category
+        ]);
 
-        return new ComplaintCategoryResource($ComplaintCategory);
+        return new ComplaintCategoryResource($complaintCategory);
     }
 
     /**
@@ -56,10 +58,10 @@ class ComplaintCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $ComplaintCategory = ComplaintCategory::findOrFail($id);
-        $ComplaintCategory->update($request->all());
+        $complaintCategory = ComplaintCategory::findOrFail($id);
+        $complaintCategory->update($request->all());
 
-        return new ComplaintCategoryResource($ComplaintCategory);
+        return new ComplaintCategoryResource($complaintCategory);
     }
 
     /**
@@ -70,8 +72,8 @@ class ComplaintCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $ComplaintCategory = ComplaintCategory::findOrFail($id);
-        $ComplaintCategory->delete();
+        $complaintCategory = ComplaintCategory::findOrFail($id);
+        $complaintCategory->delete();
 
         return response()->json([
             'message' => 'Category successfully removed.'

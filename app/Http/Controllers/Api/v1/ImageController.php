@@ -82,6 +82,7 @@ class ImageController extends Controller
     public function destroy($id)
     {
         $image = Image::findOrFail($id);
+        Storage::delete('images/' . $image->image_name);
         $image->delete();
 
         return response()->json([

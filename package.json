@@ -49,6 +49,7 @@
         "vue-router": "^3.0.2",
         "vue-scrollto": "^2.13.0",
         "vue-star-rating": "^1.6.1",
+        "vue-upload-multiple-image": "^1.1.2",
         "vue2-dropzone": "^3.5.2",
         "vue2-editor": "^2.6.6",
         "vue2-leaflet": "^1.2.3",

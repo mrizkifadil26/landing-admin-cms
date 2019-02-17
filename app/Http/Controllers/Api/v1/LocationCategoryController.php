@@ -27,11 +27,13 @@ class LocationCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate([
+        $this->validate($request, [
             'location_category' => 'required'
         ]);
 
-        $locationCategory = LocationCategory::create($request->all());
+        $locationCategory = LocationCategory::create([
+            'location_category' => $request->location_category
+        ]);
 
         return new LocationCategoryResource($locationCategory);
     }

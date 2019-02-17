@@ -27,11 +27,13 @@ class PostCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate([
+        $this->validate($request, [
             'post_category' => 'required'
         ]);
 
-        $postCategory = PostCategory::create($request->all());
+        $postCategory = PostCategory::create([
+            'post_category' => $request->post_category
+        ]);
 
         return new PostCategoryResource($postCategory);
     }

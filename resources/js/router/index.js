@@ -29,16 +29,19 @@ import CreatePost from '../components/news/CreatePost'
 import PostList from '../components/news/PostList'
 import ShowPost from '../components/news/ShowPost'
 import UpdatePost from '../components/news/UpdatePost'
+import PostCategories from '../components/news/PostCategories'
 
 import EventList from '../components/event/EventList'
 
 import ComplaintList from '../components/complaint/ComplaintList'
 import ShowComplaint from '../components/complaint/ShowComplaint'
+import ComplaintCategories from '../components/complaint/ComplaintCategories'
 
 import CreateLocation from '../components/location/CreateLocation'
 import LocationList from '../components/location/LocationList'
 import ShowLocation from '../components/location/ShowLocation'
 import UpdateLocation from '../components/location/UpdateLocation'
+import LocationCategories from '../components/location/LocationCategories'
 
 import store from '../store';
 
@@ -146,6 +149,11 @@ let router =  new Router({
             {
               path: 'delete/:id',
               name: 'Delete Post',
+            },
+            {
+              path: 'post-categories',
+              name: 'Post Categories',
+              component: PostCategories
             }
           ]
         },
@@ -178,6 +186,11 @@ let router =  new Router({
             {
               path: 'edit/:id',
               name: 'Delete Location',
+            },
+            {
+              path: 'location-categories',
+              name: 'Location Categories',
+              component: LocationCategories
             }
           ]
         },
@@ -210,6 +223,11 @@ let router =  new Router({
               name: 'Complaint Details',
               component: ShowComplaint
             },
+            {
+              path: 'complaint-categories',
+              name: 'Complaint Categories',
+              component: ComplaintCategories
+            }
           ]
         },
         {

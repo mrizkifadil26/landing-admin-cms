@@ -61,6 +61,22 @@
                     </b-form-group>
 
                   </b-col>
+
+                  <b-col>
+                    <b-form-group
+                      label="Photos"
+                      label-for="photos">
+                      <vue-dropzone id="dropzone"
+                        ref="dropZone"
+                        :options="dropzoneOptions"
+                        @vdropzone-file-added="addedPhotos" 
+                        @vdropzone-success="sendSuccess" 
+                        @vdropzone-error="errorSending" 
+                        @vdropzone-removed-file="removePhotos" 
+                        @vdropzone-sending="sendPhotos"  
+                        @vdropzone-duplicate-file="duplicateFile"></vue-dropzone>
+                    </b-form-group>
+                  </b-col>
                 </b-row>
 
                 <b-button type="submit" variant="primary" md="3" class="float-right">Create</b-button>
@@ -77,6 +93,7 @@
 <script>
 
 // import Maps from '../helpers/Maps'
+import VueDropzone from 'vue2-dropzone'
 import VueTagsInput from '@johmun/vue-tags-input'
 import Swal from 'sweetalert2'
 import { clearTimeout, setTimeout } from 'timers';
@@ -85,7 +102,8 @@ export default {
   name: 'CreateLocation',
   components: {
     // 'map-view': Maps,
-    'vue-tags-input': VueTagsInput
+    'vue-tags-input': VueTagsInput,
+    VueDropzone
   },
   data () {
     return {
@@ -97,6 +115,18 @@ export default {
         image_id: null,
         posted_by: null,
       },
+      dropzoneOptions: {
+        url: '/api/images',
+        acceptedFiles: 'image/*',
+        thumbnailWidth: 150,
+        maxFilesize: 1,
+        maxFiles: 4,
+        addRemoveLinks: true,
+        accept(file, done) {
+          done()
+        }
+      },
+      photos: [],
       tag: '',
       tags: [],
       autoCompleteItems: [],
@@ -137,7 +167,6 @@ export default {
           console.log(error)
         })
       }, 600)
-      
     },
     submitLocation: function() {
       Swal.fire({
@@ -170,6 +199,20 @@ export default {
           })
         }
       })
+    },
+    addedPhotos (file) {
+      console.log(file)
+    },
+    sendPhotos (file, xhr, formData) {
+      console.log(file)
+      console.log(formData)
+    },
+    removePhotos (file, xhr, error) {
+      console.log(file)
+      console.log(error)
+    },
+    sendSuccess(file, response) {
+      console.log(response)
     },
     updateTag(newTag) {
       this.autoCompleteItems = [],

@@ -40,23 +40,21 @@
               
                 <b-form-group
                   label="Main Image"
-                  label-for="image"
-                  :label-cols="3"
-                  :horizontal="true">
+                  label-for="image">
+                  <vue-dropzone id="dropzoneUpload"
+                    ref="dropzoneUploadRef"
+                    @vdropzone-file-added="vfileAdded"
+                    @vdropzone-success="vsuccess"
+                    @vdropzone-error="verror"
+                    @vdropzone-removed-file="vremoved"
+                    @vdropzone-mounted="vmounted"
+                    @vdropzone-drop="vdrop"
+                    @vdropzone-total-upload-progress="vprogress"
+                    :options="dropzoneOptions" 
+                    class="mb-3"
+                    v-show="showDropzone"></vue-dropzone>
                 </b-form-group>
-                <vue-dropzone
-                  id="dropzoneUpload"
-                  ref="dropzoneUploadRef"
-                  @vdropzone-file-added="vfileAdded"
-                  @vdropzone-success="vsuccess"
-                  @vdropzone-error="verror"
-                  @vdropzone-removed-file="vremoved"
-                  @vdropzone-mounted="vmounted"
-                  @vdropzone-drop="vdrop"
-                  @vdropzone-total-upload-progress="vprogress"
-                  :options="dropzoneOptions" 
-                  class="mb-3"
-                  v-show="showDropzone"></vue-dropzone>
+                
                   <b-col class="text-center">
                     <b-img v-show="showImage" fluid :src="this.image.image_link" class="mb-3 text-center" />
                   </b-col>
@@ -68,9 +66,7 @@
 
                 <b-form-group
                   label="Content"
-                  label-for="content"
-                  :label-cols="3"
-                  :horizontal="true">
+                  label-for="content">
                 </b-form-group>
                 <vue-editor v-model="post.content" class="mb-3"></vue-editor>
 
@@ -139,7 +135,6 @@ export default {
       categories: [],
       dropzoneOptions: {
         url: '/api/images',
-        // url: 'http://eprov.id/api/images',
         thumbnailWidth: 200,
         autoProcessQueue: false,
         addRemoveLinks: true,
@@ -166,14 +161,9 @@ export default {
 
     console.log(this.post.category_id)
     console.log(this.$refs.dropzoneUploadRef)
-    // axios.post()
   },
   methods: {
     publishPost: function() {
-      
-      console.log()
-      // alert('Processing!')
-
       axios.post(`/api/posts`, {
         title: this.post.title,
         description: this.post.description,
@@ -186,9 +176,8 @@ export default {
         this.showBadge = true
         this.success.isSuccess = true
         this.success.message = 'Post successfully published'
-
         this.resetForm()
-        // this.$router.go(-1)
+        this.$router.go(-1)
       }).catch(error => {
         console.log(error)
       })
@@ -236,7 +225,6 @@ export default {
       this.errors.message = null;
 
       this.$nextTick(() => { this.showForm = true })
-      console.log()
     },
     onChange: function(e) {
       console.log(e)

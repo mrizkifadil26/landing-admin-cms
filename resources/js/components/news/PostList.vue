@@ -54,8 +54,7 @@
                   v-model="currentPage" 
                   prev-text="Prev" 
                   next-text="Next" 
-                  hide-goto-end-buttons
-                >
+                  hide-goto-end-buttons>
                 </b-pagination>
               </nav>
             </b-col>
@@ -100,18 +99,12 @@ export default {
     },
   },
   methods: {
-    fetchPosts () {
-      window.axios.get('/api/posts', { params: { keywords: this.keywords } })
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-    },
-    getPosts: function () {
+    getPosts () {
       this.loading = true
-      axios.get(`/api/posts`)
+      window.axios.get(`/api/posts`)
         .then(response => {
           this.loading = false
           this.posts = response.data.data
-          console.log(this.pagination)
         }).catch(error => {
           this.loading = false
           console.log(error)
@@ -151,19 +144,16 @@ export default {
           }
       })
     },
-    getRowCount: function () {
+    getRowCount () {
       return this.posts.length
     },
-    getBadge: function (status) {
+    getBadge (status) {
       return status === 'Published' ? 'primary' : 
-        status === 'Draft' ? 'danger' : 'default';
+        status === 'Draft' ? 'danger' : 'default'
     },
   },
   watch: {
     '$route': 'getPosts',
-    keywords(after, before) {
-      this.fetchPosts()
-    }
   }
 }
 </script>
