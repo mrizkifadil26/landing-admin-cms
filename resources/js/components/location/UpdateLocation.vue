@@ -4,7 +4,7 @@
       <b-col>
         <b-card>
           <div slot="header">
-            <strong><i class="fas fa-pencil" />Update Location</strong>
+            <strong><i class="fas fa-pencil-alt" /> Update Location</strong>
           </div>
           <b-row>
             <b-col>
@@ -56,7 +56,7 @@
 <script>
 
 export default {
-  name: 'CreateLocation',
+  name: 'UpdateLocation',
   data () {
     return {
       location: {
@@ -64,11 +64,41 @@ export default {
         description: '',
         category: '',
         mapLocation: '',
-      }
+      },
+
+      tag: '',
+      tags: [],
+      autoCompleteItems: [],
+      debounce: null
     }
   },
   method: {
-    
+    getCategories: function() {
+      if (this.tag.length < 2) return;
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        axios.get('/api/location-categories')
+        .then(response => {
+          this.autoCompleteItems = response.data.data.map(i => {
+            return {
+              id: i.id,
+              text: i.location_category
+            }
+          })
+          console.log(this.autoCompleteItems)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }, 600)
+    },
+    updateTag(newTag) {
+      this.autoCompleteItems = [],
+      this.tags = newTag
+    },
+  },
+  watch: {
+    'tag': 'getCategories'
   }
 }
 </script>

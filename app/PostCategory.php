@@ -10,9 +10,9 @@ class PostCategory extends Model
         'post_category'
     ];
 
-    public function post()
+    public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class);
     }
 
 }

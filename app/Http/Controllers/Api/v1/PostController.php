@@ -28,7 +28,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required'
@@ -37,12 +36,13 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->title,
             'slug' => strtolower(str_slug($request->title, '-')),
-            'description' => $request->description,
-            'category_id' => $request->category_id,
             'image_id' => $request->image_id,
             'content' => $request->content,
             'posted_by' => $request->posted_by,
         ]);
+        
+        $postCategory = PostCategory::findOrFail($request->category);
+        $post->categories()->attach($postCategory);
 
         return new PostResource($post);
     }

@@ -18,15 +18,13 @@ class CreatePostsTable extends Migration
             $table->string('slug')->unique();
             $table->string('title');
             $table->text('description');
-            $table->integer('category_id')->unsigned();
             $table->integer('image_id')->unsigned();
             $table->text('content');
             $table->integer('posted_by')->unsigned();
             $table->timestamps();
 
-            $table->foreign('posted_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('post_categories')->onDelete('cascade');
             $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
+            $table->foreign('posted_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

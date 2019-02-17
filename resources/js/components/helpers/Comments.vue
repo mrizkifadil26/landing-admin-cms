@@ -6,7 +6,7 @@
       <b-container>
         <hr>
         <b-row>
-          <b-col md="1">
+          <b-col md="1" sm="2">
             <b-img-lazy
                   rounded
                   class="mb-3" 

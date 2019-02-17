@@ -60,17 +60,24 @@
                 </template>
               </b-table>
               <spinner v-show="loading"></spinner>
-              <nav>
-                <b-pagination
-                  :total-rows="totalRows"
-                  :per-page="perPage" 
-                  v-model="currentPage" 
-                  prev-text="Prev" 
-                  next-text="Next" 
-                  hide-goto-end-buttons
-                >
-                </b-pagination>
-              </nav>
+              <b-row>
+                <b-col>
+                  <nav>
+                    <b-pagination
+                      :total-rows="totalRows"
+                      :per-page="perPage" 
+                      v-model="currentPage" 
+                      prev-text="Prev" 
+                      next-text="Next" 
+                      hide-goto-end-buttons>
+                    </b-pagination>
+                  </nav>
+                </b-col>
+                <b-col md="4" class="ml-auto">
+                  <h5 class="float-right">Total: {{ locations.length }}</h5>
+                </b-col>
+              </b-row>
+              
             </b-col>
           </b-row>
         </b-card>

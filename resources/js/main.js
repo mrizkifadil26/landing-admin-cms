@@ -3,6 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VueProgressBar from 'vue-progressbar'
 import VueCroppie from 'vue-croppie'
 import VeeValidate from 'vee-validate'
+import VueLazyload from 'vue-lazyload'
 
 import App from './App'
 import router from './router'
@@ -26,6 +27,7 @@ const options = {
 
 Vue.component('spinner', Spinner)
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' })
+Vue.use(VueLazyload)
 Vue.use(VueCroppie)
 Vue.use(BootstrapVue)
 Vue.use(VueProgressBar, options)

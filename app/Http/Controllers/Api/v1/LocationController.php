@@ -39,7 +39,6 @@ class LocationController extends Controller
             'location' => $request->location,
             'description' => $request->description,
             'address' => $request->address,
-            'image_id' => $request->image_id,
             'posted_by' => $request->posted_by,
         ]);
         

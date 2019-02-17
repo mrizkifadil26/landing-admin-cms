@@ -13,6 +13,7 @@
                 v-else 
                 :events="events"
                 @eventClick="eventShow"></full-calendar>
+              <h5 class="float-right">Total: {{ events.length }}</h5>
               <b-modal ref="calendarModal" title="Event" @hidden="editing = false" ok-only :no-enforce-focus='true'>
                 <b-row class="mb-3" v-if="!editing">
                   <b-col>

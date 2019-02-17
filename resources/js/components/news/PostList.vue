@@ -13,9 +13,15 @@
             <b-col md="4 ml-auto" sm="6 ml-auto">
               <b-form-group>
                 <b-input-group>
-                  <b-form-input type="text" v-model.lazy="keywords"></b-form-input>
+                  <b-form-input 
+                    type="text" 
+                    placeholder="Type to Search"
+                    v-model="filter"></b-form-input>
                   <b-input-group-append>
-                    <b-button variant="primary">Search</b-button>
+                    <b-button 
+                      variant="primary"
+                      :disabled="!filter" 
+                      @click="filter = ''">Clear</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
@@ -29,16 +35,18 @@
                 :items="this.posts"
                 :fields="fields" 
                 :current-page="currentPage" 
-                :per-page="perPage">
+                :per-page="perPage"
+                :filter="filter"
+                @filtered="onFiltered">
                 <template slot="posted_by" slot-scope="data">
                   <b-link :to="{ path: `/admin/users/show/${data.item.posted_by.id}` }">{{ data.item.posted_by.name }}</b-link>
                   <p><small>{{ data.item.created_at }}</small></p>
                 </template>
-                <template slot="category_id" slot-scope="data">
-                  <b-badge variant="warning">{{ data.item.category.post_category }}</b-badge>
+                <template slot="category" slot-scope="data">
+                  <b-badge v-for="(category, index) in data.item.category" :key="index" variant="warning" class="mr-1">{{ category.post_category }}</b-badge>
                 </template>
                 <template slot="status" slot-scope="row">
-                  <b-badge :variant="row.value == 'Published' ? 'danger': 'success' ">Published</b-badge>
+                  <b-badge :variant="row.value == 'Published' ? 'danger': 'success'">Published</b-badge>
                 </template>
                 <template slot="actions" slot-scope="data">
                   <b-button class="mb-1" variant="success" :to="{ path: `news/show/${data.item.id}`, label: 'Show Post' }">{{ data.value = 'Show' }}</b-button>
@@ -47,16 +55,23 @@
                 </template>
               </b-table>
               <spinner v-if="loading"></spinner>
-              <nav>
-                <b-pagination
-                  :total-rows="totalRows"
-                  :per-page="perPage" 
-                  v-model="currentPage" 
-                  prev-text="Prev" 
-                  next-text="Next" 
-                  hide-goto-end-buttons>
-                </b-pagination>
-              </nav>
+              <b-row>
+                <b-col>
+                  <nav>
+                    <b-pagination
+                      :total-rows="totalRows"
+                      :per-page="perPage" 
+                      v-model="currentPage" 
+                      prev-text="Prev" 
+                      next-text="Next" 
+                      hide-goto-end-buttons>
+                    </b-pagination>
+                  </nav>
+                </b-col>
+                <b-col md="4" class="ml-auto">
+                  <h5 class="float-right">Total: {{ posts.length }}</h5>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
         </b-card>
@@ -74,17 +89,16 @@ export default {
   data() {
     return {
       loading: false,
-      search: false,
-      keywords: '',
-      results: [],
-
-      currentPage: 1,
-      posts: [],
+      currentPage: 1,      
       perPage: 10,
+      filter: null,
+
+      posts: [],
+
       fields: [
         { key: 'title', label: 'Title', sortable: true},
         { key: 'posted_by', sortable: true },
-        { key: 'category_id', label: 'Category' },
+        { key: 'category', label: 'Category' },
         { key: 'status', sortable: true },
         { key: 'actions', label: 'Actions' }
       ],
@@ -97,6 +111,13 @@ export default {
     totalRows() {
       return this.getRowCount()
     },
+    sortOptions() {
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key }
+        })
+    },    
   },
   methods: {
     getPosts () {
@@ -150,6 +171,10 @@ export default {
     getBadge (status) {
       return status === 'Published' ? 'primary' : 
         status === 'Draft' ? 'danger' : 'default'
+    },
+    onFiltered (filteredItems) {
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     },
   },
   watch: {

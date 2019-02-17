@@ -14,7 +14,7 @@
               <div class="display-4">{{ post.title }}</div>
               <hr>
               <p>Posted {{ post.created_at }} by <b-link :to="{ path: `/admin/users/show/${post.posted_by.id}` }">{{ post.posted_by.name }}</b-link></p>
-              <p><i class="fas fa-tags"></i> Tags: <b-badge variant="dark">{{ post.category.post_category }}</b-badge></p>
+              <p><i class="fas fa-tags"></i> Tags: <b-badge v-for="(category, index) in post.category" :key="index" variant="dark" class="mr-1">{{ category.post_category }}</b-badge></p>
               <br>
               <b-img :src="post.image.image_link" center fluid :alt="post.image.image_name" class="mb-3" />
               <div v-html="post.content"></div>
