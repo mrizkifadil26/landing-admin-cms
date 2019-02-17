@@ -14,9 +14,6 @@ $factory->define(\App\Complaint::class, function (Faker $faker) {
         'category_id' => function() {
             return ComplaintCategory::inRandomOrder()->first()->id;
         },
-        'image_id' => function() {
-            return Image::inRandomOrder()->first()->id;
-        },
         'status' => $faker->randomElement(['Handled', 'Pending']),
         'complaint_by' => function() {
             return User::inRandomOrder()->first()->id;

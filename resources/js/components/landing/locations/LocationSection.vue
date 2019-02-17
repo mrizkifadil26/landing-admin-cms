@@ -12,7 +12,8 @@
               <a class="nav-link js-scroll-trigger" :href="'/' + nav.href">{{ nav.name }}</a>
             </li>
             <li class="nav-item ml-3">
-            <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }">Login</b-button>
+              <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn">Logout</b-button>
+              <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
             </li>
           </ul>
         </div>
@@ -22,32 +23,41 @@
       <b-row>
         <b-col md="12">
           <spinner v-if="loading"></spinner>
-          <h1 class="display-4 mb-5 mt-3">{{ post.title }}</h1>
+          <h1 class="display-4 mb-5 mt-3">{{ location.location }}</h1>
           <b-row>
             <b-col md="1 px-0" sm="2" class="text-center">
-              <b-img-lazy rounded="circle" class="mb-3" :src="post.posted_by.link" width="48" />
+              <b-img-lazy rounded="circle" class="mb-3" :src="location.posted_by.link" width="48" />
             </b-col>
             <b-col class="px-0">
-              <a class="font-weight-bold" href="#">{{ post.posted_by.name }}</a>
-              <p><small>{{ post.created_at }}</small></p>
+              <a class="font-weight-bold" href="#">{{ location.posted_by.name }}</a>
+              <p><small>{{ location.created_at }}</small></p>
             </b-col>
           </b-row>
-          <h6 class="mb-2 font-weight-light">Tags <i class="fas fa-tag"></i> : <a href="#" class="font-weight-normal"><b-badge variant="dark">{{ post.category.post_category }}</b-badge></a></h6>
+          <h6 class="mb-2 font-weight-light">Tags <i class="fas fa-tag"></i> : <a href="#" class="font-weight-normal"><b-badge variant="dark">{{ location.category.location_category }}</b-badge></a></h6>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-img class="mb-4" :src="post.image.image_link" fluid-grow :alt="post.title"></b-img>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <p class="content text-justify text-wrap" v-html="post.content"></p>
+          <p class="content text-justify text-wrap" v-html="location.description"></p>
+          <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ location.address }} </p>
         </b-col>  
       </b-row>
+      <hr>
+      <b-row class="mb-3">
+        <b-col md="12" sm="12">
+          <h3 class="mb-5">Photos</h3>
+        </b-col>
+        <b-col v-if="location.photos < 1" class="text-center">
+          <h6 class="text-center text-muted">No Photos</h6>
+        </b-col>
+        <b-col v-else>
+          <b-img class="mb-4" :src="location.photos[0].image_link" fluid-grow :alt="location.photos[1].image_name"></b-img>
+        </b-col>
+      </b-row>
+      <hr class="mt-5">
       <b-row>
         <b-col class="mb-3">
-          <h2>Write a comment:</h2>
+          <h2>Write a review:</h2>
         </b-col>
       </b-row>
       <b-container v-if="!isLoggedIn">
@@ -60,7 +70,7 @@
         <hr>
       </b-container>
       <b-container v-else>
-        <b-form @submit.prevent="addComment()">
+        <b-form @submit.prevent="addReview()">
           <b-row>
             <b-col md="1.5">
               <b-img-lazy
@@ -69,24 +79,28 @@
                   :src="user.avatar.avatar_link" 
                   width="96" />
             </b-col>
-            <b-col>
+            <b-col class="mb-3">
+              <star-rating
+                class="mb-3 text-center"
+                :show-rating="false"
+                v-model="review.rating"></star-rating>
               <b-form-textarea
-                id="comment"
-                v-model="comment"
-                placeholder="Write a comment..."
+                id="review"
+                v-model="review.review"
+                placeholder="Write a review..."
                 :rows="4"
                 :max-rows="6"></b-form-textarea>
             </b-col>
           </b-row>
           <b-row>
             <b-col class="text-right">
-              <b-button type="submit" variant="primary">Add Comment</b-button>
+              <b-button type="submit" variant="primary">Add Review</b-button>
             </b-col>
           </b-row>
           <hr>
         </b-form>
       </b-container>
-      <comments :post="post.id"></comments>
+      <review :location="location.id"></review>
     </b-container>
     <the-footer></the-footer>
   </div>
@@ -95,19 +109,29 @@
 <script>
 
 import Footer from '../layouts/Footer'
-import Comments from '../../helpers/Comments'
+import Review from '../../helpers/Review'
+import Rating from 'vue-star-rating'
 
 export default {
-  name: 'NewsSection',
+  name: 'LocationSection',
   props: ['id'],
   components: {
     'the-footer': Footer,
-    Comments
+    Review,
+    'star-rating': Rating,
   },
   data () {
     return {
       post: null,
       loading: false,
+
+      paramUrl: this.$route.params.id,
+
+      review: {
+        rating: null,
+        review: ''
+      },
+
       navs: [
         {
           name: 'Berita',
@@ -126,21 +150,71 @@ export default {
           href: 'links'
         }
       ],
-      comment: ''
+
+      location: {}
     }
   },
   methods: {
-    getPost: function () {
-      const paramUrl = this.$route.params.slug
-      const postId = this.id
+    getLocation (id) {
+      
       this.loading = true
-      axios.get(`/api/posts/${postId}`)
+      axios.get(`/api/locations/${id}`)
         .then(response => {
           this.loading = false
-          this.post = response.data.data
+          this.location = response.data.data
+          console.log(this.location)
         })
         .catch(error => {
           this.loading = false
+          console.log(error)
+        })
+    },
+    logout: function() {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out.",
+        type: 'warning',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch('authentication/logout')
+          Swal.fire({
+            title: 'Logout Success',
+            text: 'Logging out...',
+            backdrop: 'rgba(0, 0, 0, 0.5)',
+            showConfirmButton: false,
+          })
+          return this.$router.push('/login')
+        } 
+      })
+    },
+    addReview () {
+      window.axios.post('/api/ratings', {
+        location_id: this.location.id,
+        user_id: this.user.id,
+        rating: this.review.rating,
+        review: this.review.review
+      }).then(response => {
+          Swal.fire({
+            type: 'success',
+            title: 'Review Sent!',
+            text: 'Your review successfully sent.'
+          })
+          this.review.rating = ''
+          this.review.review = ''
+          console.log({
+            location_id: this.location.id,
+            user_id: this.user.id,
+            rating: this.review.rating,
+            review: this.review.review
+          })
+        })
+        .catch(error => {
+          Swal.fire({
+            type: 'error',
+            title: 'Error!',
+            text: 'Please try again later.'
+          })
           console.log(error)
         })
     }
@@ -154,7 +228,7 @@ export default {
     },
   },
   created () {
-    this.getPost()
+    this.getLocation(this.paramUrl)
   },
   watch: {
     '$route': 'getPost'
@@ -292,5 +366,3 @@ export default {
 }
 
 </style>
-
-

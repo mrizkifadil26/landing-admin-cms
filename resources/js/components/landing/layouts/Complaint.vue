@@ -78,12 +78,11 @@
                     :invalid-feedback="errors.first('address')"
                     :label-cols="4"
                     :horizontal="true">
-                    <b-form-input id="address"
+                    <b-form-textarea id="address"
                       name="address" 
-                      type="address"
                       :state="!errors.has('address') ? null : false" 
                       v-model="complaint.address"
-                      v-validate="'required'"></b-form-input>
+                      v-validate="'required'"></b-form-textarea>
                   </b-form-group>
 
                   <b-form-group
@@ -115,6 +114,17 @@
                     label-for="image"
                     :label-cols="4"
                     :horizontal="true">
+                    <vue-upload-multiple-image
+                        dragText="Upload your file here"
+                        browseText="or click to Upload"
+                        primaryText="Main Image"
+                        markIsPrimaryText="Set as main image"
+                        popupText=""
+                        @upload-success="uploadImageSuccess"
+                        @before-remove="beforeRemove"
+                        @edit-image="editImage"
+                        @data-change="dataChange"
+                        :data-images="images"></vue-upload-multiple-image>
                   </b-form-group>
 
                 </b-col>
@@ -130,10 +140,14 @@
 
 <script>
 
+import VueUploadMultipleImage from 'vue-upload-multiple-image'
 import Swal from 'sweetalert2'
 
 export default {
   name: 'Complaint',
+  components: {
+    VueUploadMultipleImage
+  },
   data() {
     return {
       loading: false,
@@ -142,15 +156,15 @@ export default {
         description: '',
         fullName: '',
         address: '',
-        image_id: '',
         category_id: '',
         complaint_by: ''
       },
       selected: null,
-      categories: []
+      categories: [],
+      images: [],
     }
   },
-  mounted () {
+  created () {
     this.getCategories()
   },
   computed: {
@@ -177,7 +191,7 @@ export default {
             full_name: this.complaint.fullName,
             address: this.complaint.address,
             category_id: this.selected,
-            image_id: 1,
+            photos: this.photos,
             complaint_by: this.user.id,
           })
           .then(response => {
@@ -194,7 +208,7 @@ export default {
             fullName: this.complaint.fullName,
             address: this.complaint.address,
             category_id: this.selected,
-            image_id: 1,
+            photos: this.photos,
             complaint_by: this.user.name,
           }) 
         }
@@ -229,6 +243,36 @@ export default {
         this.loading = false
         console.log(error)
       })
+    },
+
+    uploadImageSuccess(formData, index, fileList) {
+      console.log('data', formData, index, fileList)
+      window.axios.post('/api/images', formData).then(response => {
+        let id = response.data.data.id
+        this.photos.push(id)
+        console.log(response)
+      })
+    },
+    beforeRemove (index, done, fileList) {
+      console.log('index', index, fileList)
+      Swal.fire({
+        type: 'warning',
+        title: 'Are you sure want to remove this image?',
+        text: 'This image will be deleted.',
+        showCancelButton: true
+      })
+      .then(result => {
+        if (result.value) {
+          Swal.fire('Removed!', 'Your image has removed', 'success')
+          done()
+        }
+      })
+    },
+    editImage (formData, index, fileList) {
+      console.log('edit data', formData, index, fileList)
+    },
+    dataChange (data) {
+      console.log(data)
     }
   }
 }

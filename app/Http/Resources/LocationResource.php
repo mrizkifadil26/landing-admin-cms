@@ -23,7 +23,11 @@ class LocationResource extends JsonResource
             'avg_rating' => number_format($this->ratings->avg('rating'), 2),
             'ratings' => $this->ratings,
             'photos' => $this->photos,
-            'posted_by' => $this->user,
+            'posted_by' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'link' => $this->user->avatar->avatar_link
+            ],
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,            
         ];

@@ -33,7 +33,6 @@ class ComplaintController extends Controller
             'full_name' => 'required',
             'address' => 'required',
             'category_id' => 'required',
-            'image_id' => 'required',
         ]);
 
         $complaint = Complaint::create([
@@ -42,11 +41,10 @@ class ComplaintController extends Controller
             'full_name' => $request->full_name,
             'address' => $request->address,
             'category_id' => $request->category_id,
-            'image_id' => $request->image_id,
             'complaint_by' => $request->complaint_by
         ]);
 
-        $photos = Image::find($request->image);
+        $photos = Image::find($request->photos);
         $complaint->photos()->attach($photos);
 
         return new ComplaintResource($complaint);

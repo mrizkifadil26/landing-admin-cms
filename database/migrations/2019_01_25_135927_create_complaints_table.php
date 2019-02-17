@@ -20,13 +20,11 @@ class CreateComplaintsTable extends Migration
             $table->string('full_name');
             $table->string('address');
             $table->integer('category_id')->unsigned();
-            $table->integer('image_id')->unsigned();
             $table->string('status')->default('Pending');
             $table->integer('complaint_by')->unsigned();
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('complaint_categories')->onDelete('cascade');
-            $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
             $table->foreign('complaint_by')->references('id')->on('users')->onDelete('cascade');
         });
     }

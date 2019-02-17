@@ -10,6 +10,8 @@ import Page500 from '../components/error/Page500'
 import Landing from '../components/landing/Landing'
 import NewsLayout from '../components/landing/news/NewsLayout'
 import NewsSection from '../components/landing/news/NewsSection'
+import LocationLayout from '../components/landing/locations/LocationLayout'
+import LocationSection from '../components/landing/locations/LocationSection'
 
 import Login from '../components/auth/Login'
 import Register from '../components/auth/Register'
@@ -87,9 +89,25 @@ let router =  new Router({
           ]
         },
         {
-          path: '/location',
-          name: 'Location Section',
-          component: {}
+          path: '/locations',
+          meta: { label: 'Location Section' },
+          component: {
+            render(c) {
+              return c('router-view')
+            }
+          },
+          children: [
+            {
+              path: '',
+              component: LocationLayout
+            },
+            {
+              path: '/locations/:id',
+              name: 'Location Section',
+              component: LocationSection,
+              props: true
+            },
+          ]
         },
         {
           path: '/complaint',

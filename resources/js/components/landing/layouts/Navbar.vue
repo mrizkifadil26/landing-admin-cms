@@ -12,7 +12,7 @@
           </li>
           <li class="nav-item ml-3">
             <b-button class="btn btn-warning js-scroll-trigger" @click="logout" v-if="isLoggedIn">Logout</b-button>
-           <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
+            <b-button class="btn btn-warning js-scroll-trigger" :to="{ name: 'Login' }" v-else>Login</b-button>
           </li>
         </ul>
       </div>
